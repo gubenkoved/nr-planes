@@ -45,9 +45,9 @@ namespace NRPlanes.Core.Primitives
         }
 
         /// <summary>
-        /// Returns value in range [-180; 180].
-        /// <para>Returns 0, then second position in (0, 1) direction (along classical y-axis);</para>
-        /// <para>90 deg, then second position in (1, 0) direction (y-axis)</para>
+        /// Returns value in range [-180; 180]:
+        /// <para>- Negative value ((0;-180))  when rotation is counterclock-wise</para>
+        /// <para>- Positive value ([0;180]) when rotation is clock-wise</para>
         /// </summary>
         public static double RelativeAngleBetweenPositions(Vector from, Vector to)
         {

@@ -11,6 +11,22 @@ namespace NRPlanes.Tests
     public class VectorTests
     {
         [TestMethod]
+        public void AngleBetweenTest0()
+        {
+            double angle = Vector.AngleBetween(new Vector(0, 1), new Vector(0, 1));
+
+            Assert.AreEqual(0, angle);
+        }
+
+        [TestMethod]
+        public void AngleBetweenTest00()
+        {
+            double angle = Vector.AngleBetween(new Vector(0, 1), new Vector(0, -1));
+
+            Assert.AreEqual(180, angle);
+        }
+
+        [TestMethod]
         public void AngleBetweenTest1()
         {
             double angle = Vector.AngleBetween(new Vector(0, -1), new Vector(1, 1));
