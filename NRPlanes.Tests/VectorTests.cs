@@ -13,23 +13,23 @@ namespace NRPlanes.Tests
         [TestMethod]
         public void AngleBetweenTest1()
         {
-            double angle = Vector.AngleBetween(new Vector(-1, -1), new Vector(1, 1));
+            double angle = Vector.AngleBetween(new Vector(0, -1), new Vector(1, 1));
 
-            Assert.AreEqual(180, angle);
+            Assert.AreEqual(-135, angle);
         }
 
         [TestMethod]
         public void AngleBetweenTest2()
         {
-            double angle = Vector.AngleBetween(new Vector(1, 0), new Vector(1, 1) - new Vector(-1, -1));
+            double angle = Vector.AngleBetween(new Vector(1, 0), new Vector(1, 1));
 
-            Assert.AreEqual(45, angle);
+            Assert.AreEqual(-45, angle);
         }
 
         [TestMethod]
         public void AngleBetweenTest3()
         {
-            double angle = Vector.AngleBetween(new Vector(1, 0), new Vector(1, 1) - new Vector(0, 1));
+            double angle = Vector.AngleBetween(new Vector(1, 0), new Vector(1, 0));
 
             Assert.AreEqual(0, angle);
         }
@@ -44,8 +44,8 @@ namespace NRPlanes.Tests
             
             Assert.AreEqual(45, angle1);
             Assert.AreEqual(135, angle2);
-            Assert.AreEqual(225, angle3);
-            Assert.AreEqual(315, angle4);
+            Assert.AreEqual(-135, angle3);
+            Assert.AreEqual(-45, angle4);
         }
 
 

@@ -51,7 +51,7 @@ namespace NRPlanes.Core.Primitives
         /// </summary>
         public static double RelativeAngleBetweenPositions(Vector from, Vector to)
         {
-            return NormalizeAngle(Vector.AngleBetween(new Vector(0, 1), to - from));
+            return Vector.AngleBetween(new Vector(0, 1), to - from);
         }
     }
 }
