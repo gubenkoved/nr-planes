@@ -104,8 +104,10 @@ namespace NRPlanes.Client.Common
             {
                 Plane enemyPlane = null;
 
-                _world.PerformSafeGameObjectCollectionOperation( () =>
-                    enemyPlane = (Plane)_world.GameObjects.SingleOrDefault(o => o.Id == enemyPlaneInfo.Id));
+                using (var handle = _world.GameObjectsSafeReadHandle)
+                {
+                    enemyPlane = (Plane)handle.Items.SingleOrDefault(o => o.Id == enemyPlaneInfo.Id);
+                }
 
                 if (enemyPlane != null)
                     enemyPlaneInfo.Apply(enemyPlane);

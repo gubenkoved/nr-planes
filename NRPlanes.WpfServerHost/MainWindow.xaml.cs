@@ -92,7 +92,7 @@ namespace NRPlanes.WpfServerHost
         {
             while (true)
             {
-                Invoke(() => _gameObjectsAmountParameter.Value = _service.World.GameObjects.Count());
+                Invoke(() => _gameObjectsAmountParameter.Value = _service.World.GameObjectsCount);
                 Invoke(() => _serverFPSParameter.Value = _service.FPS.ToString("F2"));
 
                 Thread.Sleep(100);

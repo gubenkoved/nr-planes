@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Aliens\AliensAppearingStrategy.cs" />
     <Compile Include="Aliens\BasicAliensAppearingStrategy.cs" />
+    <Compile Include="Aliens\SingleAliensAppearingStrategy.cs" />
     <Compile Include="Bullets\LaserBullet.cs" />
     <Compile Include="Common\Bonus.cs" />
     <Compile Include="Common\Bullet.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Common\ReferenceArea.cs" />
     <Compile Include="Common\Shield.cs" />
     <Compile Include="Common\StaticObject.cs" />
+    <Compile Include="Common\ThreadSafeCollection.cs" />
     <Compile Include="Common\Weapon.cs" />
     <Compile Include="Common\WeaponPosition.cs" />
     <Compile Include="Controllers\AlienPlaneController.cs" />

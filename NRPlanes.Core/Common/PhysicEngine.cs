@@ -104,22 +104,27 @@ namespace NRPlanes.Core.Common
         /// <summary>
         /// Sweep and Prune collision detection algorithm <see cref="http://habrahabr.ru/blogs/algorithm/135948/"/>        
         /// </summary>
-        public static IEnumerable<Collision> GetCollisions(List<GameObject> objects)
+        public static IEnumerable<Collision> GetCollisions(GameObject[] objects)
         {
             List<Collision> collisions = new List<Collision>();
 
             var absoluteGeomertyCache = new Dictionary<GameObject, Geometry>(); // absolute geometry cache
-            objects.ForEach(o => absoluteGeomertyCache[o] = o.CalculateAbsoluteGeometry());
 
+            for (int i = 0; i < objects.Length; i++)
+            {
+                absoluteGeomertyCache[objects[i]] = objects[i].CalculateAbsoluteGeometry();
+            }
+            
             var xCoordinateComparer = new Comparison<GameObject>((x, y) => absoluteGeomertyCache[x].BoundingRectangle.X.CompareTo(absoluteGeomertyCache[y].BoundingRectangle.X));
-            objects.Sort(xCoordinateComparer); // sort game objects by x coordinate of left bound (of bounding rectangle)
 
-            for (int i = 0; i < objects.Count; i++)
+            Array.Sort(objects, xCoordinateComparer); // sort game objects by x coordinate of left bound (of bounding rectangle)
+
+            for (int i = 0; i < objects.Length; i++)
             {
                 double maxX = absoluteGeomertyCache[objects[i]].BoundingRectangle.X
                     + absoluteGeomertyCache[objects[i]].BoundingRectangle.Width;
 
-                for (int j = i + 1; j < objects.Count && absoluteGeomertyCache[objects[j]].BoundingRectangle.X <= maxX; j++)
+                for (int j = i + 1; j < objects.Length && absoluteGeomertyCache[objects[j]].BoundingRectangle.X <= maxX; j++)
                 {
                     if (absoluteGeomertyCache[objects[i]].IsIntersectsOrInclude(absoluteGeomertyCache[objects[j]]))
                     {

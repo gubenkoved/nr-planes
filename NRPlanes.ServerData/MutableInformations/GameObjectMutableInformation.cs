@@ -49,5 +49,10 @@ namespace NRPlanes.ServerData.MutableInformations
             _positionPrivateFieldAccessor.SetValue(obj, Position);
             _velocityPrivateFieldAccessor.SetValue(obj, Velocity);
         }
+
+        public override string ToString()
+        {
+            return string.Format("ID:{0}, Rot:{1:F3}, RotV:{2:F3}, Pos:{3}, V:{4}", Id, Rotation, RotationVelocity, Position, Velocity);
+        }
     }
 }

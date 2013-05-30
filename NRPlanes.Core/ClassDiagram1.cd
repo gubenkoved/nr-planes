@@ -67,12 +67,9 @@
   <Class Name="NRPlanes.Core.Common.GameWorld" BaseTypeListCollapsed="true">
     <Position X="12.5" Y="9.25" Width="3.5" />
     <TypeIdentifier>
-      <HashCode>AARAAQAkAgAAoAAgAAAAAAggCBAIBgAAAAACAAQAAAI=</HashCode>
+      <HashCode>AkTAAUAEAgAAoAAiAAABAAogABAMBgAAAAACAAQAACI=</HashCode>
       <FileName>Common\GameWorld.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="GameObjects" />
-    </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="NRPlanes.Core.Common.PhysicEngine" Collapsed="true">
@@ -174,7 +171,7 @@
   <Class Name="NRPlanes.Core.Primitives.Helper" Collapsed="true">
     <Position X="15.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAIAgAAAAAAAAAAAAAAAAACAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAIAgAAAAAgAAAAAAAAAAACAEAAAAAA=</HashCode>
       <FileName>Primitives\Helper.cs</FileName>
     </TypeIdentifier>
   </Class>

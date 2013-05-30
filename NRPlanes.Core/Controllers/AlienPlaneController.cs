@@ -24,10 +24,10 @@ namespace NRPlanes.Core.Controllers
             if (nearestPlayer == null)
                 return;
 
-            double needAngleToPlayer = Helper.RelativeAngleBetweenPositions(ControlledPlane.Position, nearestPlayer.Position);
-            double needRotationDelta = Helper.NormalizeAngle((ControlledPlane.Rotation - needAngleToPlayer));
+            double angleToPlayer = Helper.RelativeAngleBetweenPositions(ControlledPlane.Position, nearestPlayer.Position);
+            double rotationDelta = Helper.NormalizeAngle(angleToPlayer) - ControlledPlane.Rotation;
 
-            if (needRotationDelta < 180) // rotate through left side
+            if (rotationDelta < 0) // rotate through left side
             {
                 ControlledPlane.StartMotion(MotionType.Left);
             }
@@ -43,18 +43,24 @@ namespace NRPlanes.Core.Controllers
                 ControlledPlane.Fire(WeaponPosition.LeftFront);
                 ControlledPlane.Fire(WeaponPosition.RightFront);
             }
+            else
+            {
+                ControlledPlane.StartMotion(MotionType.Forward);
+            }
         }
 
         private Plane FindNearestPlayersPlane()
         {
-            IEnumerable<Plane> playersPlanes = m_world.GameObjects
-                .Where(o => o is Plane && !m_world.PlaneControllers.Any(c => c.ControlledPlane == o)).Cast<Plane>().ToList();
+            using (var handle = m_world.GameObjectsSafeReadHandle)
+            {
+                IEnumerable<Plane> playersPlanes = handle.Items.Where(o => o is Plane && !m_world.PlaneControllers.Any(c => c.ControlledPlane == o)).Cast<Plane>().ToList();
+                
+                Vector curPosition = ControlledPlane.Position;
 
-            Vector curPosition = ControlledPlane.Position;
+                Plane nearestPlayer = playersPlanes.OrderBy(plane => (plane.Position - curPosition).LengthSquared).FirstOrDefault();
 
-            Plane nearestPlayer = playersPlanes.OrderBy(plane => (plane.Position - curPosition).LengthSquared).FirstOrDefault();
-
-            return nearestPlayer;
+                return nearestPlayer;
+            }
         }
     }
 }

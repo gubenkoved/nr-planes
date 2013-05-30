@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define DETAILED_LOG
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -65,7 +67,8 @@ namespace NRPlanes.Server
 
             World = new GameWorld(new Size(800, 800));
             World.AddGravityBoundsWithPlanets(50, 13);
-            World.AliensAppearingStrategy = new BasicAliensAppearingStrategy(World, TimeSpan.FromSeconds(10));
+            //World.AliensAppearingStrategy = new BasicAliensAppearingStrategy(World, TimeSpan.FromSeconds(10));
+            World.AliensAppearingStrategy = new SingleAliensAppearingStrategy(World);
 
             Task.Factory.StartNew(GameWorldUpdate);                
         }
@@ -111,17 +114,16 @@ namespace NRPlanes.Server
         {
             GetNewObjectsResult newObjectsResult = new GetNewObjectsResult();
 
-            // preventing objects collectiong changing
-            World.PerformSafeGameObjectCollectionOperation(() =>
+            using (var handle = World.GameObjectsSafeReadHandle)
+            {
+                // fill GameObject's ID field (For objects that have been created on the server)
+                foreach (var createdObject in handle.Items.Where(o => !o.Id.HasValue))
                 {
-                    // fill GameObject's ID field (For objects that have been created on the server)
-                    foreach (var createdObject in World.GameObjects.Where(o => !o.Id.HasValue))
-                    {
-                        AssignGameObjectID(createdObject);
-                    }
+                    AssignGameObjectID(createdObject);
+                }
 
-                    newObjectsResult.Objects = World.GameObjects.Where(o => o.Id.Value >= minId && !o.IsGarbage).ToList();
-                });
+                newObjectsResult.Objects = handle.Items.Where(o => o.Id.Value >= minId && !o.IsGarbage).ToList();
+            }
 
             if (newObjectsResult.Objects.Count > 0)
                 LogMessage(string.Format("{0} objects has sent to player with id={1} (last ID={2})", newObjectsResult.Objects.Count, playerGuid, minId));
@@ -139,19 +141,29 @@ namespace NRPlanes.Server
 
         public IEnumerable<PlaneMutableInformation> GetPlanesInfo(Guid playerGuid)
         {
+#if DETAILED_LOG
+            LogMessage(string.Format("Planes infos for player with GUID={0}", playerGuid));
+#endif
             Plane playerPlane = m_playerToPlaneMapping[playerGuid];
 
-            List<PlaneMutableInformation> info = new List<PlaneMutableInformation>();
+            List<PlaneMutableInformation> infos = new List<PlaneMutableInformation>();
 
-            foreach (Plane plane in World.GameObjects.Where(o => o is Plane))
+            using (var handle = World.GameObjectsSafeReadHandle)
             {
-                if (plane != playerPlane)
+                foreach (Plane plane in handle.Items.Where(o => o is Plane))
                 {
-                    info.Add(new PlaneMutableInformation(plane));
+                    if (plane != playerPlane)
+                    {
+                        PlaneMutableInformation planeInfo = new PlaneMutableInformation(plane);
+                        infos.Add(planeInfo);
+#if DETAILED_LOG
+                        LogMessage(planeInfo.ToString());
+#endif
+                    }
                 }
             }
 
-            return info;
+            return infos;
         }
 
         private void AssignGameObjectID(GameObject obj)
@@ -162,7 +174,7 @@ namespace NRPlanes.Server
         private void LogMessage(string message)
         {
             if (m_log != null)
-                m_log(message);
+                m_log.BeginInvoke(message, null, null);
         }
     }
 }

@@ -12,10 +12,17 @@ namespace NRPlanes.Core.Common
 {
     public class GameWorld : IUpdatable
     {
-        private readonly List<GameObject> m_gameObjects;
-        public IEnumerable<GameObject> GameObjects
+        private readonly ThreadSafeCollection<GameObject> m_safeGameObjects;        
+        public ThreadSafeCollection<GameObject>.SafeReadHandle<GameObject> GameObjectsSafeReadHandle
         {
-            get { return m_gameObjects; }
+            get { return m_safeGameObjects.SafeRead(); }
+        }
+        public int GameObjectsCount
+        {
+            get
+            {
+                return m_safeGameObjects.Count;
+            }
         }
 
         private readonly List<StaticObject> m_staticObjects;
@@ -42,7 +49,7 @@ namespace NRPlanes.Core.Common
         {
             Logger.Log("Constructing GameWorld...");
 
-            m_gameObjects = new List<GameObject>();
+            m_safeGameObjects = new ThreadSafeCollection<GameObject>(); 
             m_staticObjects = new List<StaticObject>();
             m_planeControllers = new List<PlaneControllerBase>();           
 
@@ -51,18 +58,6 @@ namespace NRPlanes.Core.Common
         }
 
         #region Public methods
-        /// <summary>
-        /// Perform operation which requires protection from modification game objects collection
-        /// </summary>
-        /// <param name="safeOperation"></param>
-        public void PerformSafeGameObjectCollectionOperation(Action safeOperation)
-        {
-            // preventing changing game objects collection while this operations is executing
-            lock (m_gameObjects)
-            {
-                safeOperation.Invoke();
-            }
-        }
 
         public void Update(TimeSpan elapsed)
         {
@@ -70,23 +65,19 @@ namespace NRPlanes.Core.Common
                 AliensAppearingStrategy.Update(elapsed);
 
             ProcessControllersUpdate(elapsed);
+            
+            ProcessUpdate(elapsed);
 
-            // preventing changing game objects collection while this operations is executing
-            PerformSafeGameObjectCollectionOperation(() =>
-            {
-                ProcessUpdate(elapsed);
+            ProcessStaticObjectsAffection(elapsed);
 
-                ProcessStaticObjectsAffection(elapsed);
-
-                ProcessCollisions();
-            });
+            ProcessCollisions();
         }
 
         public void AddGameObject(GameObject obj)
         {
             obj.GameWorldAddObjectDelegate = AddGameObject;
 
-            PerformSafeGameObjectCollectionOperation(() => m_gameObjects.Add(obj));
+            m_safeGameObjects.Add(obj);
 
             OnGameObjectStatusChanged(null, new GameObjectStatusChangedEventArg(GameObjectStatus.Created, obj));
         }
@@ -127,25 +118,31 @@ namespace NRPlanes.Core.Common
 
         private void ProcessUpdate(TimeSpan elapsed)
         {
-            for (int i = m_gameObjects.Count - 1; i >= 0; i--)
+            GameObject[] copy = m_safeGameObjects.ToArray();
+
+            for (int i = copy.Length - 1; i >= 0; i--)
             {
-                if (!m_gameObjects[i].IsGarbage)
-                    m_gameObjects[i].Update(elapsed);
+                if (!copy[i].IsGarbage)
+                    copy[i].Update(elapsed);
                 else
-                    DeleteGameObject(m_gameObjects[i]);
+                    DeleteGameObject(copy[i]);
             }
         }
 
         private void ProcessStaticObjectsAffection(TimeSpan elapsed)
         {
-            // Note: Can be optimized by Sweep&Prune analog
+            // Note: Can be optimized by Sweep&Prune alg
+
             foreach (var staticObject in StaticObjects)
             {
-                foreach (var gameObject in m_gameObjects)
+                using (var handle = m_safeGameObjects.SafeRead())
                 {
-                    if (staticObject.AbsoluteGeometry.HitTest(gameObject.Position))
+                    foreach (var gameObject in handle.Items)
                     {
-                        staticObject.AffectOnGameObject(gameObject, elapsed);
+                        if (staticObject.AbsoluteGeometry.HitTest(gameObject.Position))
+                        {
+                            staticObject.AffectOnGameObject(gameObject, elapsed);
+                        }
                     }
                 }
             }
@@ -153,7 +150,7 @@ namespace NRPlanes.Core.Common
 
         private void ProcessCollisions()
         {
-            var collisions = PhysicEngine.GetCollisions(m_gameObjects).ToList();
+            var collisions = PhysicEngine.GetCollisions(m_safeGameObjects.ToArray()).ToList();
 
             foreach (var collision in collisions)
             {
@@ -171,7 +168,7 @@ namespace NRPlanes.Core.Common
 
         private void DeleteGameObject(GameObject obj)
         {
-            m_gameObjects.Remove(obj);
+            m_safeGameObjects.Remove(obj);
 
             OnGameObjectStatusChanged(null, new GameObjectStatusChangedEventArg(GameObjectStatus.Deleted, obj));
         }

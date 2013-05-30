@@ -51,5 +51,10 @@ namespace NRPlanes.ServerData.MutableInformations
                 equipmentMutable.Apply(equipment);
             }
         }
+
+        public override string ToString()
+        {
+            return string.Format("Health:{0}, GO props:({1})", Health, base.ToString());
+        }
     }
 }
