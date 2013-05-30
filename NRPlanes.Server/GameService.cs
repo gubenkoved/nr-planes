@@ -11,20 +11,22 @@ using System.Diagnostics;
 using NRPlanes.ServerData.MutableInformations;
 using NRPlanes.ServerData.OperationResults;
 using NRPlanes.ServerData;
+using NRPlanes.Core.Logging;
+using NRPlanes.Core.Aliens;
 
 namespace NRPlanes.Server
 {
     [ServiceBehavior(
         InstanceContextMode = InstanceContextMode.Single, 
-        ConcurrencyMode = ConcurrencyMode.Multiple)]
+        ConcurrencyMode = ConcurrencyMode.Single)]
     public class GameService : IGameService
     {
-        public GameWorld World { get; private set; }
+        public readonly GameWorld World;
         public double FPS { get; private set; }
 
-        private int _lastObjectId;
-        private Dictionary<Guid, Plane> _playerToPlaneMapping;
-        private Action<string> _log;
+        private int m_lastObjectID;
+        private Dictionary<Guid, Plane> m_playerToPlaneMapping;
+        private Action<string> m_log;
 
         private void GameWorldUpdate()
         {
@@ -49,18 +51,23 @@ namespace NRPlanes.Server
         }
 
         public GameService()
+            :this(null)
         {
-            _playerToPlaneMapping = new Dictionary<Guid, Plane>();
-
-            World = new GameWorld(new Size(800, 800), 50, 13);
-
-            Task.Factory.StartNew(GameWorldUpdate);                
         }
 
         public GameService(Action<string> logAction)
-            :this()
         {
-            _log = logAction;
+            m_log = logAction;
+
+            Logger.LogItemReceived += logItem => LogMessage(logItem.ToString());
+
+            m_playerToPlaneMapping = new Dictionary<Guid, Plane>();
+
+            World = new GameWorld(new Size(800, 800));
+            World.AddGravityBoundsWithPlanets(50, 13);
+            World.AliensAppearingStrategy = new BasicAliensAppearingStrategy(World, TimeSpan.FromSeconds(10));
+
+            Task.Factory.StartNew(GameWorldUpdate);                
         }
 
         public JoinResult Join()
@@ -72,10 +79,9 @@ namespace NRPlanes.Server
                 StaticObjects = World.StaticObjects
             };
 
-            _playerToPlaneMapping[result.PlayerGuid] = null;
+            m_playerToPlaneMapping[result.PlayerGuid] = null;
 
-            if (_log != null)
-                _log(string.Format("Player joined (id={0})", result.PlayerGuid));
+            LogMessage(string.Format("Player joined (id={0})", result.PlayerGuid));
 
             return result;
         }        
@@ -87,17 +93,16 @@ namespace NRPlanes.Server
             foreach (var obj in objects)
             {
                 if (obj is Plane)
-                    _playerToPlaneMapping[playerGuid] = obj as Plane; // If player commit plane when it his own plane
+                    m_playerToPlaneMapping[playerGuid] = obj as Plane; // If player commit plane when it his own plane
 
-                obj.Id = _lastObjectId++;
+                AssignGameObjectID(obj);                
 
                 World.AddGameObject(IntegrityDataHelper.PreprocessRecieved(obj));
 
                 result.ObjectsIds.Add(obj.Id.Value);
             }
 
-            if (_log != null)
-                _log(string.Format("{0} object(s) has commited", objects.Count));
+            LogMessage(string.Format("{0} object(s) has commited (last ID={1})", objects.Count, m_lastObjectID));
 
             return result;
         }
@@ -107,19 +112,26 @@ namespace NRPlanes.Server
             GetNewObjectsResult newObjectsResult = new GetNewObjectsResult();
 
             // preventing objects collectiong changing
-            World.PerformSafeGameObjectCollectionOperation(() => 
-                newObjectsResult.Objects = World.GameObjects.Where(o => o.Id.Value >= minId && !o.IsGarbage).ToList());
+            World.PerformSafeGameObjectCollectionOperation(() =>
+                {
+                    // fill GameObject's ID field (For objects that have been created on the server)
+                    foreach (var createdObject in World.GameObjects.Where(o => !o.Id.HasValue))
+                    {
+                        AssignGameObjectID(createdObject);
+                    }
+
+                    newObjectsResult.Objects = World.GameObjects.Where(o => o.Id.Value >= minId && !o.IsGarbage).ToList();
+                });
 
             if (newObjectsResult.Objects.Count > 0)
-                if (_log != null)
-                    _log(string.Format("{0} objects has sent to player with id={1} (minId={2})", newObjectsResult.Objects.Count, playerGuid, minId));
+                LogMessage(string.Format("{0} objects has sent to player with id={1} (last ID={2})", newObjectsResult.Objects.Count, playerGuid, minId));
 
             return newObjectsResult;
         }
 
         public void UpdatePlane(Guid playerGuid, PlaneMutableInformation info)
         {
-            Plane playerPlane = _playerToPlaneMapping[playerGuid];
+            Plane playerPlane = m_playerToPlaneMapping[playerGuid];
 
             info.Apply(playerPlane);
         }
@@ -127,7 +139,7 @@ namespace NRPlanes.Server
 
         public IEnumerable<PlaneMutableInformation> GetPlanesInfo(Guid playerGuid)
         {
-            Plane playerPlane = _playerToPlaneMapping[playerGuid];
+            Plane playerPlane = m_playerToPlaneMapping[playerGuid];
 
             List<PlaneMutableInformation> info = new List<PlaneMutableInformation>();
 
@@ -140,6 +152,17 @@ namespace NRPlanes.Server
             }
 
             return info;
+        }
+
+        private void AssignGameObjectID(GameObject obj)
+        {
+            obj.Id = m_lastObjectID++;
+        }
+
+        private void LogMessage(string message)
+        {
+            if (m_log != null)
+                m_log(message);
         }
     }
 }

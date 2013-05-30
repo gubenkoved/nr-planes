@@ -13,8 +13,9 @@ namespace NRPlanes.Client.Common
 {
     /// <summary>
     /// Synchronizes game object sets on client- and server- sides
-    /// - subscribes on GameWorld events to commit created objects
-    /// - and receive objects created by another users.
+    /// <para>- subscribes on GameWorld events to commit created objects</para>
+    /// <para>- and receive objects created by another users</para>
+    /// <para>Works in dedicated thread</para>
     /// </summary>
     public class ObjectsSynchronizer
     {

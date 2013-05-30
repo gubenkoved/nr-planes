@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using NRPlanes.Core.Common;
 using Plane = NRPlanes.Core.Common.Plane;
 using NRPlanes.Core.Controllers;
+using System;
 
 namespace NRPlanes.Client.Common
 {
@@ -16,7 +17,7 @@ namespace NRPlanes.Client.Common
 
         }
 
-        public override void Update()
+        public override void Update(TimeSpan elapsed)
         {
             var newState = Keyboard.GetState();
 

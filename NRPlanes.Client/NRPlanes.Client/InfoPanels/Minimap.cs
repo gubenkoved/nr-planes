@@ -6,49 +6,46 @@ namespace NRPlanes.Client.InfoPanels
 {
     public class Minimap : InfoPanelItem
     {
-        private readonly GameWorldXna _gameWorldXna;
-
-        private readonly CoordinatesTransformer _coordinatesTransformer;
-
-        private Texture2D _background;
-        
-        private Texture2D _visibleAreaTexture;
+        private readonly GameWorldXna m_gameWorldXna;
+        private readonly CoordinatesTransformer m_coordinatesTransformer;
+        private Texture2D m_background;
+        private Texture2D m_visibleAreaTexture;
 
         public Minimap(PlanesGame game, Rectangle positionRecangle, GameWorldXna gameWorldXna)
             : base(game, positionRecangle)
         {
-            _gameWorldXna = gameWorldXna;
+            m_gameWorldXna = gameWorldXna;
 
-            _coordinatesTransformer = new CoordinatesTransformer(gameWorldXna.GameWorld.Size, positionRecangle);
+            m_coordinatesTransformer = new CoordinatesTransformer(gameWorldXna.GameWorld.Size, positionRecangle);
         }
 
         public override void Initialize()
         {
-            _background = Game.Content.Load<Texture2D>("Minimap/minimap_background");
+            m_background = Game.Content.Load<Texture2D>("Minimap/minimap_background");
 
-            _visibleAreaTexture = Game.Content.Load<Texture2D>("Minimap/visible_area");
+            m_visibleAreaTexture = Game.Content.Load<Texture2D>("Minimap/visible_area");
 
             base.Initialize();
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_background,
-                             _coordinatesTransformer.PhysicalRectangle,
+            spriteBatch.Draw(m_background,
+                             m_coordinatesTransformer.PhysicalRectangle,
                              Color.White);
 
-            spriteBatch.Draw(_visibleAreaTexture,
-                             _coordinatesTransformer.Transform(
-                                 _gameWorldXna.CoordinatesTransformer.VisibleLogicalRectangle),
+            spriteBatch.Draw(m_visibleAreaTexture,
+                             m_coordinatesTransformer.Transform(
+                                 m_gameWorldXna.CoordinatesTransformer.VisibleLogicalRectangle),
                              Color.White);
 
-            foreach (var drawableObject in _gameWorldXna.DrawableGameComponents)
+            foreach (var drawableObject in m_gameWorldXna.DrawableGameComponents)
             {
                 if (drawableObject is IOnMinimapDrawable)
                 {
                     var minimapVisivbleObject = drawableObject as IOnMinimapDrawable;
 
-                    minimapVisivbleObject.DrawOnMinimap(gameTime, spriteBatch, _coordinatesTransformer);
+                    minimapVisivbleObject.DrawOnMinimap(gameTime, spriteBatch, m_coordinatesTransformer);
                 }
             }
         }

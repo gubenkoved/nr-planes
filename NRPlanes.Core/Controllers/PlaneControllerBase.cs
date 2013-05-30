@@ -6,7 +6,7 @@ using NRPlanes.Core.Common;
 
 namespace NRPlanes.Core.Controllers
 {
-    public abstract class PlaneControllerBase
+    public abstract class PlaneControllerBase : IUpdatable
     {
         public readonly Plane ControlledPlane;
 
@@ -19,6 +19,6 @@ namespace NRPlanes.Core.Controllers
         /// This function shuold be invoked by every game tick.
         /// Contains management imapcts.
         /// </summary>
-        public abstract void Update();
+        public abstract void Update(TimeSpan elapsed);
     }
 }

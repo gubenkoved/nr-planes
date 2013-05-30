@@ -69,7 +69,7 @@ namespace NRPlanes.Core.Primitives
         /// </summary>
         /// <param name="v1">First vector</param>
         /// <param name="v2">Second vector</param>
-        /// <returns></returns>
+        /// <returns>Value in range [-180; 180]</returns>
         public static double AngleBetween(Vector v1, Vector v2)
         {
             // from System.Windows AngleBetween

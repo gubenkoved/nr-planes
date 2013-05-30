@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aliens\AliensAppearingStrategy.cs" />
+    <Compile Include="Aliens\BasicAliensAppearingStrategy.cs" />
     <Compile Include="Bullets\LaserBullet.cs" />
     <Compile Include="Common\Bonus.cs" />
     <Compile Include="Common\Bullet.cs" />
@@ -63,10 +65,11 @@
     <Compile Include="Common\StaticObject.cs" />
     <Compile Include="Common\Weapon.cs" />
     <Compile Include="Common\WeaponPosition.cs" />
-    <Compile Include="Controllers\AIPlaneController.cs" />
+    <Compile Include="Controllers\AlienPlaneController.cs" />
     <Compile Include="Controllers\PlaneControllerBase.cs" />
     <Compile Include="Engines\IonEngine.cs" />
     <Compile Include="Engines\RocketEngine.cs" />
+    <Compile Include="Logging\Logger.cs" />
     <Compile Include="Planes\XWingPlane.cs" />
     <Compile Include="Primitives\CircleGeometry.cs" />
     <Compile Include="Primitives\Extensions.cs" />

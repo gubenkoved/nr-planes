@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using NRPlanes.Core.Primitives;
 using NRPlanes.Core.StaticObjects;
 using NRPlanes.Core.Controllers;
+using NRPlanes.Core.Aliens;
+using NRPlanes.Core.Logging;
 
 namespace NRPlanes.Core.Common
 {
@@ -31,28 +33,21 @@ namespace NRPlanes.Core.Common
             }
         }
 
+        public AliensAppearingStrategy AliensAppearingStrategy { get; set; }
+
         public Size Size { get; private set; }
-        
         public Random Random { get; private set; }
 
-        public GameWorld(Size logicalSize, double gravityBoundsLength, int planetsAmount)
-            : this(
-                logicalSize,
-                GenerateRandomPlanets(planetsAmount, new Rect(gravityBoundsLength, gravityBoundsLength, logicalSize.Width - 2 * gravityBoundsLength, logicalSize.Height - 2 * gravityBoundsLength))
-                    .Union(GenerateGravityBounds(logicalSize, gravityBoundsLength)))
+        public GameWorld(Size logicalSize)
         {
-        }
+            Logger.Log("Constructing GameWorld...");
 
-        public GameWorld(Size logicalSize, IEnumerable<StaticObject> staticObjects)
-        {
             m_gameObjects = new List<GameObject>();
             m_staticObjects = new List<StaticObject>();
-            m_planeControllers = new List<PlaneControllerBase>();
+            m_planeControllers = new List<PlaneControllerBase>();           
 
             Random = new Random(Environment.TickCount);
-            Size = logicalSize;
-
-            m_staticObjects.AddRange(staticObjects);
+            Size = logicalSize;            
         }
 
         #region Public methods
@@ -71,7 +66,10 @@ namespace NRPlanes.Core.Common
 
         public void Update(TimeSpan elapsed)
         {
-            ProcessControllersUpdate();
+            if (AliensAppearingStrategy != null)
+                AliensAppearingStrategy.Update(elapsed);
+
+            ProcessControllersUpdate(elapsed);
 
             // preventing changing game objects collection while this operations is executing
             PerformSafeGameObjectCollectionOperation(() =>
@@ -93,6 +91,11 @@ namespace NRPlanes.Core.Common
             OnGameObjectStatusChanged(null, new GameObjectStatusChangedEventArg(GameObjectStatus.Created, obj));
         }
 
+        public void AddStaticObject(StaticObject obj)
+        {
+            m_staticObjects.Add(obj);
+        }
+
         public void AddPlaneController(PlaneControllerBase controller)
         {
             m_planeControllers.Add(controller);
@@ -102,14 +105,23 @@ namespace NRPlanes.Core.Common
         {
             m_planeControllers.Remove(controller);
         }
+
+        public void AddGravityBoundsWithPlanets(double gravityBoundsLength, int planetsAmount)
+        {
+            IEnumerable<StaticObject> planets = GenerateRandomPlanets(planetsAmount, new Rect(gravityBoundsLength, gravityBoundsLength, Size.Width - 2 * gravityBoundsLength, Size.Height - 2 * gravityBoundsLength));
+            IEnumerable<StaticObject> gravityBounds = GenerateGravityBounds(Size, gravityBoundsLength);
+
+            m_staticObjects.AddRange(planets);
+            m_staticObjects.AddRange(gravityBounds);
+        }
         #endregion
 
         #region Private methods
-        private void ProcessControllersUpdate()
+        private void ProcessControllersUpdate(TimeSpan elapsed)
         {
             foreach (var controller in m_planeControllers)
             {
-                controller.Update();
+                controller.Update(elapsed);
             }
         }
 

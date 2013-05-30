@@ -12,55 +12,59 @@ namespace NRPlanes.Client.Common
 {
     public class GameManager
     {
-        private readonly PlanesGame _game;
-        private readonly GameServiceClient _client;
+        private readonly PlanesGame m_game;
+        private readonly GameServiceClient m_client;
         
-        private GameWorld _gameWorld;
-        private GameWorldXna _gameWorldXna;
-        private InfoPanel _infoPanel;
+        private GameWorld m_gameWorld;
+        private GameWorldXna m_gameWorldXna;
+        private InfoPanel m_infoPanel;
 
-        private NRPlanes.Core.Common.Plane _ownPlane;        
-        private Guid _ownGuid;
+        private NRPlanes.Core.Common.Plane m_ownPlane;        
+        private Guid m_ownGuid;
 
-        private ObjectsSynchronizer _synchronizer;
+        private ObjectsSynchronizer m_synchronizer;
 
         public GameManager(PlanesGame game)
         {
-            _game = game;
+            m_game = game;
             
-            _client = new GameServiceClient();
-            _client.Open();
+            m_client = new GameServiceClient();
+            m_client.Open();
         }
 
         public void Initialize()
         {
             // getting game world from server
-            JoinResult initInfo = _client.Join();
+            JoinResult initInfo = m_client.Join();
             
-            _ownGuid = initInfo.PlayerGuid; // assigned by server unique own indetifier to identificate player
-            _gameWorld = new GameWorld(initInfo.LogicalSize, initInfo.StaticObjects);
+            m_ownGuid = initInfo.PlayerGuid; // assigned by server unique own indetifier to identificate player
+            m_gameWorld = new GameWorld(initInfo.LogicalSize);
+
+            foreach (var staticObject in initInfo.StaticObjects)
+            {
+                m_gameWorld.AddStaticObject(staticObject);
+            }
             
-            _gameWorldXna = new GameWorldXna(_game, _gameWorld, new Rectangle(0, 0, _game.Graphics.PreferredBackBufferWidth, _game.Graphics.PreferredBackBufferHeight));
-            _infoPanel = new InfoPanel(_game, _gameWorldXna);
+            m_gameWorldXna = new GameWorldXna(m_game, m_gameWorld, new Rectangle(0, 0, m_game.Graphics.PreferredBackBufferWidth, m_game.Graphics.PreferredBackBufferHeight));
+            m_infoPanel = new InfoPanel(m_game, m_gameWorldXna);
             
             #region Create plane, controller and set camera
-            _ownPlane = XWingPlane.BasicConfiguration(new Vector(_gameWorld.Size.Width / 2.0, _gameWorld.Size.Height / 2.0));
+            m_ownPlane = XWingPlane.BasicConfiguration(new Vector(m_gameWorld.Size.Width / 2.0, m_gameWorld.Size.Height / 2.0));
 
-            _gameWorld.AddPlaneController(
-                new LocalPlaneController(_ownPlane));
+            m_gameWorld.AddPlaneController(new LocalPlaneController(m_ownPlane));
 
-            _gameWorldXna.CenterOfView = _ownPlane;
-            _gameWorldXna.ForceSetCameraOnCenterOfView();
+            m_gameWorldXna.CenterOfView = m_ownPlane;
+            m_gameWorldXna.ForceSetCameraOnCenterOfView();
             #endregion
 
-            _synchronizer = new ObjectsSynchronizer(_client, _gameWorld, _ownGuid, _ownPlane);
+            m_synchronizer = new ObjectsSynchronizer(m_client, m_gameWorld, m_ownGuid, m_ownPlane);
 
-            _gameWorld.AddGameObject(_ownPlane); // Add after subscribing of GameWorld events
+            m_gameWorld.AddGameObject(m_ownPlane); // Add after subscribing of GameWorld events
 
-            _infoPanel.Initialize();
-            _infoPanel.PlaneInfoPanel.Plane = _ownPlane;
+            m_infoPanel.Initialize();
+            m_infoPanel.PlaneInfoPanel.Plane = m_ownPlane;
 
-            _gameWorldXna.Initialize();
+            m_gameWorldXna.Initialize();
         }
 
         public void Update(GameTime gameTime)
@@ -71,17 +75,17 @@ namespace NRPlanes.Client.Common
 
             TimeSpan elapsed = gameTime.ElapsedGameTime;
 
-            _synchronizer.Update();
-            _gameWorld.Update(elapsed);            
-            _infoPanel.Update(gameTime);
-            _gameWorldXna.Update(gameTime);
+            m_synchronizer.Update();
+            m_gameWorld.Update(elapsed);            
+            m_infoPanel.Update(gameTime);
+            m_gameWorldXna.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime)
         {
-            _gameWorldXna.Draw(gameTime);
+            m_gameWorldXna.Draw(gameTime);
 
-            _infoPanel.Draw(gameTime);
+            m_infoPanel.Draw(gameTime);
         }
     }
 }

@@ -1,3 +1,5 @@
+//#define DEBUG_MODE
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,33 +17,41 @@ using NRPlanes.Core.StaticObjects;
 using NRPlanes.Core.Weapons;
 using Plane = NRPlanes.Core.Common.Plane;
 using NRPlanes.Client.Sound;
+using System.Threading;
+using System.Collections.Concurrent;
 
 namespace NRPlanes.Client.Common
 {
     public class GameWorldXna : DrawableGameComponent
     {
-        private readonly List<MyDrawableGameComponent> _drawableGameComponents;
+        private object m_sync = new object();
+
+        private readonly List<MyDrawableGameComponent> m_drawableGameComponents;
         public IEnumerable<MyDrawableGameComponent> DrawableGameComponents
         {
-            get { return _drawableGameComponents; }
+            get 
+            {
+                // return copy for thread-safety reasons
+                return m_drawableGameComponents.ToList(); 
+            }
         }
 
-        private readonly GameWorld _gameWorld;
+        private readonly GameWorld m_gameWorld;
         public GameWorld GameWorld
         {
-            get { return _gameWorld; }
+            get { return m_gameWorld; }
         }
 
-        private SpriteBatch _spriteBatch;
-        private Texture2D _background;
+        private SpriteBatch m_spriteBatch;
+        private Texture2D m_background;
 
-        private readonly InstanceMapper _instanceMapper;
-        private readonly SoundManager _soundManager;
+        private readonly InstanceMapper m_instanceMapper;
+        private readonly SoundManager m_soundManager;
 
-        private readonly CoordinatesTransformer _coordinatesTransformer;
+        private readonly CoordinatesTransformer m_coordinatesTransformer;
         public CoordinatesTransformer CoordinatesTransformer
         {
-            get { return _coordinatesTransformer; }
+            get { return m_coordinatesTransformer; }
         }
 
         public GameObject CenterOfView { get; set; }
@@ -54,21 +64,18 @@ namespace NRPlanes.Client.Common
         public GameWorldXna(PlanesGame game, GameWorld gameWorld, Rectangle gameFieldRectangle)
             : base(game)
         {
-            _drawableGameComponents = new List<MyDrawableGameComponent>();
+            m_drawableGameComponents = new List<MyDrawableGameComponent>();
 
-            _gameWorld = gameWorld;
+            m_gameWorld = gameWorld;
+            m_gameWorld.GameObjectStatusChanged += GameObjectStatusChanged;
+            m_gameWorld.CollisionDetected += CollisionDetected;
 
-            _gameWorld.GameObjectStatusChanged += GameObjectStatusChanged;
+            m_coordinatesTransformer = new CoordinatesTransformer(m_gameWorld.Size, gameFieldRectangle, 180);
+            m_coordinatesTransformer.ScaleToFit();
 
-            _gameWorld.CollisionDetected += CollisionDetected;
+            m_instanceMapper = new InstanceMapper(game, m_coordinatesTransformer);
 
-            _coordinatesTransformer = new CoordinatesTransformer(_gameWorld.Size, gameFieldRectangle, 180);
-            
-            _coordinatesTransformer.ScaleToFit();
-
-            _instanceMapper = new InstanceMapper(game, _coordinatesTransformer);
-
-            _soundManager = SoundManager.CreateInstance(game, () => _coordinatesTransformer.VisibleLogicalRectangle);
+            m_soundManager = SoundManager.CreateInstance(game, () => m_coordinatesTransformer.VisibleLogicalRectangle);
 
             FillInstanceMapper();
 
@@ -77,9 +84,9 @@ namespace NRPlanes.Client.Common
 
         public override void Initialize()
         {
-            _spriteBatch = new SpriteBatch(Game.Graphics.GraphicsDevice);
+            m_spriteBatch = new SpriteBatch(Game.Graphics.GraphicsDevice);
 
-            _background = Game.Content.Load<Texture2D>("Images/background");
+            m_background = Game.Content.Load<Texture2D>("Images/background");
 
             base.Initialize();
         }
@@ -88,29 +95,28 @@ namespace NRPlanes.Client.Common
         {
             #region GameObjects
 
-            _instanceMapper.AddMapping(typeof(XWingPlane), typeof(XWingPlaneXna));
-            _instanceMapper.AddMapping(typeof(LaserBullet), typeof(LaserBulletXna));
+            m_instanceMapper.AddMapping(typeof(XWingPlane), typeof(XWingPlaneXna));
+            m_instanceMapper.AddMapping(typeof(LaserBullet), typeof(LaserBulletXna));
 
             #endregion
 
             #region Equipments
 
-            _instanceMapper.AddMapping(typeof(RocketEngine), typeof(RocketEngineXna));
-            _instanceMapper.AddMapping(typeof(IonEngine), typeof(IonEngineXna));
-            _instanceMapper.AddMapping(typeof(LaserGun), typeof(LaserGunXna));
-            _instanceMapper.AddMapping(typeof(Shield), typeof(ShieldXna));
+            m_instanceMapper.AddMapping(typeof(RocketEngine), typeof(RocketEngineXna));
+            m_instanceMapper.AddMapping(typeof(IonEngine), typeof(IonEngineXna));
+            m_instanceMapper.AddMapping(typeof(LaserGun), typeof(LaserGunXna));
+            m_instanceMapper.AddMapping(typeof(Shield), typeof(ShieldXna));
 
             #endregion
 
             #region StaticObjects
 
-            _instanceMapper.AddMapping(typeof(RectangleGravityField), typeof(RectangleGravityFieldXna));
-            _instanceMapper.AddMapping(typeof(HealthRecoveryPlanet), typeof(HealthRecoveryPlanetXna));
+            m_instanceMapper.AddMapping(typeof(RectangleGravityField), typeof(RectangleGravityFieldXna));
+            m_instanceMapper.AddMapping(typeof(HealthRecoveryPlanet), typeof(HealthRecoveryPlanetXna));
 
             #endregion
 
         }
-
         private void GameObjectStatusChanged(object sender, GameObjectStatusChangedEventArg arg)
         {
             switch (arg.Status)
@@ -126,7 +132,6 @@ namespace NRPlanes.Client.Common
             }
 
         }
-
         private void CollisionDetected(object sender, CollisionEventArgs args)
         {
             var collision = args.Collision;
@@ -137,36 +142,54 @@ namespace NRPlanes.Client.Common
             if (collision.Two.IsGarbage)
                 AddExplosion(collision.Two);
         }
-
+        private void AddDrawableGameComponent(MyDrawableGameComponent component)
+        {
+            lock (m_sync)
+            {
+                m_drawableGameComponents.Add(component);
+            }
+        }
+        private void RemoveDrawableGameComponent(MyDrawableGameComponent component)
+        {
+            lock (m_sync)
+            {
+                m_drawableGameComponents.Remove(component);
+            }
+        }
+        private void RemoveDrawableGameComponentAt(int i)
+        {
+            lock (m_sync)
+            {
+                m_drawableGameComponents.RemoveAt(i);
+            }
+        }
         private void AddExplosion(GameObject exploded)
         {            
-            ExplosionXna explosion = new ExplosionXna(Game, exploded, _coordinatesTransformer);
+            ExplosionXna explosion = new ExplosionXna(Game, exploded, m_coordinatesTransformer);
 
-            _drawableGameComponents.Add(explosion);
+            AddDrawableGameComponent(explosion);
         }
-
         private void AddGameObject(GameObject gameObject)
-        {
-            var xnaRelatedGameObject = _instanceMapper.CreateInstance(gameObject);
+        {            
+            var xnaRelatedGameObject = m_instanceMapper.CreateInstance(gameObject);
 
-            _drawableGameComponents.Add(xnaRelatedGameObject);
+            AddDrawableGameComponent(xnaRelatedGameObject);
 
             if (gameObject is IHaveEquipment)
             {
                 foreach (var equipment in (gameObject as IHaveEquipment).AllEquipment)
                 {
-                    var xnaRelatedEquipment = _instanceMapper.CreateInstance(equipment);
-                    
-                    _drawableGameComponents.Add(xnaRelatedEquipment);
+                    var xnaRelatedEquipment = m_instanceMapper.CreateInstance(equipment);
+
+                    AddDrawableGameComponent(xnaRelatedEquipment);
                 }
             }
         }
-
         private void DeleteGameObject(GameObject gameObject)
         {
-            var drawableGameObject = _drawableGameComponents.OfType<DrawableGameObject>().Single(d => d.GameObject == gameObject);
+            var drawableGameObject = m_drawableGameComponents.OfType<DrawableGameObject>().Single(d => d.GameObject == gameObject);
 
-            _drawableGameComponents.Remove(drawableGameObject);
+            RemoveDrawableGameComponent(drawableGameObject);
 
             if (gameObject is IHaveEquipment)
             {
@@ -178,31 +201,30 @@ namespace NRPlanes.Client.Common
                 }
             }
         }
-
         private void DeleteEquipment(Equipment equipment)
         {
-            var drawableEquipment = _drawableGameComponents.OfType<DrawableEquipment>().Single(e => e.Equipment == equipment);
+            var drawableEquipment = m_drawableGameComponents.OfType<DrawableEquipment>().Single(e => e.Equipment == equipment);
 
-            _drawableGameComponents.Remove(drawableEquipment);
+            RemoveDrawableGameComponent(drawableEquipment);
         }
 
         public void ForceSetCameraOnCenterOfView()
         {
-            _coordinatesTransformer.SetCenterOfView(CenterOfView.Position);
+            m_coordinatesTransformer.SetCenterOfView(CenterOfView.Position);
         }
 
         public override void Update(GameTime gameTime)
         {            
-            _soundManager.Update(gameTime.ElapsedGameTime);
+            m_soundManager.Update(gameTime.ElapsedGameTime);
 
             UpdateView(gameTime);
 
-            for (int i = _drawableGameComponents.Count - 1; i >= 0; i--)
+            for (int i = m_drawableGameComponents.Count - 1; i >= 0; i--)
             {
-                if (!_drawableGameComponents[i].IsGarbage)
-                    _drawableGameComponents[i].Update(gameTime);
+                if (!m_drawableGameComponents[i].IsGarbage)
+                    m_drawableGameComponents[i].Update(gameTime);
                 else
-                    _drawableGameComponents.RemoveAt(i);
+                    RemoveDrawableGameComponentAt(i);
             }
         }
 
@@ -210,25 +232,28 @@ namespace NRPlanes.Client.Common
         {
             GraphicsDevice.Clear(Color.Transparent);
 
-            _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
             DrawBackground();
             DrawAdditionalInfo(gameTime);
 
-            foreach (var drawableGameObject in _drawableGameComponents)
+            lock (m_sync) // because m_drawableGameComponents collection can be modified while iterating
             {
-                drawableGameObject.Draw(gameTime, _spriteBatch);
+                foreach (var drawableGameObject in m_drawableGameComponents)
+                {
+                    drawableGameObject.Draw(gameTime, m_spriteBatch);
+                }
             }
 
-            _spriteBatch.End();
+            m_spriteBatch.End();
             
-            // set it flag TRUE, if you want to se bounding rectangles, and other debug info
-            if (false)
-            {
-                _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-                    DrawDebugInfo();
-                _spriteBatch.End();
-            }
+#if DEBUG_MODE
+            m_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+
+            DrawDebugInfo();
+
+            m_spriteBatch.End();
+#endif
         }
 
         private void UpdateView(GameTime gameTime)
@@ -240,11 +265,11 @@ namespace NRPlanes.Client.Common
             {
                 #region View position
 
-                var oldCenter = _coordinatesTransformer.VisibleLogicalRectangle.Center;
+                var oldCenter = m_coordinatesTransformer.VisibleLogicalRectangle.Center;
 
                 var offset = CenterOfView.Position - oldCenter;
 
-                _coordinatesTransformer.SetCenterOfView(oldCenter + followingSpeedCoeff * offset);
+                m_coordinatesTransformer.SetCenterOfView(oldCenter + followingSpeedCoeff * offset);
                 #endregion
 
 
@@ -252,7 +277,7 @@ namespace NRPlanes.Client.Common
 
                 double newScale = Math.Exp(-0.01 * CenterOfView.Velocity.Length);
 
-                _coordinatesTransformer.Scale = _coordinatesTransformer.Scale * scaleInertness +
+                m_coordinatesTransformer.Scale = m_coordinatesTransformer.Scale * scaleInertness +
                                                 newScale * (1.0 - scaleInertness);
                 #endregion
             }
@@ -262,9 +287,9 @@ namespace NRPlanes.Client.Common
         {
             return;
 
-            var destination = _coordinatesTransformer.PhysicalRectangle;
+            var destination = m_coordinatesTransformer.PhysicalRectangle;
             
-            _spriteBatch.Draw(_background, destination, null, Color.White, 0.0f, new Vector2(), SpriteEffects.None, 1.0f);
+            m_spriteBatch.Draw(m_background, destination, null, Color.White, 0.0f, new Vector2(), SpriteEffects.None, 1.0f);
         }
 
         private void DrawDebugInfo()
@@ -281,13 +306,13 @@ namespace NRPlanes.Client.Common
                 {
                     var gameObject = ((DrawableGameObject) drawableObj).GameObject;
 
-                    debugGeomertyDrawer.Draw(_spriteBatch, _coordinatesTransformer, gameObject.CalculateAbsoluteGeometry());
+                    debugGeomertyDrawer.Draw(m_spriteBatch, m_coordinatesTransformer, gameObject.CalculateAbsoluteGeometry());
                 
                 } else if (drawableObj is DrawableStaticObject)
                 {
                     var staticObject = ((DrawableStaticObject)drawableObj).StaticObject;
 
-                    debugGeomertyDrawer.Draw(_spriteBatch, _coordinatesTransformer, staticObject.AbsoluteGeometry);
+                    debugGeomertyDrawer.Draw(m_spriteBatch, m_coordinatesTransformer, staticObject.AbsoluteGeometry);
                 }
             }
         }
@@ -299,20 +324,20 @@ namespace NRPlanes.Client.Common
             var fps = 1.0 / gameTime.ElapsedGameTime.TotalSeconds;
 
             if (!double.IsInfinity(fps))
-                _spriteBatch.DrawString(font, string.Format("{0:F1} fps", fps), new Vector2(10, 10), Color.White);
+                m_spriteBatch.DrawString(font, string.Format("{0:F1} fps", fps), new Vector2(10, 10), Color.White);
 
             var time = gameTime.TotalGameTime;
 
-            _spriteBatch.DrawString(font, string.Format(@"{0:hh\:mm\:ss}", time), new Vector2(10, 22), Color.White);
+            m_spriteBatch.DrawString(font, string.Format(@"{0:hh\:mm\:ss}", time), new Vector2(10, 22), Color.White);
         }
 
         private void GrabStaticObjects()
         {
-            foreach (var staticObject in _gameWorld.StaticObjects)
+            foreach (var staticObject in m_gameWorld.StaticObjects)
             {
-                var xnaRelatedStaticObject = _instanceMapper.CreateInstance(staticObject);
+                var xnaRelatedStaticObject = m_instanceMapper.CreateInstance(staticObject);
                 
-                _drawableGameComponents.Add(xnaRelatedStaticObject);
+                m_drawableGameComponents.Add(xnaRelatedStaticObject);
             }
         }
     }
