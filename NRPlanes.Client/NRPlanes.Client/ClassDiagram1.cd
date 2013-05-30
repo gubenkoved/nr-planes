@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="NRPlanes.Client.Common.AnimationSpriteDrawer" Collapsed="true">
+    <Position X="17" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAACgAAAAACAAABAAAgAEAAAAAAAAAAAAE=</HashCode>
+      <FileName>Common\AnimationSpriteDrawer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.Common.CoordinatesTransformer" Collapsed="true">
+    <Position X="18.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACBAgAAhAAAEAEAAICABQEAAAAEAAAAAAAAAAAACA=</HashCode>
+      <FileName>Common\CoordinatesTransformer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.Common.DrawableEquipment" Collapsed="true">
+    <Position X="3.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\DrawableEquipment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.Common.DrawableGameObject" Collapsed="true">
+    <Position X="9" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\DrawableGameObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.Common.DrawableStaticObject" Collapsed="true">
+    <Position X="13.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\DrawableStaticObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.Common.Extensions" Collapsed="true">
+    <Position X="20.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAACAAAAAAAAACAAAABAAACAAAEAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Common\Extensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.Common.GameManager" Collapsed="true">
+    <Position X="22.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAACAAAAAAAwAAAAAAAAQAAAAAAAQAAAAAAAAAAAQ=</HashCode>
+      <FileName>Common\GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.Common.GameWorldXna" Collapsed="true">
+    <Position X="17" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAASAAAAAACwAACEQBAAjggAgAUAAAAIAGAQAAAAA=</HashCode>
+      <FileName>Common\GameWorldXna.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.Common.InstanceMapper" Collapsed="true">
+    <Position X="22.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAIAAAEAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Common\InstanceMapper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.Common.MyDrawableGameComponent" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAgAAAAAAAAAAAAgAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\MyDrawableGameComponent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.Common.MySoundEffect" Collapsed="true">
+    <Position X="17" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAABCAAAASAAAAAAIABABgAAAAA=</HashCode>
+      <FileName>Common\MySoundEffect.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.GameComponents.HealthRecoveryPlanetXna" Collapsed="true">
+    <Position X="12.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAgAAAAAAAAAAAAAAAAQAACAAAAAAAAQ=</HashCode>
+      <FileName>GameComponents\HealthRecoveryPlanetXna.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NRPlanes.Client.GameComponents.IonEngineXna" Collapsed="true">
+    <Position X="1" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEAAAAAAAAgAAAAAAAAAgAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>GameComponents\IonEngineXna.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.GameComponents.LaserBulletXna" Collapsed="true">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAQAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameComponents\LaserBulletXna.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.GameComponents.LaserGunXna" Collapsed="true">
+    <Position X="3.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAQAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameComponents\LaserGunXna.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.GameComponents.RectangleGravityFieldXna" Collapsed="true">
+    <Position X="14.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAQAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameComponents\RectangleGravityFieldXna.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.GameComponents.RocketEngineXna" Collapsed="true">
+    <Position X="5.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAACAgAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>GameComponents\RocketEngineXna.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.GameComponents.XWingPlaneXna" Collapsed="true">
+    <Position X="7.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEAAAAQAAAgAAAQAAAAAAAAAAAAQAACAAAAAAAAA=</HashCode>
+      <FileName>GameComponents\XWingPlaneXna.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NRPlanes.Client.InfoPanels.IndicatorsDrawer" Collapsed="true">
+    <Position X="18.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgCAAAAAAAAAAACAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>InfoPanels\IndicatorsDrawer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.InfoPanels.InfoPanel" Collapsed="true">
+    <Position X="20.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAwAAAgAAAAQAAAgAAAAgCIAAAAAAAAA=</HashCode>
+      <FileName>InfoPanels\InfoPanel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.InfoPanels.InfoPanelItem" Collapsed="true">
+    <Position X="1.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAgAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>InfoPanels\InfoPanelItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.InfoPanels.Minimap" Collapsed="true">
+    <Position X="2.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAwAAAEAAAAQAABAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>InfoPanels\Minimap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.InfoPanels.PlaneInfo" Collapsed="true">
+    <Position X="0.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAICAQAAAAA=</HashCode>
+      <FileName>InfoPanels\PlaneInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.PlanesGame" Collapsed="true">
+    <Position X="18.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEAAACAAAAwAAAAAAAAAACAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>PlanesGame.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Client.Program" Collapsed="true">
+    <Position X="20.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="NRPlanes.Client.InfoPanels.IOnMinimapDrawable" Collapsed="true">
+    <Position X="17" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>InfoPanels\IOnMinimapDrawable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="NRPlanes.Client.Common.MySoundEffectState" Collapsed="true">
+    <Position X="17" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAACAAAAAAAAAAAAAAAAAAAAAoAAAAAAAAAA=</HashCode>
+      <FileName>Common\MySoundEffect.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

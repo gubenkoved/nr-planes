@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.OperationResults" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.OperationResults" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="JoinResult">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" minOccurs="0" name="LogicalSize" type="q1:Size" />
+      <xs:element minOccurs="0" name="PlayerGuid" type="ser:guid" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" minOccurs="0" name="StaticObjects" nillable="true" type="q2:ArrayOfStaticObject" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="JoinResult" nillable="true" type="tns:JoinResult" />
+  <xs:complexType name="CommitResult">
+    <xs:sequence>
+      <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ObjectsIds" nillable="true" type="q3:ArrayOfint" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CommitResult" nillable="true" type="tns:CommitResult" />
+  <xs:complexType name="GetNewObjectsResult">
+    <xs:sequence>
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" minOccurs="0" name="Objects" nillable="true" type="q4:ArrayOfGameObject" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetNewObjectsResult" nillable="true" type="tns:GetNewObjectsResult" />
+</xs:schema>

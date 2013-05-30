@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access" MembersFormat="NameAndType">
+  <Class Name="NRPlanes.Core.Bullets.LaserBullet" Collapsed="true">
+    <Position X="5.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Bullets\LaserBullet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Common.Bullet" Collapsed="true">
+    <Position X="5.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAEAAAAAAAAAAAAABAAAAEAAABAQAAAgBAABA=</HashCode>
+      <FileName>Common\Bullet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Common.Collision" Collapsed="true">
+    <Position X="12.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAgAAAAAAIA=</HashCode>
+      <FileName>Common\Collision.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Common.CollisionEventArgs" Collapsed="true">
+    <Position X="14" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\CollisionEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Common.Engine" Collapsed="true">
+    <Position X="4" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AFQAAAAAAAAAAAAAEAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Common\Engine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Common.Equipment" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACIAAAAAAAgAAAAAACCAAAAAAAAAAAAAAAAEQAAAA=</HashCode>
+      <FileName>Common\Equipment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Common.Equipment&lt;T&gt;" Collapsed="true">
+    <Position X="4" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\Equipment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Common.GameObject" Collapsed="true">
+    <Position X="6.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQCAAAAAQAAAIAgAAAgAAAQCAAIAACAEAAkAACEAAA=</HashCode>
+      <FileName>Common\GameObject.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NRPlanes.Core.Common.GameObjectStatusChangedEventArg" Collapsed="true">
+    <Position X="12.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Common\GameObjectStatusChangedEventArg.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Common.GameWorld" BaseTypeListCollapsed="true">
+    <Position X="12.5" Y="9.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AARAAQAkAgAAoAAgAAAAAAggCBAIBgAAAAACAAQAAAI=</HashCode>
+      <FileName>Common\GameWorld.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="GameObjects" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NRPlanes.Core.Common.PhysicEngine" Collapsed="true">
+    <Position X="12.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAQAAAAAAAAAAEAAAAAAABAAAACAAAAAIAAAAAA=</HashCode>
+      <FileName>Common\PhysicEngine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Common.Plane">
+    <Position X="7.75" Y="8.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAQACCCIAAEgAAAAAQEgAAAIAAgEIAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Common\Plane.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="AllEquipment" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NRPlanes.Core.Common.PlaneEquipment" Collapsed="true">
+    <Position X="4" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAQBAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\PlaneEquipment.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NRPlanes.Core.Common.ReferenceArea" Collapsed="true">
+    <Position X="14" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\ReferenceArea.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Common.Shield" Collapsed="true">
+    <Position X="7.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQEAACAAAAAAAAAEAAAAAAAAACAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Common\Shield.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Common.StaticObject" Collapsed="true">
+    <Position X="1.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\StaticObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Common.Weapon" Collapsed="true">
+    <Position X="0.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IBQAAAAAAAAAAAAAAAAAAAAAAAAEAAQAIGAAQAAAAAA=</HashCode>
+      <FileName>Common\Weapon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Engines.IonEngine" Collapsed="true">
+    <Position X="3" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engines\IonEngine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Engines.RocketEngine" Collapsed="true">
+    <Position X="5.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engines\RocketEngine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Planes.XWingPlane" Collapsed="true">
+    <Position X="4.75" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAIAAAAAAAAAAAoAAAAAAAAIAEIAAAA=</HashCode>
+      <FileName>Planes\XWingPlane.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Primitives.CircleGeometry" Collapsed="true">
+    <Position X="9.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAIAAAAAABAAAAAAAAAAAAAEAAAAAAAAAAEAAEIEBA=</HashCode>
+      <FileName>Primitives\CircleGeometry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Primitives.Extensions" Collapsed="true">
+    <Position X="15.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAEAAAAAAgAEAAAAAAAAA=</HashCode>
+      <FileName>Primitives\Extensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Primitives.Geometry" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAABAAAAAAAAAAAABEAAAAAAAAAAEAAAIEBA=</HashCode>
+      <FileName>Primitives\Geometry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Primitives.Helper" Collapsed="true">
+    <Position X="15.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAgAAAAAAAAAAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>Primitives\Helper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Primitives.PolygonGeometry" Collapsed="true">
+    <Position X="7.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAABAABACAAAAAAABMCAAAAEAwAAEAAUIEBA=</HashCode>
+      <FileName>Primitives\PolygonGeometry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.StaticObjects.HealthRecoveryPlanet" Collapsed="true">
+    <Position X="0.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>StaticObjects\HealthRecoveryPlanet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.StaticObjects.Planet" Collapsed="true">
+    <Position X="0.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StaticObjects\Planet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.StaticObjects.RectangleGravityField" Collapsed="true">
+    <Position X="2.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAEAAAAAAE=</HashCode>
+      <FileName>StaticObjects\RectangleGravityField.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NRPlanes.Core.Weapons.LaserGun" Collapsed="true">
+    <Position X="0.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Weapons\LaserGun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="NRPlanes.Core.Common.ReferenceAreaPoint" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAgAAAAAAAAAAAAAEAAAAAAAiA=</HashCode>
+      <FileName>Common\ReferenceArea.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="NRPlanes.Core.Primitives.Matrix" Collapsed="true">
+    <Position X="12.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACABAAAAAAAACAAAAAAAACAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Primitives\Matrix.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NRPlanes.Core.Primitives.Rect" Collapsed="true">
+    <Position X="14" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAIBAAAgFAEAAIQAEAAAAAYAAAACACAQAAIYEA=</HashCode>
+      <FileName>Primitives\Rect.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NRPlanes.Core.Primitives.Segment" Collapsed="true">
+    <Position X="12.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAACAAAAAAAAAAAABAAAAQAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Primitives\Segment.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NRPlanes.Core.Primitives.Size" Collapsed="true">
+    <Position X="14" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAEAEAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Primitives\Size.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NRPlanes.Core.Primitives.Vector" Collapsed="true">
+    <Position X="15.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEYAUBAABAACAAAAAAAAAgAAAAYAA=</HashCode>
+      <FileName>Primitives\Vector.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="NRPlanes.Core.Common.IHaveEquipment" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\IHaveEquipment.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="NRPlanes.Core.Common.IHaveEquipment&lt;T&gt;" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\IHaveEquipment.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="NRPlanes.Core.Common.IUpdatable" Collapsed="true">
+    <Position X="12.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\IUpdatable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="NRPlanes.Core.Common.GameObjectStatus" Collapsed="true">
+    <Position X="12.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\GameObjectStatusChangedEventArg.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="NRPlanes.Core.Common.MotionType" Collapsed="true">
+    <Position X="14" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAI=</HashCode>
+      <FileName>Common\Plane.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="NRPlanes.Core.Common.WeaponPosition" Collapsed="true">
+    <Position X="15.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAQAIAAAAAABA=</HashCode>
+      <FileName>Common\WeaponPosition.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
