@@ -46,12 +46,12 @@ namespace NRPlanes.Core.Primitives
 
         /// <summary>
         /// Returns value in range [-180; 180].
-        /// <para>Returns 0, then second position in (1, 0) direction (along classical x-axis);</para>
-        /// <para>90 deg, then second position in (0, 1) direction (y-axis)</para>
+        /// <para>Returns 0, then second position in (0, 1) direction (along classical y-axis);</para>
+        /// <para>90 deg, then second position in (1, 0) direction (y-axis)</para>
         /// </summary>
-        public static double RelativeAngleBetweenPositions(Vector firstPos, Vector secondPos)
+        public static double RelativeAngleBetweenPositions(Vector from, Vector to)
         {
-            return Vector.AngleBetween(new Vector(1, 0), secondPos - firstPos);
+            return NormalizeAngle(Vector.AngleBetween(new Vector(0, 1), to - from));
         }
     }
 }

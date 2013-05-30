@@ -29,6 +29,22 @@ namespace NRPlanes.Core.Primitives
             get { return X * X + Y * Y; }
         }
 
+        /// <summary>
+        /// Returns reflected by x-axis vector (y -> -y)
+        /// </summary>
+        public Vector ReflectionByXAxis()
+        {
+            return new Vector(X, -Y);
+        }
+
+        /// <summary>
+        /// Returns reflected by y-axis vector (x -> -x)
+        /// </summary>
+        public Vector ReflectionByYAxis()
+        {
+            return new Vector(-X, Y);
+        }
+
         public static Vector operator +(Vector v1, Vector v2)
         {
             return new Vector(v1.X + v2.X, v1.Y + v2.Y);
@@ -77,7 +93,7 @@ namespace NRPlanes.Core.Primitives
             double y = v1.X * v2.Y - v2.X * v1.Y;
             double x = v1.X * v2.X + v1.Y * v2.Y;
             
-            return Helper.ToDegrees(Math.Atan2(y, x));
+            return Helper.ToDegrees(Math.Atan2(-y, x));
         }
 
         public static Vector Multiply(Vector v, Matrix matrix)
@@ -90,7 +106,7 @@ namespace NRPlanes.Core.Primitives
 
         public override string ToString()
         {
-            return string.Format("({0:F2}, {1:F2})", X, Y);
+            return string.Format("({0:F1}; {1:F1})", X, Y);
         }
     }
 }

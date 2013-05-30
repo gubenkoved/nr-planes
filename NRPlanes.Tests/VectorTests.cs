@@ -35,14 +35,17 @@ namespace NRPlanes.Tests
         }
 
         [TestMethod]
-        public void AngleBetweenTest4()
+        public void RelativeAngleBetweenPositions()
         {
-            double angle = Vector.AngleBetween(new Vector(1, 0), new Vector(1, 1) - new Vector(1, 0));
-
-            double angle2 = Helper.RelativeAngleBetweenPositions(new Vector(1, 0), new Vector(1, 1));
-
-            Assert.AreEqual(angle2, angle);
-            Assert.AreEqual(90, angle);
+            double angle1 = Helper.RelativeAngleBetweenPositions(new Vector(0, 0), new Vector(1, 1));
+            double angle2 = Helper.RelativeAngleBetweenPositions(new Vector(0, 0), new Vector(1, -1));
+            double angle3 = Helper.RelativeAngleBetweenPositions(new Vector(0, 0), new Vector(-1, -1));
+            double angle4 = Helper.RelativeAngleBetweenPositions(new Vector(0, 0), new Vector(-1, 1));
+            
+            Assert.AreEqual(45, angle1);
+            Assert.AreEqual(135, angle2);
+            Assert.AreEqual(225, angle3);
+            Assert.AreEqual(315, angle4);
         }
 
 

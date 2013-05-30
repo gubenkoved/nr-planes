@@ -9,7 +9,8 @@ namespace NRPlanes.Core.Common
     {
         Forward,
         Left,
-        Right
+        Right,
+        All
     }
 
     [DataContract]

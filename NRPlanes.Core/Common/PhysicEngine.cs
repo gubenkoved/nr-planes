@@ -23,6 +23,7 @@ namespace NRPlanes.Core.Common
 
             #region Rotation
             obj.Rotation += obj.RotationVelocity * elapsedSeconds;
+            obj.Rotation = Helper.NormalizeAngle(obj.Rotation);
 
             obj.RotationVelocity += obj.RotationAcceleration * elapsedSeconds;
 
@@ -48,11 +49,9 @@ namespace NRPlanes.Core.Common
             Vector radiusVector = fulcrum - obj.Position;
             double angle = Vector.AngleBetween(radiusVector, force);
 
-            bool counterClockwise = Math.Sign(Helper.ToRadians(angle)) < 0.0;
+            var momentOfForce = Math.Sin(Helper.ToRadians(angle)) * force.Length * radiusVector.Length;
 
-            var momentOfForce = (counterClockwise ? -1.0 : 1.0) * Math.Sin(Helper.ToRadians(angle)) * force.Length * radiusVector.Length;
-
-            obj.RotationAcceleration += (counterClockwise ? 1.0 : -1.0) * momentOfForce / obj.AngularMass;
+            obj.RotationAcceleration += momentOfForce / obj.AngularMass;
             #endregion
         }
 
@@ -66,11 +65,9 @@ namespace NRPlanes.Core.Common
             Vector radiusVector = fulcrum - obj.Position;
             double angle = Vector.AngleBetween(radiusVector, impulse);
 
-            bool counterClockwise = Math.Sign(Helper.ToRadians(angle)) < 0.0;
+            var momentOfImpulse = Math.Sin(Helper.ToRadians(angle)) * impulse.Length * radiusVector.Length;
 
-            var momentOfImpulse = (counterClockwise ? -1.0 : 1.0) * Math.Sin(Helper.ToRadians(angle)) * impulse.Length * radiusVector.Length;
-
-            obj.RotationVelocity += (counterClockwise ? 1.0 : -1.0) * momentOfImpulse / obj.AngularMass;
+            obj.RotationVelocity += momentOfImpulse / obj.AngularMass;
             #endregion
         }
 

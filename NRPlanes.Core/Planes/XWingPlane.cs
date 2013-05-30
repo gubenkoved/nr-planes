@@ -107,6 +107,12 @@ namespace NRPlanes.Core.Planes
                 case MotionType.Right:
                     _rightDeflectingEngine.TurnOn();
                     break;
+                case MotionType.All:
+                    _leftForwardEngine.TurnOn();
+                    _rightForwardEngine.TurnOn();
+                    _leftDeflectingEngine.TurnOn();
+                    _rightDeflectingEngine.TurnOn();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException("motion");
             }
@@ -124,6 +130,12 @@ namespace NRPlanes.Core.Planes
                     _leftDeflectingEngine.TurnOff();
                     break;
                 case MotionType.Right:
+                    _rightDeflectingEngine.TurnOff();
+                    break;
+                case MotionType.All:
+                    _leftForwardEngine.TurnOff();
+                    _rightForwardEngine.TurnOff();
+                    _leftDeflectingEngine.TurnOff();
                     _rightDeflectingEngine.TurnOff();
                     break;
                 default:

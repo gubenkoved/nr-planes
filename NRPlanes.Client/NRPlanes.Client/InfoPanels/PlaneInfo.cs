@@ -53,6 +53,16 @@ namespace NRPlanes.Client.InfoPanels
 
                 _indicatorsDrawer.Draw(spriteBatch,
                                        indicatorPosition,
+                                       1,
+                                       Color.Black,
+                                       Color.Black,
+                                       string.Format("{0}, {1:F1}", Plane.Position, Plane.Rotation),
+                                       Color.FromNonPremultiplied(255, 255, 255, 200));
+                
+                indicatorPosition.Offset(0, 24);
+
+                _indicatorsDrawer.Draw(spriteBatch,
+                                       indicatorPosition,
                                        Plane.Health / Plane.MaximalHealth,
                                        Color.Black, 
                                        Color.Red, 

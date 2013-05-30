@@ -19,17 +19,20 @@ namespace NRPlanes.Core.Controllers
 
         public override void Update(TimeSpan elapsed)
         {
+            // disable previous motions
+            ControlledPlane.EndMotion(MotionType.All);
+
             Plane nearestPlayer = FindNearestPlayersPlane();
 
             if (nearestPlayer == null)
                 return;
 
             double angleToPlayer = Helper.RelativeAngleBetweenPositions(ControlledPlane.Position, nearestPlayer.Position);
-            double rotationDelta = Helper.NormalizeAngle(angleToPlayer) - ControlledPlane.Rotation;
+            double rotationDelta = Helper.NormalizeAngle(angleToPlayer - ControlledPlane.Rotation);
 
-            if (rotationDelta < 0) // rotate through left side
+            if (rotationDelta > 180) // rotate through left side
             {
-                ControlledPlane.StartMotion(MotionType.Left);
+                ControlledPlane.StartMotion(MotionType.Left);                
             }
             else
             {
@@ -41,7 +44,7 @@ namespace NRPlanes.Core.Controllers
             {
                 ControlledPlane.Fire(WeaponPosition.CenterFront);
                 ControlledPlane.Fire(WeaponPosition.LeftFront);
-                ControlledPlane.Fire(WeaponPosition.RightFront);
+                ControlledPlane.Fire(WeaponPosition.RightFront);                
             }
             else
             {
