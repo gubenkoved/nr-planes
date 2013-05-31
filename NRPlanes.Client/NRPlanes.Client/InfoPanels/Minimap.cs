@@ -39,13 +39,16 @@ namespace NRPlanes.Client.InfoPanels
                                  m_gameWorldXna.CoordinatesTransformer.VisibleLogicalRectangle),
                              Color.White);
 
-            foreach (var drawableObject in m_gameWorldXna.DrawableGameComponents)
+            using (var handle = m_gameWorldXna.DrawableGameComponentsSafeReadHandle)
             {
-                if (drawableObject is IOnMinimapDrawable)
+                foreach (var drawableObject in handle.Items)
                 {
-                    var minimapVisivbleObject = drawableObject as IOnMinimapDrawable;
+                    if (drawableObject is IOnMinimapDrawable)
+                    {
+                        var minimapVisivbleObject = drawableObject as IOnMinimapDrawable;
 
-                    minimapVisivbleObject.DrawOnMinimap(gameTime, spriteBatch, m_coordinatesTransformer);
+                        minimapVisivbleObject.DrawOnMinimap(gameTime, spriteBatch, m_coordinatesTransformer);
+                    }
                 }
             }
         }

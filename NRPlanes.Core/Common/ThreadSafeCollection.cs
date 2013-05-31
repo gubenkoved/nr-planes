@@ -17,7 +17,7 @@ namespace NRPlanes.Core.Common
     /// </summary>
     public class ThreadSafeCollection<T>
     {
-        public class SafeReadHandle<T> : IDisposable
+        public class SafeReadHandle : IDisposable
         {
             private ThreadSafeCollection<T> m_collection;
             public List<T> Items
@@ -32,16 +32,16 @@ namespace NRPlanes.Core.Common
             {
                 m_collection = threadSafeCollection;
 
-                threadSafeCollection.m_rwl.EnterUpgradeableReadLock();
+                threadSafeCollection.m_RWLock.EnterUpgradeableReadLock();
             }
 
             public void Dispose()
             {
-                m_collection.m_rwl.ExitUpgradeableReadLock();
+                m_collection.m_RWLock.ExitUpgradeableReadLock();
             }
         }
 
-        private ReaderWriterLockSlim m_rwl = new ReaderWriterLockSlim();
+        internal ReaderWriterLockSlim m_RWLock = new ReaderWriterLockSlim();
         private List<T> m_list = new List<T>();
 
         public int Count
@@ -69,39 +69,39 @@ namespace NRPlanes.Core.Common
         }
         public void Add(T item)
         {            
-            m_rwl.EnterWriteLock();
+            m_RWLock.EnterWriteLock();
 
             m_list.Add(item);
 
-            m_rwl.ExitWriteLock();
+            m_RWLock.ExitWriteLock();
         }
         public void AddRange(IEnumerable<T> items)
         {
-            m_rwl.EnterWriteLock();
+            m_RWLock.EnterWriteLock();
 
             m_list.AddRange(items);
 
-            m_rwl.ExitWriteLock();
+            m_RWLock.ExitWriteLock();
         }
         public void Remove(T item)
         {
-            m_rwl.EnterWriteLock();
+            m_RWLock.EnterWriteLock();
 
             m_list.Remove(item);
 
-            m_rwl.ExitWriteLock();
+            m_RWLock.ExitWriteLock();
         }
         public void RemoveAt(int i)
         {
-            m_rwl.EnterWriteLock();
+            m_RWLock.EnterWriteLock();
 
             m_list.RemoveAt(i);
 
-            m_rwl.ExitWriteLock();
+            m_RWLock.ExitWriteLock();
         }        
-        public SafeReadHandle<T> SafeRead()
+        public SafeReadHandle SafeRead()
         {
-            return new SafeReadHandle<T>(this);
+            return new SafeReadHandle(this);
         }
         public T[] ToArray()
         {

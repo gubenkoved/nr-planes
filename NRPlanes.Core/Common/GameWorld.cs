@@ -13,7 +13,7 @@ namespace NRPlanes.Core.Common
     public class GameWorld : IUpdatable
     {
         private readonly ThreadSafeCollection<GameObject> m_safeGameObjects;        
-        public ThreadSafeCollection<GameObject>.SafeReadHandle<GameObject> GameObjectsSafeReadHandle
+        public ThreadSafeCollection<GameObject>.SafeReadHandle GameObjectsSafeReadHandle
         {
             get { return m_safeGameObjects.SafeRead(); }
         }
@@ -118,14 +118,17 @@ namespace NRPlanes.Core.Common
 
         private void ProcessUpdate(TimeSpan elapsed)
         {
-            GameObject[] copy = m_safeGameObjects.ToArray();
-
-            for (int i = copy.Length - 1; i >= 0; i--)
+            using (var handle = m_safeGameObjects.SafeRead())
             {
-                if (!copy[i].IsGarbage)
-                    copy[i].Update(elapsed);
-                else
-                    DeleteGameObject(copy[i]);
+                GameObject[] copy = m_safeGameObjects.ToArray();
+
+                for (int i = copy.Length - 1; i >= 0; i--)
+                {
+                    if (!copy[i].IsGarbage)
+                        copy[i].Update(elapsed);
+                    else
+                        DeleteGameObject(copy[i]);
+                }
             }
         }
 

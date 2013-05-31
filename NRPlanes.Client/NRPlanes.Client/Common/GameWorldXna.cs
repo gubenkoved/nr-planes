@@ -24,15 +24,12 @@ namespace NRPlanes.Client.Common
 {
     public class GameWorldXna : DrawableGameComponent
     {
-        private object m_sync = new object();
-
-        private readonly List<MyDrawableGameComponent> m_drawableGameComponents;
-        public IEnumerable<MyDrawableGameComponent> DrawableGameComponents
+        private ThreadSafeCollection<MyDrawableGameComponent> m_safeDrawableGameComponents;
+        public ThreadSafeCollection<MyDrawableGameComponent>.SafeReadHandle DrawableGameComponentsSafeReadHandle
         {
-            get 
+            get
             {
-                // return copy for thread-safety reasons
-                return m_drawableGameComponents.ToList(); 
+                return m_safeDrawableGameComponents.SafeRead();
             }
         }
 
@@ -45,8 +42,11 @@ namespace NRPlanes.Client.Common
         private SpriteBatch m_spriteBatch;
         private Texture2D m_background;
 
-        private readonly InstanceMapper m_instanceMapper;
+        private readonly InstanceMapper m_instanceMapper;        
         private readonly SoundManager m_soundManager;
+
+        private readonly Dictionary<GameObject, DrawableGameObject> m_gameObjectMapping;
+        private readonly Dictionary<Equipment, DrawableEquipment> m_equipmentMapping;
 
         private readonly CoordinatesTransformer m_coordinatesTransformer;
         public CoordinatesTransformer CoordinatesTransformer
@@ -64,7 +64,7 @@ namespace NRPlanes.Client.Common
         public GameWorldXna(PlanesGame game, GameWorld gameWorld, Rectangle gameFieldRectangle)
             : base(game)
         {
-            m_drawableGameComponents = new List<MyDrawableGameComponent>();
+            m_safeDrawableGameComponents = new ThreadSafeCollection<MyDrawableGameComponent>();            
 
             m_gameWorld = gameWorld;
             m_gameWorld.GameObjectStatusChanged += GameObjectStatusChanged;
@@ -74,6 +74,9 @@ namespace NRPlanes.Client.Common
             m_coordinatesTransformer.ScaleToFit();
 
             m_instanceMapper = new InstanceMapper(game, m_coordinatesTransformer);
+
+            m_gameObjectMapping = new Dictionary<GameObject, DrawableGameObject>();
+            m_equipmentMapping = new Dictionary<Equipment, DrawableEquipment>();
 
             m_soundManager = SoundManager.CreateInstance(game, () => m_coordinatesTransformer.VisibleLogicalRectangle);
 
@@ -122,10 +125,10 @@ namespace NRPlanes.Client.Common
             switch (arg.Status)
             {
                 case GameObjectStatus.Created:
-                    AddGameObject(arg.GameObject);
+                    WhenGameObjectAdded(arg.GameObject);
                     break;
                 case GameObjectStatus.Deleted:
-                    DeleteGameObject(arg.GameObject);
+                    WhenGameObjectDeleted(arg.GameObject);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -142,54 +145,35 @@ namespace NRPlanes.Client.Common
             if (collision.Two.IsGarbage)
                 AddExplosion(collision.Two);
         }
-        private void AddDrawableGameComponent(MyDrawableGameComponent component)
-        {
-            lock (m_sync)
-            {
-                m_drawableGameComponents.Add(component);
-            }
-        }
-        private void RemoveDrawableGameComponent(MyDrawableGameComponent component)
-        {
-            lock (m_sync)
-            {
-                m_drawableGameComponents.Remove(component);
-            }
-        }
-        private void RemoveDrawableGameComponentAt(int i)
-        {
-            lock (m_sync)
-            {
-                m_drawableGameComponents.RemoveAt(i);
-            }
-        }
         private void AddExplosion(GameObject exploded)
         {            
             ExplosionXna explosion = new ExplosionXna(Game, exploded, m_coordinatesTransformer);
 
-            AddDrawableGameComponent(explosion);
+            m_safeDrawableGameComponents.Add(explosion);
         }
-        private void AddGameObject(GameObject gameObject)
+        private void WhenGameObjectAdded(GameObject gameObject)
         {            
-            var xnaRelatedGameObject = m_instanceMapper.CreateInstance(gameObject);
+            var xnaRelatedGameObject = (DrawableGameObject)m_instanceMapper.CreateInstance(gameObject);
 
-            AddDrawableGameComponent(xnaRelatedGameObject);
+            m_gameObjectMapping[gameObject] = xnaRelatedGameObject;
+
+            m_safeDrawableGameComponents.Add(xnaRelatedGameObject);
 
             if (gameObject is IHaveEquipment)
             {
                 foreach (var equipment in (gameObject as IHaveEquipment).AllEquipment)
                 {
-                    var xnaRelatedEquipment = m_instanceMapper.CreateInstance(equipment);
-
-                    AddDrawableGameComponent(xnaRelatedEquipment);
+                    AddEquipment(equipment);
                 }
             }
         }
-        private void DeleteGameObject(GameObject gameObject)
+        private void WhenGameObjectDeleted(GameObject gameObject)
         {
-            var drawableGameObject = m_drawableGameComponents.OfType<DrawableGameObject>().Single(d => d.GameObject == gameObject);
+            var drawableGameObject = m_gameObjectMapping[gameObject];
 
-            RemoveDrawableGameComponent(drawableGameObject);
+            m_gameObjectMapping.Remove(gameObject);
+
+            m_safeDrawableGameComponents.Remove(drawableGameObject);
 
             if (gameObject is IHaveEquipment)
             {
@@ -201,11 +185,21 @@ namespace NRPlanes.Client.Common
                 }
             }
         }
+        private void AddEquipment(Equipment equipment)
+        {
+            var xnaRelatedEquipment = (DrawableEquipment)m_instanceMapper.CreateInstance(equipment);
+
+            m_equipmentMapping[equipment] = xnaRelatedEquipment;
+
+            m_safeDrawableGameComponents.Add(xnaRelatedEquipment);
+        }
         private void DeleteEquipment(Equipment equipment)
         {
-            var drawableEquipment = m_drawableGameComponents.OfType<DrawableEquipment>().Single(e => e.Equipment == equipment);
+            var drawableEquipment = m_equipmentMapping[equipment];
 
-            RemoveDrawableGameComponent(drawableEquipment);
+            m_equipmentMapping.Remove(equipment);
+
+            m_safeDrawableGameComponents.Remove(drawableEquipment);
         }
 
         public void ForceSetCameraOnCenterOfView()
@@ -219,12 +213,17 @@ namespace NRPlanes.Client.Common
 
             UpdateView(gameTime);
 
-            for (int i = m_drawableGameComponents.Count - 1; i >= 0; i--)
+            using (var handle = m_safeDrawableGameComponents.SafeRead())
             {
-                if (!m_drawableGameComponents[i].IsGarbage)
-                    m_drawableGameComponents[i].Update(gameTime);
-                else
-                    RemoveDrawableGameComponentAt(i);
+                MyDrawableGameComponent[] copy = m_safeDrawableGameComponents.ToArray();
+
+                for (int i = copy.Length - 1; i >= 0; i--)
+                {
+                    if (!copy[i].IsGarbage)
+                        copy[i].Update(gameTime);
+                    else
+                        m_safeDrawableGameComponents.Remove(copy[i]);
+                }
             }
         }
 
@@ -237,9 +236,9 @@ namespace NRPlanes.Client.Common
             DrawBackground();
             DrawAdditionalInfo(gameTime);
 
-            lock (m_sync) // because m_drawableGameComponents collection can be modified while iterating
+            using (var handle = m_safeDrawableGameComponents.SafeRead())
             {
-                foreach (var drawableGameObject in m_drawableGameComponents)
+                foreach (var drawableGameObject in handle.Items)
                 {
                     drawableGameObject.Draw(gameTime, m_spriteBatch);
                 }
@@ -300,21 +299,27 @@ namespace NRPlanes.Client.Common
                     Game.Content.Load<Texture2D>("Debug/point"),
                     Game.Content.Load<SpriteFont>("Fonts/debug"));
 
-            foreach (var drawableObj in DrawableGameComponents)
+            using (var handle = m_safeDrawableGameComponents.SafeRead())
             {
-                if (drawableObj is DrawableGameObject)
+                foreach (var drawableObj in handle.Items)
                 {
-                    var gameObject = ((DrawableGameObject) drawableObj).GameObject;
+                    if (drawableObj is DrawableGameObject)
+                    {
+                        var gameObject = ((DrawableGameObject)drawableObj).GameObject;
 
-                    debugGeomertyDrawer.Draw(m_spriteBatch, m_coordinatesTransformer, gameObject.CalculateAbsoluteGeometry());
-                
-                } else if (drawableObj is DrawableStaticObject)
-                {
-                    var staticObject = ((DrawableStaticObject)drawableObj).StaticObject;
+                        debugGeomertyDrawer.Draw(m_spriteBatch, m_coordinatesTransformer, gameObject.CalculateAbsoluteGeometry());
 
-                    debugGeomertyDrawer.Draw(m_spriteBatch, m_coordinatesTransformer, staticObject.AbsoluteGeometry);
+                    }
+                    else if (drawableObj is DrawableStaticObject)
+                    {
+                        var staticObject = ((DrawableStaticObject)drawableObj).StaticObject;
+
+                        debugGeomertyDrawer.Draw(m_spriteBatch, m_coordinatesTransformer, staticObject.AbsoluteGeometry);
+                    }
                 }
             }
+
+            
         }
 
         private void DrawAdditionalInfo(GameTime gameTime)
@@ -336,8 +341,8 @@ namespace NRPlanes.Client.Common
             foreach (var staticObject in m_gameWorld.StaticObjects)
             {
                 var xnaRelatedStaticObject = m_instanceMapper.CreateInstance(staticObject);
-                
-                m_drawableGameComponents.Add(xnaRelatedStaticObject);
+
+                m_safeDrawableGameComponents.Add(xnaRelatedStaticObject);                
             }
         }
     }
