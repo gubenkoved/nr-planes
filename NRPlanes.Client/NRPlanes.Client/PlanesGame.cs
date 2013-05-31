@@ -8,6 +8,7 @@ using NRPlanes.Core.Common;
 using NRPlanes.Core.Planes;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace NRPlanes.Client
 {
@@ -18,7 +19,7 @@ namespace NRPlanes.Client
     {
         private readonly GameManager _gameManager;
 
-        public GraphicsDeviceManager Graphics { get; private set; }
+        public GraphicsDeviceManager Graphics { get; private set; }        
 
         public PlanesGame()
         {
@@ -35,6 +36,8 @@ namespace NRPlanes.Client
             Graphics.PreferredBackBufferHeight = 600;
             Graphics.IsFullScreen = false;
 #endif
+            
+
             _gameManager = new GameManager(this);
 
             IsFixedTimeStep = true;
@@ -83,10 +86,11 @@ namespace NRPlanes.Client
         }
 
         protected override void Draw(GameTime gameTime)
-        {
+        {            
+
             _gameManager.Draw(gameTime);
 
-            base.Draw(gameTime);
+            //base.Draw(gameTime);
         }
 
         protected override void OnExiting(object sender, EventArgs args)

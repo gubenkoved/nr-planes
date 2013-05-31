@@ -45,6 +45,8 @@ namespace NRPlanes.Client.Common
         private readonly InstanceMapper m_instanceMapper;        
         private readonly SoundManager m_soundManager;
 
+        private RenderTarget2D m_lastFrameRenderTarget;
+
         private readonly Dictionary<GameObject, DrawableGameObject> m_gameObjectMapping;
         private readonly Dictionary<Equipment, DrawableEquipment> m_equipmentMapping;
 
@@ -79,6 +81,10 @@ namespace NRPlanes.Client.Common
             m_equipmentMapping = new Dictionary<Equipment, DrawableEquipment>();
 
             m_soundManager = SoundManager.CreateInstance(game, () => m_coordinatesTransformer.VisibleLogicalRectangle);
+
+            m_lastFrameRenderTarget = new RenderTarget2D(game.Graphics.GraphicsDevice,
+                game.Graphics.PreferredBackBufferWidth, game.Graphics.PreferredBackBufferHeight,
+                false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PlatformContents);
 
             FillInstanceMapper();
 
@@ -229,9 +235,10 @@ namespace NRPlanes.Client.Common
 
         public override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Transparent);
-
-            m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            GraphicsDevice.Clear(Color.Black);
+            
+            // draw xna game world
+            m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);            
 
             DrawBackground();
             DrawAdditionalInfo(gameTime);
@@ -244,8 +251,9 @@ namespace NRPlanes.Client.Common
                 }
             }
 
-            m_spriteBatch.End();
-            
+            m_spriteBatch.End();                             
+            // end of drawing xna game world
+
 #if DEBUG_MODE
             m_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 

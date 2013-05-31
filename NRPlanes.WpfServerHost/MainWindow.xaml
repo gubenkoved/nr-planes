@@ -13,14 +13,14 @@
         FontSize="12" 
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid Margin="10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="200" />
-        </Grid.ColumnDefinitions>
-        <ScrollViewer Name="LogScrollView" Grid.Column="0" VerticalScrollBarVisibility="Auto">
-            <ListBox Name="Log" FontFamily="PT Sans" FontSize="10" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Name="LogScrollView" Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ListBox Name="Log" FontWeight="Light" FontSize="12" />
         </ScrollViewer>
-        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
             <ListBox ItemsSource="{Binding Path=Parameters}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>

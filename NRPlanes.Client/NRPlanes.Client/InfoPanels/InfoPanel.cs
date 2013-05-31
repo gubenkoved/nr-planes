@@ -13,21 +13,21 @@ namespace NRPlanes.Client.InfoPanels
             get { return base.Game as PlanesGame; }
         }
 
-        private readonly GameWorldXna _gameWorldXna;
+        private readonly GameWorldXna m_gameWorldXna;
 
         public PlaneInfo PlaneInfoPanel { get; private set; }
         public Minimap MinimapPanel { get; private set; }
-        private readonly List<InfoPanelItem> _infoPanelItems;
+        private readonly List<InfoPanelItem> m_infoPanelItems;
 
-        private SpriteBatch _spriteBatch;
+        private SpriteBatch m_spriteBatch;
 
         //note: info panel position rectangle needed??
         public InfoPanel(PlanesGame game, GameWorldXna gameWorldXna) 
             : base(game)
         {
-            _gameWorldXna = gameWorldXna;
+            m_gameWorldXna = gameWorldXna;
 
-            _infoPanelItems = new List<InfoPanelItem>();
+            m_infoPanelItems = new List<InfoPanelItem>();
 
             const int panelsWidth = 200;
             const int indent = 10;
@@ -40,18 +40,18 @@ namespace NRPlanes.Client.InfoPanels
                                                   game.Graphics.PreferredBackBufferHeight - 2 * indent -
                                                   minimapPosition.Y - minimapPosition.Height);
 
-            MinimapPanel = new Minimap(game, minimapPosition, _gameWorldXna);
+            MinimapPanel = new Minimap(game, minimapPosition, m_gameWorldXna);
             PlaneInfoPanel = new PlaneInfo(game, planeInfoPosition);
 
-            _infoPanelItems.Add(MinimapPanel);
-            _infoPanelItems.Add(PlaneInfoPanel);
+            m_infoPanelItems.Add(MinimapPanel);
+            m_infoPanelItems.Add(PlaneInfoPanel);
         }
 
         public override void Initialize()
         {
-            _spriteBatch = new SpriteBatch(Game.Graphics.GraphicsDevice);
+            m_spriteBatch = new SpriteBatch(Game.Graphics.GraphicsDevice);
 
-            foreach (var infoPanelItem in _infoPanelItems)
+            foreach (var infoPanelItem in m_infoPanelItems)
             {
                 infoPanelItem.Initialize();
             }
@@ -61,14 +61,14 @@ namespace NRPlanes.Client.InfoPanels
 
         public override void Draw(GameTime gameTime)
         {
-            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            m_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
-            foreach (var infoPanelItem in _infoPanelItems)
+            foreach (var infoPanelItem in m_infoPanelItems)
             {
-                infoPanelItem.Draw(gameTime, _spriteBatch);
+                infoPanelItem.Draw(gameTime, m_spriteBatch);
             }
 
-            _spriteBatch.End();
+            m_spriteBatch.End();
         }
     }
 }

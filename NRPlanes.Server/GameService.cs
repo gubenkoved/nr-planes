@@ -1,4 +1,4 @@
-﻿#define DETAILED_LOG
+﻿//#define DETAILED_LOG
 
 using System;
 using System.Collections.Generic;
