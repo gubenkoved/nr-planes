@@ -11,15 +11,7 @@ namespace NRPlanes.Core.Primitives
 
         public static double Angle(this Vector vector)
         {
-            return Vector.AngleBetween(vector, new Vector(0, 1.0));
-        }
-
-        public static Vector Ort(this Vector vector)
-        {
-            if (vector.Length == 0.0)
-                return new Vector();
-            else
-                return vector / vector.Length;
+            return Vector.AngleBetween(new Vector(0, 1), vector);
         }
 
         public static bool HitTest(this Rect rect, Vector vector)

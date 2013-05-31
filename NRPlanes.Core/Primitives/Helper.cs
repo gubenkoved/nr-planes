@@ -53,5 +53,17 @@ namespace NRPlanes.Core.Primitives
         {
             return Vector.AngleBetween(new Vector(0, 1), to - from);
         }
+
+        /// <summary>
+        /// Returns vector angle value [-180; 180]:
+        /// <para>- Negative value ((0;-180)) when vector in left half-plane (with negative x)</para>
+        /// <para>- Positive value ([0;180]) when vector in right half-plane (with positive x)</para>
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        public static double Angle(Vector vector)
+        {
+            return Vector.AngleBetween(new Vector(0, 1), vector);
+        }
     }
 }

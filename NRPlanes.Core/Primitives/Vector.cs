@@ -45,6 +45,14 @@ namespace NRPlanes.Core.Primitives
             return new Vector(-X, Y);
         }
 
+        public Vector Ort()
+        {
+            if (LengthSquared == 0.0)
+                return new Vector(0, 0);
+            else
+                return this / this.Length;
+        }
+
         public static Vector operator +(Vector v1, Vector v2)
         {
             return new Vector(v1.X + v2.X, v1.Y + v2.Y);
@@ -81,11 +89,11 @@ namespace NRPlanes.Core.Primitives
         }
 
         /// <summary>
-        /// Angle between vectors in degrees
+        /// Angle between vectors in degrees (-180; 180]
         /// </summary>
         /// <param name="v1">First vector</param>
         /// <param name="v2">Second vector</param>
-        /// <returns>Value in range [-180; 180]</returns>
+        /// <returns>Value in range (-180; 180]</returns>
         public static double AngleBetween(Vector v1, Vector v2)
         {
             // from System.Windows AngleBetween
