@@ -56,7 +56,7 @@ namespace NRPlanes.Client.InfoPanels
                                        1,
                                        Color.Black,
                                        Color.Black,
-                                       string.Format("{0}, {1:F1}", Plane.Position, Plane.Rotation),
+                                       string.Format("{0}, {1:F1}, V={2:F1}", Plane.Position, Plane.Rotation, Plane.Velocity.Length),
                                        Color.FromNonPremultiplied(255, 255, 255, 200));
                 
                 indicatorPosition.Offset(0, 24);

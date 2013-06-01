@@ -1,4 +1,4 @@
-//#define FULL_SCREEN
+#define FULL_SCREEN
 
 using System;
 using NRPlanes.Core.Primitives;
@@ -17,8 +17,7 @@ namespace NRPlanes.Client
     /// </summary>
     public class PlanesGame : Game
     {
-        private readonly GameManager _gameManager;
-
+        public readonly GameManager GameManager;
         public GraphicsDeviceManager Graphics { get; private set; }        
 
         public PlanesGame()
@@ -37,8 +36,7 @@ namespace NRPlanes.Client
             Graphics.IsFullScreen = false;
 #endif
             
-
-            _gameManager = new GameManager(this);
+            GameManager = new GameManager(this);
 
             IsFixedTimeStep = true;
             TargetElapsedTime = TimeSpan.FromMilliseconds(20);
@@ -52,7 +50,7 @@ namespace NRPlanes.Client
         /// </summary>
         protected override void Initialize()
         {
-            _gameManager.Initialize();
+            GameManager.Initialize();
 
             base.Initialize();
         }
@@ -80,7 +78,7 @@ namespace NRPlanes.Client
                 Exit();
             }
 
-            _gameManager.Update(gameTime);
+            GameManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -88,7 +86,7 @@ namespace NRPlanes.Client
         protected override void Draw(GameTime gameTime)
         {            
 
-            _gameManager.Draw(gameTime);
+            GameManager.Draw(gameTime);
 
             //base.Draw(gameTime);
         }

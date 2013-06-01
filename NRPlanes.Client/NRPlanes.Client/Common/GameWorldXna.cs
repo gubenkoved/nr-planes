@@ -19,6 +19,7 @@ using Plane = NRPlanes.Core.Common.Plane;
 using NRPlanes.Client.Sound;
 using System.Threading;
 using System.Collections.Concurrent;
+using NRPlanes.Client.Particles;
 
 namespace NRPlanes.Client.Common
 {
@@ -30,6 +31,15 @@ namespace NRPlanes.Client.Common
             get
             {
                 return m_safeDrawableGameComponents.SafeRead();
+            }
+        }
+
+        private List<Particle> m_particles;
+        public IEnumerable<Particle> Particles
+        {
+            get
+            {
+                return m_particles;
             }
         }
 
@@ -66,7 +76,9 @@ namespace NRPlanes.Client.Common
         public GameWorldXna(PlanesGame game, GameWorld gameWorld, Rectangle gameFieldRectangle)
             : base(game)
         {
-            m_safeDrawableGameComponents = new ThreadSafeCollection<MyDrawableGameComponent>();            
+            m_safeDrawableGameComponents = new ThreadSafeCollection<MyDrawableGameComponent>();
+
+            m_particles = new List<Particle>();
 
             m_gameWorld = gameWorld;
             m_gameWorld.GameObjectStatusChanged += GameObjectStatusChanged;
@@ -208,16 +220,27 @@ namespace NRPlanes.Client.Common
             m_safeDrawableGameComponents.Remove(drawableEquipment);
         }
 
+        public void AddParticle(Particle particle)
+        {
+            m_particles.Add(particle);
+        }
         public void ForceSetCameraOnCenterOfView()
         {
             m_coordinatesTransformer.SetCenterOfView(CenterOfView.Position);
         }
-
         public override void Update(GameTime gameTime)
         {            
             m_soundManager.Update(gameTime.ElapsedGameTime);
 
             UpdateView(gameTime);
+
+            for (int i = 0; i < m_particles.Count; i++)
+            {
+                if (m_particles[i].IsGarbage)
+                    m_particles.RemoveAt(i);
+                else
+                    m_particles[i].Update(gameTime);
+            }
 
             using (var handle = m_safeDrawableGameComponents.SafeRead())
             {
@@ -232,17 +255,24 @@ namespace NRPlanes.Client.Common
                 }
             }
         }
-
         public override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
             
             // draw xna game world
             m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);            
-
             DrawBackground();
             DrawAdditionalInfo(gameTime);
+            m_spriteBatch.End();
 
+            m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.Additive);
+            foreach (var particle in m_particles)
+            {
+                particle.Draw(gameTime, m_spriteBatch);
+            }
+            m_spriteBatch.End();
+
+            m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             using (var handle = m_safeDrawableGameComponents.SafeRead())
             {
                 foreach (var drawableGameObject in handle.Items)
@@ -250,7 +280,6 @@ namespace NRPlanes.Client.Common
                     drawableGameObject.Draw(gameTime, m_spriteBatch);
                 }
             }
-
             m_spriteBatch.End();                             
             // end of drawing xna game world
 
@@ -289,7 +318,6 @@ namespace NRPlanes.Client.Common
                 #endregion
             }
         }
-
         private void DrawBackground()
         {
             return;
@@ -298,7 +326,6 @@ namespace NRPlanes.Client.Common
             
             m_spriteBatch.Draw(m_background, destination, null, Color.White, 0.0f, new Vector2(), SpriteEffects.None, 1.0f);
         }
-
         private void DrawDebugInfo()
         {
             var debugGeomertyDrawer = 
@@ -329,7 +356,6 @@ namespace NRPlanes.Client.Common
 
             
         }
-
         private void DrawAdditionalInfo(GameTime gameTime)
         {
             var font = Game.Content.Load<SpriteFont>("Fonts/information_font");
@@ -343,7 +369,6 @@ namespace NRPlanes.Client.Common
 
             m_spriteBatch.DrawString(font, string.Format(@"{0:hh\:mm\:ss}", time), new Vector2(10, 22), Color.White);
         }
-
         private void GrabStaticObjects()
         {
             foreach (var staticObject in m_gameWorld.StaticObjects)

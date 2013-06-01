@@ -14,9 +14,25 @@ namespace NRPlanes.Client.Common
     {
         private readonly PlanesGame m_game;
         private readonly GameServiceClient m_client;
-        
+
         private GameWorld m_gameWorld;
+        public GameWorld GameWorld
+        {
+            get
+            {
+                return m_gameWorld;
+            }
+        }
+
         private GameWorldXna m_gameWorldXna;
+        public GameWorldXna GameWorldXna
+        {
+            get
+            {
+                return m_gameWorldXna;
+            }
+        }
+
         private InfoPanel m_infoPanel;
 
         private NRPlanes.Core.Common.Plane m_ownPlane;        

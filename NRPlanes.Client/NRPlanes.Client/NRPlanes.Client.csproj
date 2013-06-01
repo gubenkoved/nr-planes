@@ -121,6 +121,9 @@
     <Compile Include="Common\InstanceMapper.cs" />
     <Compile Include="Common\LayersDepths.cs" />
     <Compile Include="Common\MyDrawableGameComponent.cs" />
+    <Compile Include="Particles\Particle.cs" />
+    <Compile Include="Particles\ParticlesEmitter.cs" />
+    <Compile Include="Particles\ParticlesPhysicsEngine.cs" />
     <Compile Include="Sound\BasicSoundEffect.cs" />
     <Compile Include="Sound\FadeInOutSoundEffect.cs" />
     <Compile Include="Common\ObjectsSynchronizer.cs" />
@@ -263,6 +266,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\NRPlanesServerReference\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

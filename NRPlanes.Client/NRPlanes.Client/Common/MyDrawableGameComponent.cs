@@ -26,6 +26,6 @@ namespace NRPlanes.Client.Common
             CoordinatesTransformer = coordinatesTransformer;
         }
 
-        public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
+        public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);        
     }
 }

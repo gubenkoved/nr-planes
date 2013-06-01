@@ -28,3 +28,7 @@ Content\Fonts\information_font.xnb
 Content\Fonts\infopanel_font.xnb
 Content\Fonts\debug.xnb
 Content\Images\x_wing_shield.xnb
+Content\Particles\circle.xnb
+Content\Particles\diamond.xnb
+Content\Particles\star.xnb
+Content\Particles\circle_blured.xnb
