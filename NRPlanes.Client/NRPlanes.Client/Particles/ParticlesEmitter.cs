@@ -16,9 +16,15 @@ namespace NRPlanes.Client.Particles
         public double LongitualPositionDeviationRadius;
         public double TransversePositionDeviationRadius;
 
-        public double VelocityDeviationRadius;
+        public double LongitualVelocityDeviationRadius;
+        public double TransverseVelocityDeviationRadius;
+
         public double RotationDeviation;
         public double RotationVelocityDeviation;
+
+        /// <summary>
+        /// Correct values: [0; 1)
+        /// </summary>
         public double AlphaVelocityDeviationFactor;
 
         public ParticlesEmitter(GameWorldXna world)
@@ -42,11 +48,12 @@ namespace NRPlanes.Client.Particles
         private void DeviateParams(Particle particle)
         {
             particle.Position += GenerateAsymmetricRandomVectorWithRadius(particle.Velocity, LongitualPositionDeviationRadius, TransversePositionDeviationRadius);
+            particle.Velocity += GenerateAsymmetricRandomVectorWithRadius(particle.Velocity, LongitualVelocityDeviationRadius, TransverseVelocityDeviationRadius);
 
-            particle.Velocity += GenerateRandomVectorWithRadius(VelocityDeviationRadius);
             particle.Rotation += 2 * (m_random.NextDouble() - 0.5) * RotationDeviation;
             particle.RotationVelocity += 2 * (m_random.NextDouble() - 0.5) * RotationVelocityDeviation;
-            particle.AlphaVelocity *= (m_random.NextDouble() + 1) * AlphaVelocityDeviationFactor;
+
+            particle.AlphaVelocity *= 1 + 2 * (m_random.NextDouble() - 0.5) * AlphaVelocityDeviationFactor;
         }
 
         private Vector GenerateAsymmetricRandomVectorWithRadius(Vector ort, double longitualRadius, double transverseRadius)

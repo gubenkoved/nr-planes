@@ -27,9 +27,10 @@ namespace NRPlanes.Client.GameComponents
             m_particlesEmitter = new ParticlesEmitter(game.GameManager.GameWorldXna)
             {
                 LongitualPositionDeviationRadius = 2,
-                TransversePositionDeviationRadius = 0,
-                VelocityDeviationRadius = 0.1,
-                AlphaVelocityDeviationFactor = 1
+                TransversePositionDeviationRadius = 0.7,
+                LongitualVelocityDeviationRadius = 0.1,
+                TransverseVelocityDeviationRadius = 0.02,
+                AlphaVelocityDeviationFactor = 0.3
             };
         }
 
@@ -62,11 +63,12 @@ namespace NRPlanes.Client.GameComponents
                 {
                     Color = Color.OrangeRed,
                     Position = Equipment.GetAbsolutePosition(),
-                    Size = new Size(2.5, 2.5),
+                    Size = new Size(2.5, 4),
                     AlphaVelocity = -0.05f,
                     TimeToLive = TimeSpan.FromSeconds(2),
-                    Velocity = new Vector(0, -1).Rotate(Equipment.GetAbsoluteRotation())
-                }, 15);
+                    Velocity = new Vector(0, -0.5).Rotate(Equipment.GetAbsoluteRotation()),
+                    Rotation = Equipment.GetAbsoluteRotation()
+                }, 5);
                 
                 //var origin = new Vector2((float) m_animationSpriteDrawer.FrameSize.Width / 2.0f,
                 //                         (float) m_animationSpriteDrawer.FrameSize.Height / 2.0f);
