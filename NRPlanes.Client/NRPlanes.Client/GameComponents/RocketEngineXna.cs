@@ -16,7 +16,7 @@ namespace NRPlanes.Client.GameComponents
 
         private AnimationSpriteDrawer m_animationSpriteDrawer;
         private FadeInOutSoundEffect m_workSoundEffect;
-        private ParticlesEmitter m_particlesEmitter;
+        private AsymmetricParticlesEmitter m_particlesEmitter;
 
         public RocketEngineXna(PlanesGame game, RocketEngine rocketEngine, CoordinatesTransformer coordinatesTransformer)
             : base(game, rocketEngine, coordinatesTransformer)
@@ -24,10 +24,10 @@ namespace NRPlanes.Client.GameComponents
             m_workSoundEffect = SoundManager.Instance.CreateFadeInOutSoundEffect("engine_work", 
                 TimeSpan.FromSeconds(0.4), TimeSpan.FromSeconds(0.1));
 
-            m_particlesEmitter = new ParticlesEmitter(game.GameManager.GameWorldXna)
+            m_particlesEmitter = new AsymmetricParticlesEmitter(game.GameManager.GameWorldXna)
             {
                 LongitualPositionDeviationRadius = 2,
-                TransversePositionDeviationRadius = 0.7,
+                TransversePositionDeviationRadius = 0.4,
                 LongitualVelocityDeviationRadius = 0.1,
                 TransverseVelocityDeviationRadius = 0.02,
                 AlphaVelocityDeviationFactor = 0.3
@@ -63,7 +63,7 @@ namespace NRPlanes.Client.GameComponents
                 {
                     Color = Color.OrangeRed,
                     Position = Equipment.GetAbsolutePosition(),
-                    Size = new Size(2.5, 4),
+                    Size = new Size(2.5, 3),
                     AlphaVelocity = -0.05f,
                     TimeToLive = TimeSpan.FromSeconds(2),
                     Velocity = new Vector(0, -0.5).Rotate(Equipment.GetAbsoluteRotation()),

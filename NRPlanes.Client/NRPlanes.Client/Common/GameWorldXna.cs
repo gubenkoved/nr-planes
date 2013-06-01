@@ -270,9 +270,11 @@ namespace NRPlanes.Client.Common
             {
                 particle.Draw(gameTime, m_spriteBatch);
             }
-            m_spriteBatch.End();
+            //m_spriteBatch.End();
 
-            m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            // sprite sorting not available through SpriteBatch.Begin calls
+
+            //m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             using (var handle = m_safeDrawableGameComponents.SafeRead())
             {
                 foreach (var drawableGameObject in handle.Items)
@@ -280,7 +282,8 @@ namespace NRPlanes.Client.Common
                     drawableGameObject.Draw(gameTime, m_spriteBatch);
                 }
             }
-            m_spriteBatch.End();                             
+            m_spriteBatch.End();
+            
             // end of drawing xna game world
 
 #if DEBUG_MODE

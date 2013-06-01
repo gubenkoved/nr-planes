@@ -21,12 +21,14 @@ namespace NRPlanes.Core.Bullets
         public LaserBullet(double mass, double angularMass, ReferenceArea referenceArea, double power, TimeSpan timeToLive)
             : base(mass, angularMass, referenceArea, power, timeToLive)
         {
+            const double size = 0.35;
+
             RelativeGeometry = new PolygonGeometry(new[]
                                                {
-                                                   new Vector(-0.22, 0.7),
-                                                   new Vector(0.22, 0.7),
-                                                   new Vector(0.22, -0.7),
-                                                   new Vector(-0.22, -0.7)
+                                                   new Vector(-size, size),
+                                                   new Vector(size, size),
+                                                   new Vector(size, -size),
+                                                   new Vector(-size, -size)
                                                });
         }
     }

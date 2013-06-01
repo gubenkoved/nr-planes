@@ -18,7 +18,7 @@ namespace NRPlanes.Client.GameComponents
             get { return base.GameObject as LaserBullet; }
         }
 
-        private ParticlesEmitter m_particlesEmitter;
+        private AsymmetricParticlesEmitter m_particlesEmitter;
         private Texture2D m_texture;
 
         public LaserBulletXna(PlanesGame game, LaserBullet bullet, CoordinatesTransformer coordinatesTransformer)
@@ -28,7 +28,7 @@ namespace NRPlanes.Client.GameComponents
             sound.Position = bullet.Position;
             sound.Play();
 
-            m_particlesEmitter = new ParticlesEmitter(game.GameManager.GameWorldXna)
+            m_particlesEmitter = new AsymmetricParticlesEmitter(game.GameManager.GameWorldXna)
             {
                 LongitualPositionDeviationRadius = 0,
                 TransversePositionDeviationRadius = 0,
@@ -41,7 +41,7 @@ namespace NRPlanes.Client.GameComponents
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (m_texture == null)
-                m_texture = Game.Content.Load<Texture2D>("Images/bullet");
+                m_texture = Game.Content.Load<Texture2D>("Images/circle_bullet");
 
             if (GameObject.TimeToLive > TimeSpan.Zero)
             {
@@ -49,9 +49,9 @@ namespace NRPlanes.Client.GameComponents
                 {
                     Color = Color.FromNonPremultiplied(20, 20, 20, 255),
                     Position = GameObject.Position,
-                    Size = new Size(1, 15),
-                    AlphaVelocity = -0.03f,
-                    TimeToLive = TimeSpan.FromSeconds(4),
+                    Size = new Size(1, 15),                    
+                    AlphaVelocity = -0.01f,
+                    TimeToLive = TimeSpan.FromSeconds(5),
                     Rotation = GameObject.Velocity.Angle()
                 }, 1);
 

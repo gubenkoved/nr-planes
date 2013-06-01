@@ -3,7 +3,6 @@ Content\Images\alien.xnb
 Content\Images\x_wing.xnb
 Content\Animations\flame_anim.xnb
 Content\Animations\flame_anim_2.xnb
-Content\Images\bullet.xnb
 Content\Images\weapon.xnb
 Content\Images\background.xnb
 Content\Images\gravity_field.xnb
@@ -32,3 +31,4 @@ Content\Particles\circle.xnb
 Content\Particles\diamond.xnb
 Content\Particles\star.xnb
 Content\Particles\circle_blured.xnb
+Content\Images\circle_bullet.xnb

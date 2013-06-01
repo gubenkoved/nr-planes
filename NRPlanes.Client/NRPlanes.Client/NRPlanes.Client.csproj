@@ -121,9 +121,11 @@
     <Compile Include="Common\InstanceMapper.cs" />
     <Compile Include="Common\LayersDepths.cs" />
     <Compile Include="Common\MyDrawableGameComponent.cs" />
+    <Compile Include="Particles\ParticlesEmitterBase.cs" />
     <Compile Include="Particles\Particle.cs" />
-    <Compile Include="Particles\ParticlesEmitter.cs" />
-    <Compile Include="Particles\ParticlesPhysicsEngine.cs" />
+    <Compile Include="Particles\AsymmetricParticlesEmitter.cs" />
+    <Compile Include="Particles\ParticlesEngine.cs" />
+    <Compile Include="Particles\SymmetricParticlesEmitter.cs" />
     <Compile Include="Sound\BasicSoundEffect.cs" />
     <Compile Include="Sound\FadeInOutSoundEffect.cs" />
     <Compile Include="Common\ObjectsSynchronizer.cs" />

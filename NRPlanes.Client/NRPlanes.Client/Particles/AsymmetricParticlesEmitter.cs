@@ -7,11 +7,9 @@ using NRPlanes.Core.Primitives;
 
 namespace NRPlanes.Client.Particles
 {
-    public class ParticlesEmitter
+    public class AsymmetricParticlesEmitter : ParticlesEmitterBase
     {
         private Random m_random = new Random(Environment.TickCount);
-
-        public readonly GameWorldXna m_world;
 
         public double LongitualPositionDeviationRadius;
         public double TransversePositionDeviationRadius;
@@ -27,22 +25,14 @@ namespace NRPlanes.Client.Particles
         /// </summary>
         public double AlphaVelocityDeviationFactor;
 
-        public ParticlesEmitter(GameWorldXna world)
+        public AsymmetricParticlesEmitter(GameWorldXna world)
+            :base( world )
         {
-            m_world = world;
         }
 
-        public void Emit(Particle particle, int amount = 1)
+        protected override void HandleCreatedParticle(Particle particle)
         {
-            for (int i = 0; i < amount; i++)
-            {
-                Particle p = (Particle)particle.Clone();
-
-                DeviateParams(p);
-
-                m_world.AddParticle(p);
-            }
-            
+            DeviateParams(particle);
         }
 
         private void DeviateParams(Particle particle)

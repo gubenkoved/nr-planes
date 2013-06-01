@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NRPlanes.Client.Particles
 {
-    public static class ParticlesPhysicsEngine
+    public static class ParticlesEngine
     {
         public static void Update(Particle particle, TimeSpan elapsed)
         {
@@ -16,6 +16,8 @@ namespace NRPlanes.Client.Particles
             particle.Rotation += particle.RotationVelocity;
 
             particle.RotationVelocity += particle.RotationAcceleration;
+
+            particle.SizeFactor += particle.SizeFactorVelocity;
         }
     }
 }
