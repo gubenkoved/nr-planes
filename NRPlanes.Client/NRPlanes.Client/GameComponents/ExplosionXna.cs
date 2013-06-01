@@ -15,6 +15,7 @@ namespace NRPlanes.Client.GameComponents
         private static Random _random = new Random(Environment.TickCount);
 
         private ParticlesEmitterBase m_particlesEmitter;
+        private const int PARTICLES_PER_UNIT_AREA = 25;
         private int m_drawCount;
 
         private AnimationSpriteDrawer _animationSpriteDrawer;
@@ -24,13 +25,13 @@ namespace NRPlanes.Client.GameComponents
         public ExplosionXna(PlanesGame game, GameObject exploded, CoordinatesTransformer coordinatesTransformer)
             : base(game, coordinatesTransformer)
         {
-            double explosionSideSize = Math.Max(10.0, exploded.RelativeGeometry.BoundingRectangle.LongSide * 5.0);
-            _explosionPosition = new Rect(exploded.Position, new Size(explosionSideSize, explosionSideSize));
+            //double explosionSideSize = Math.Max(10.0, exploded.RelativeGeometry.BoundingRectangle.LongSide * 5.0);            
+            _explosionPosition = new Rect(exploded.Position, exploded.RelativeGeometry.BoundingRectangle.Size);            
 
             m_particlesEmitter = new SymmetricParticlesEmitter(game.GameManager.GameWorldXna)
             {
-                PositionDeviationRadius = explosionSideSize / 50,
-                VelocityDeviationRadius = 0.05               
+                PositionDeviationRadius = _explosionPosition.Width / 2,
+                VelocityDeviationRadius = 0.1
             };
 
             BasicSoundEffect sound = null;
@@ -59,14 +60,14 @@ namespace NRPlanes.Client.GameComponents
                 {
                     Color = Color.OrangeRed,
                     Position = _explosionPosition.Center,
-                    Size = new Size(1, 1),
-                    AlphaVelocity = -0.015f,
-                    TimeToLive = TimeSpan.FromSeconds(3),
+                    Size = new Size(2, 2),
+                    AlphaVelocity = -0.02f,
+                    TimeToLive = TimeSpan.FromSeconds(5),
                     Velocity = new Vector(),
                     Rotation = 0,
                     Depth = LayersDepths.Explosion,
                     SizeFactorVelocity = new Vector(0.01, 0.01)
-                }, 100);
+                }, (int)(_explosionPosition.Area * PARTICLES_PER_UNIT_AREA));
 
                 //m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
                 //{

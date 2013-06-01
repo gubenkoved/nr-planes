@@ -59,6 +59,11 @@ namespace NRPlanes.Client.Particles
                 Alpha += AlphaVelocity;
                 Alpha = Math.Max(0.0f, Math.Min(1.0f, Alpha));
 
+                if (Alpha == 0)
+                {
+                    IsGarbage = true;
+                }
+
                 ParticlesEngine.Update(this, gameTime.ElapsedGameTime);
             }
             else

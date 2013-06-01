@@ -24,6 +24,14 @@ namespace NRPlanes.Core.Primitives
         [DataMember]
         public double Height { get; set; }
 
+        public double Area
+        {
+            get
+            {
+                return Width * Height;
+            }
+        }
+
         /// <param name="x">X coordinate of left bottom corner</param>
         /// <param name="y">Y coordinate of left bottom corner</param>
         /// <param name="width"></param>
@@ -126,7 +134,7 @@ namespace NRPlanes.Core.Primitives
         public Size Size
         {
             get { return new Size(Width, Height); }
-        }
+        }        
 
         public override string ToString()
         {
