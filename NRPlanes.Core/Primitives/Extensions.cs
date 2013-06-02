@@ -2,12 +2,12 @@ namespace NRPlanes.Core.Primitives
 {
     public static class Extensions
     {
-        public static Vector Rotate(this Vector vector, double angle)
-        {
-            var rotationMatrix = Matrix.CreateRotationMatrix(angle);
+        //public static Vector Rotate(this Vector vector, double angle)
+        //{
+        //    var rotationMatrix = Matrix.CreateRotationMatrix(angle);
 
-            return Vector.Multiply(vector, rotationMatrix);
-        }
+        //    return Vector.Multiply(vector, rotationMatrix);
+        //}
 
         public static double Angle(this Vector vector)
         {

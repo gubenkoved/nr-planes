@@ -67,7 +67,7 @@
   <Class Name="NRPlanes.Core.Common.GameWorld" BaseTypeListCollapsed="true">
     <Position X="12.5" Y="9.25" Width="3.5" />
     <TypeIdentifier>
-      <HashCode>AkTAAUAEAgAAoAAiAAABAAogABAMBgAAAAACAAQAACI=</HashCode>
+      <HashCode>AkTAAUAAAoAAoAACAAABAAogABAMBgAAAAACAAQAACI=</HashCode>
       <FileName>Common\GameWorld.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -157,7 +157,7 @@
   <Class Name="NRPlanes.Core.Primitives.Extensions" Collapsed="true">
     <Position X="15.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAEAAAAAAgAEAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
       <FileName>Primitives\Extensions.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -171,7 +171,7 @@
   <Class Name="NRPlanes.Core.Primitives.Helper" Collapsed="true">
     <Position X="15.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAIAgAAAAAgAAAAAAAAAAACAEAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAIAgAAAAAgAAAAAAAAAAECAEAAAAAA=</HashCode>
       <FileName>Primitives\Helper.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -218,17 +218,10 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Struct>
-  <Struct Name="NRPlanes.Core.Primitives.Matrix" Collapsed="true">
-    <Position X="12.25" Y="3.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>ACABAAAAAAAACAAAAAAAACAAAAAAABAAAAAAAAAAAAA=</HashCode>
-      <FileName>Primitives\Matrix.cs</FileName>
-    </TypeIdentifier>
-  </Struct>
   <Struct Name="NRPlanes.Core.Primitives.Rect" Collapsed="true">
     <Position X="14" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgAAAAAIBAAAgFAEAAIQAEAAAAAYAAAACACAQAAIYEA=</HashCode>
+      <HashCode>AgAAAAAIBAAAgFAEAAIQAEAAAAAYAAAACACAQQAIYEA=</HashCode>
       <FileName>Primitives\Rect.cs</FileName>
     </TypeIdentifier>
   </Struct>
@@ -249,7 +242,7 @@
   <Struct Name="NRPlanes.Core.Primitives.Vector" Collapsed="true">
     <Position X="15.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEYAUBAABAACAAAAAAAAAgAAAAYAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAEaAUBABBAECAAAAAgAAAgAAAAYAA=</HashCode>
       <FileName>Primitives\Vector.cs</FileName>
     </TypeIdentifier>
   </Struct>
@@ -284,7 +277,7 @@
   <Enum Name="NRPlanes.Core.Common.MotionType" Collapsed="true">
     <Position X="14" Y="7" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAI=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACICAAAAAAAI=</HashCode>
       <FileName>Common\Plane.cs</FileName>
     </TypeIdentifier>
   </Enum>

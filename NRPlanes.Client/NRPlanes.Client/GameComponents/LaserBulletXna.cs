@@ -50,7 +50,7 @@ namespace NRPlanes.Client.GameComponents
                     Color = Color.FromNonPremultiplied(20, 20, 20, 255),
                     Position = GameObject.Position,
                     Size = new Size(1, 15),                    
-                    AlphaVelocity = -0.01f,
+                    AlphaVelocity = -0.5f,
                     TimeToLive = TimeSpan.FromSeconds(5),
                     Rotation = GameObject.Velocity.Angle()
                 }, 1);

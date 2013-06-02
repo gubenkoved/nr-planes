@@ -46,13 +46,14 @@ namespace NRPlanes.Core.Primitives
 
         public static PolygonGeometry FromRectangle(Rect rect)
         {
-            return new PolygonGeometry(new[]
-                                           {
-                                               new Vector(rect.X, rect.Y),
-                                               new Vector(rect.X + rect.Width, rect.Y),
-                                               new Vector(rect.X + rect.Width, rect.Y + rect.Height),
-                                               new Vector(rect.X, rect.Y + rect.Height)
-                                           });
+            return new PolygonGeometry
+                (new[] 
+                {
+                    new Vector(rect.X, rect.Y),
+                    new Vector(rect.X + rect.Width, rect.Y),
+                    new Vector(rect.X + rect.Width, rect.Y + rect.Height),
+                    new Vector(rect.X, rect.Y + rect.Height)
+                });
 
         }
 
@@ -135,8 +136,10 @@ namespace NRPlanes.Core.Primitives
 
                 return false;
             }
-
-            return base.IsIntersectsWith(anotherGeometry);
+            else
+            {
+                return base.IsIntersectsWith(anotherGeometry);
+            }
         }
 
         public override void Translate(Vector translateVector)

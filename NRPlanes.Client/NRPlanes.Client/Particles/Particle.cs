@@ -56,7 +56,7 @@ namespace NRPlanes.Client.Particles
 
             if (m_liveTime <= TimeToLive)
             {
-                Alpha += AlphaVelocity;
+                Alpha += AlphaVelocity * gameTime.ElapsedGameTime.TotalSeconds;
                 Alpha = Math.Max(0.0f, Math.Min(1.0f, Alpha));
 
                 if (Alpha == 0)

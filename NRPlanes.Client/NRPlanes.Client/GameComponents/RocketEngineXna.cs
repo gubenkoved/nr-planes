@@ -49,24 +49,26 @@ namespace NRPlanes.Client.GameComponents
         {
             var frameSize = new Size(24, 24);
 
-            if (m_animationSpriteDrawer == null)
-            {
-                m_animationSpriteDrawer
-                    = new AnimationSpriteDrawer(
-                        Game.Content.Load<Texture2D>("Animations/flame_anim"),
-                        frameSize, TimeSpan.FromMilliseconds(30));
-            }
+            //if (m_animationSpriteDrawer == null)
+            //{
+            //    m_animationSpriteDrawer
+            //        = new AnimationSpriteDrawer(
+            //            Game.Content.Load<Texture2D>("Animations/flame_anim"),
+            //            frameSize, TimeSpan.FromMilliseconds(30));
+            //}
 
             if (Equipment.IsActive)
             {
+                m_particlesEmitter.LongitualDirection = new Vector(0, 1).Rotate(Equipment.GetAbsoluteRotation());
+
                 m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
                 {
                     Color = Color.OrangeRed,
                     Position = Equipment.GetAbsolutePosition(),
                     Size = new Size(2.5, 3),
-                    AlphaVelocity = -0.05f,
+                    AlphaVelocity = -1.6f,
                     TimeToLive = TimeSpan.FromSeconds(2),
-                    Velocity = new Vector(0, -0.5).Rotate(Equipment.GetAbsoluteRotation()),
+                    Velocity = Equipment.RelatedGameObject.Velocity + new Vector(0, -30).Rotate(Equipment.GetAbsoluteRotation()),
                     Rotation = Equipment.GetAbsoluteRotation()
                 }, 5);
                 

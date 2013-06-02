@@ -53,6 +53,18 @@ namespace NRPlanes.Core.Primitives
                 return this / this.Length;
         }
 
+        public Vector Rotate(double angleDegrees)
+        {
+            double radians = Helper.ToRadians(angleDegrees);
+
+            double sin = Math.Sin(radians);
+            double cos = Math.Cos(radians);
+
+            return new Vector(
+                X * cos + Y * sin,
+                -X * sin + Y * cos);
+        }
+
         public static Vector operator +(Vector v1, Vector v2)
         {
             return new Vector(v1.X + v2.X, v1.Y + v2.Y);
@@ -104,13 +116,13 @@ namespace NRPlanes.Core.Primitives
             return Helper.ToDegrees(Math.Atan2(-y, x));
         }
 
-        public static Vector Multiply(Vector v, Matrix matrix)
-        {
-            double x = v.X * matrix.M11 + v.Y * matrix.M21;
-            double y = v.X * matrix.M12 + v.Y * matrix.M22;
+        //public static Vector Multiply(Vector v, Matrix matrix)
+        //{
+        //    double x = v.X * matrix.M11 + v.Y * matrix.M21;
+        //    double y = v.X * matrix.M12 + v.Y * matrix.M22;
 
-            return new Vector(x, y);
-        }
+        //    return new Vector(x, y);
+        //}
 
         public override string ToString()
         {
