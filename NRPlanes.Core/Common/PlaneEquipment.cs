@@ -27,6 +27,9 @@ namespace NRPlanes.Core.Common
         [DataMember]
         public double Charge { get; protected set; }
 
+        [DataMember]
+        public double MinimalChargeToActivate { get; protected set; }
+
         /// <summary>
         /// Time during restores one unit of charge
         /// </summary>

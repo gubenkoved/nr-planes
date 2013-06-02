@@ -12,8 +12,7 @@ namespace NRPlanes.Client.Particles
     public enum ParticleType
     {
         Circle,
-        BluredCircle,
-        Square,
+        BluredCircle,        
         Star,
         Diamond
     }
@@ -25,7 +24,7 @@ namespace NRPlanes.Client.Particles
         public TimeSpan TimeToLive = TimeSpan.FromSeconds(10);
         private TimeSpan m_liveTime;
 
-        public ParticleType Type = ParticleType.BluredCircle;
+        public readonly ParticleType Type = ParticleType.BluredCircle;
         public double Alpha = 1.0;
         public double AlphaVelocity;
         public Color Color = Color.White;
@@ -48,9 +47,10 @@ namespace NRPlanes.Client.Particles
 
         public float Depth = LayersDepths.ParticlesDefault;
 
-        public Particle(PlanesGame game, CoordinatesTransformer transformer)
+        public Particle(PlanesGame game, CoordinatesTransformer transformer, ParticleType type = ParticleType.BluredCircle)
             :base(game, transformer)
         {
+            Type = type;
         }
 
         public override void Update(GameTime gameTime)
@@ -79,7 +79,25 @@ namespace NRPlanes.Client.Particles
         public override void Draw(GameTime gameTime, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
         {
             if (m_texture == null)
-                m_texture = Game.Content.Load<Texture2D>("Particles/circle_blured");
+            {
+                switch (Type)
+                {
+                    case ParticleType.Circle:
+                        m_texture = Game.Content.Load<Texture2D>("Particles/circle");
+                        break;
+                    case ParticleType.BluredCircle:
+                        m_texture = Game.Content.Load<Texture2D>("Particles/circle_blured");
+                        break;                    
+                    case ParticleType.Star:
+                        m_texture = Game.Content.Load<Texture2D>("Particles/star");
+                        break;
+                    case ParticleType.Diamond:
+                        m_texture = Game.Content.Load<Texture2D>("Particles/diamond");
+                        break;
+                    default:
+                        throw new Exception("Unknown particle type");
+                }
+            }
 
             if (!IsGarbage)
             {

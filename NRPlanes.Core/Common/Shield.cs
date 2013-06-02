@@ -9,9 +9,6 @@ namespace NRPlanes.Core.Common
         public bool IsActive { get; private set; }
 
         [DataMember]
-        public double MinimalChargeToActivate { get; private set; }
-
-        [DataMember]
         public double DamageToChargeFactor { get; private set; }
 
         public Shield(double maximumCharge, double regeneration, double minimalChargeToActivate, double damageToChargeFactor)

@@ -7,24 +7,24 @@ using System.Linq;
 
 namespace NRPlanes.Client.InfoPanels
 {
-    public class PlaneInfo : InfoPanelItem
+    public class PlaneInfoPanelItem : InfoPanelItem
     {
-        private Texture2D _background;
+        private Texture2D m_background;
 
-        private IndicatorsDrawer _indicatorsDrawer;
+        private IndicatorsDrawer m_indicatorsDrawer;
 
         public Plane Plane { get; set; }
 
-        public PlaneInfo(PlanesGame game, Rectangle positionRectangle) 
+        public PlaneInfoPanelItem(PlanesGame game, Rectangle positionRectangle) 
             : base(game, positionRectangle)
         {
         }
 
         public override void Initialize()
         {
-            _background = Game.Content.Load<Texture2D>("PlaneInfo/background");
+            m_background = Game.Content.Load<Texture2D>("PlaneInfo/background");
 
-            _indicatorsDrawer = new IndicatorsDrawer(Game.Content.Load<Texture2D>("PlaneInfo/indicator_backround"),
+            m_indicatorsDrawer = new IndicatorsDrawer(Game.Content.Load<Texture2D>("PlaneInfo/indicator_backround"),
                                                      Game.Content.Load<Texture2D>("PlaneInfo/indicator_value"),
                                                      Game.Content.Load<SpriteFont>("Fonts/infopanel_font"));
 
@@ -33,7 +33,7 @@ namespace NRPlanes.Client.InfoPanels
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_background,
+            spriteBatch.Draw(m_background,
                              PositionRectangle,
                              null,
                              Color.White,
@@ -51,17 +51,17 @@ namespace NRPlanes.Client.InfoPanels
                                                                PositionRectangle.Width - 2 * indention,
                                                                20);
 
-                _indicatorsDrawer.Draw(spriteBatch,
+                m_indicatorsDrawer.Draw(spriteBatch,
                                        indicatorPosition,
                                        1,
-                                       Color.Black,
-                                       Color.Black,
+                                       Color.Transparent,
+                                       Color.Transparent,
                                        string.Format("{0}, {1:F1}, V={2:F1}", Plane.Position, Plane.Rotation, Plane.Velocity.Length),
                                        Color.FromNonPremultiplied(255, 255, 255, 200));
                 
                 indicatorPosition.Offset(0, 24);
 
-                _indicatorsDrawer.Draw(spriteBatch,
+                m_indicatorsDrawer.Draw(spriteBatch,
                                        indicatorPosition,
                                        Plane.Health / Plane.MaximalHealth,
                                        Color.Black, 
@@ -86,7 +86,7 @@ namespace NRPlanes.Client.InfoPanels
 
                     indicatorPosition.Offset(0, 24);
 
-                    _indicatorsDrawer.Draw(spriteBatch,
+                    m_indicatorsDrawer.Draw(spriteBatch,
                                            indicatorPosition,
                                            equipment.Charge / equipment.MaximumCharge,
                                            Color.Black,

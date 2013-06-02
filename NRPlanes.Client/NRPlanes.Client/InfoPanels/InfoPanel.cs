@@ -15,7 +15,7 @@ namespace NRPlanes.Client.InfoPanels
 
         private readonly GameWorldXna m_gameWorldXna;
 
-        public PlaneInfo PlaneInfoPanel { get; private set; }
+        public PlaneInfoPanelItem PlaneInfoPanel { get; private set; }
         public Minimap MinimapPanel { get; private set; }
         private readonly List<InfoPanelItem> m_infoPanelItems;
 
@@ -41,7 +41,7 @@ namespace NRPlanes.Client.InfoPanels
                                                   minimapPosition.Y - minimapPosition.Height);
 
             MinimapPanel = new Minimap(game, minimapPosition, m_gameWorldXna);
-            PlaneInfoPanel = new PlaneInfo(game, planeInfoPosition);
+            PlaneInfoPanel = new PlaneInfoPanelItem(game, planeInfoPosition);
 
             m_infoPanelItems.Add(MinimapPanel);
             m_infoPanelItems.Add(PlaneInfoPanel);
