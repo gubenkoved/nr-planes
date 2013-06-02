@@ -15,8 +15,9 @@ namespace NRPlanes.Client.GameComponents
     {
         public new Shield Equipment { get { return base.Equipment as Shield; } }
 
-        private Texture2D _texture;
-        private Color _color;
+        private Texture2D m_texture;
+        private Color m_color;
+        private int m_drawCounter;
 
         public ShieldXna(PlanesGame game, Shield shield, CoordinatesTransformer coordinatesTransformer)
             : base(game, shield, coordinatesTransformer)
@@ -26,12 +27,12 @@ namespace NRPlanes.Client.GameComponents
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (_texture == null)
+            if (m_texture == null)
             {
                 if (Equipment.RelatedGameObject is XWingPlane)
                 {
-                    _texture = Game.Content.Load<Texture2D>("Images/x_wing_shield");
-                    _color = Color.Red;
+                    m_texture = Game.Content.Load<Texture2D>("Images/x_wing_shield");
+                    m_color = Color.YellowGreen;
                 }
                 else
                     throw new Exception("Unknown plane to create shield");
@@ -39,15 +40,17 @@ namespace NRPlanes.Client.GameComponents
 
             if (Equipment.IsActive)
             {
-                var origin = new Vector2(_texture.Width / 2.0f, _texture.Height / 2.0f);
+                ++m_drawCounter;
+
+                var origin = new Vector2(m_texture.Width / 2.0f, m_texture.Height / 2.0f);
 
                 var scaleVector = CoordinatesTransformer.CreateScaleVector(Equipment.RelatedGameObject.RelativeGeometry.BoundingRectangle.Size,
-                                                                           new Size(_texture.Width, _texture.Height));
+                                                                           new Size(m_texture.Width, m_texture.Height));
 
-                spriteBatch.Draw(_texture,
+                spriteBatch.Draw(m_texture,
                                  CoordinatesTransformer.Transform(Equipment.GetAbsolutePosition()),
                                  null,
-                                 _color,
+                                 Color.FromNonPremultiplied(m_color.R, m_color.G, m_color.B, (int)(195 + 60 * Math.Sin(m_drawCounter / 3.0))),
                                  MathHelper.ToRadians((float)Equipment.GetAbsoluteRotation()),
                                  origin,
                                  scaleVector,

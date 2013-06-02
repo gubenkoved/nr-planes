@@ -34,6 +34,11 @@ namespace NRPlanes.Client.Particles
         public Vector SizeFactor = new Vector(1, 1);
         public Vector SizeFactorVelocity;
 
+        /// <summary>
+        /// Then particle is static position, velocity, rotation and rotation velocity never updates
+        /// </summary>
+        public bool IsStatic = false;
+
         public Vector Position;
         public Vector Velocity;
         public Vector Acceleration;

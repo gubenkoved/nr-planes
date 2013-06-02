@@ -230,13 +230,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Images\x_wing_shield.png">
-      <Name>x_wing_shield</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Particles\circle_blured.png">
       <Name>circle_blured</Name>
       <Importer>TextureImporter</Importer>
@@ -263,6 +256,13 @@
   <ItemGroup>
     <Compile Include="Images\circle_bullet.png">
       <Name>circle_bullet</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\x_wing_shield.png">
+      <Name>x_wing_shield</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

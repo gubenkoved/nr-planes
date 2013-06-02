@@ -46,6 +46,9 @@ namespace NRPlanes.Core.Common
         [DataMember]
         public TimeSpan ElapsedTimeForShot { get; private set; }
 
+        [DataMember]
+        public DateTime LastShotDateTime { get; private set; }
+
         public override void Update(TimeSpan elapsed)
         {
             base.Update(elapsed);
@@ -65,10 +68,12 @@ namespace NRPlanes.Core.Common
         public void Fire()
         {
             if (Charge >= 1.0 && ElapsedTimeForShot == TimeSpan.Zero)
-            {
+            {                
                 Charge -= 1.0;
 
                 ElapsedTimeForShot = ReloadingTime;
+
+                LastShotDateTime = DateTime.Now;
 
                 Vector absolutePosition = GetAbsolutePosition();
                 double absoluteRotation = GetAbsoluteRotation();

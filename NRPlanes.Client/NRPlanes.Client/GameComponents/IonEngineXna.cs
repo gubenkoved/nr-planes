@@ -62,7 +62,7 @@ namespace NRPlanes.Client.GameComponents
                 m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
                 {
                     Color = Color.LightBlue,
-                    Position = Equipment.GetAbsolutePosition(),
+                    Position = Equipment.GetAbsolutePosition() + new Vector(0, -0.5).Rotate(Equipment.GetAbsoluteRotation()),
                     Size = new Size(1.5, 1.5),
                     AlphaVelocity = -5.0f,
                     TimeToLive = TimeSpan.FromSeconds(1),

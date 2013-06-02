@@ -368,9 +368,9 @@ namespace NRPlanes.Client.Common
             if (!double.IsInfinity(fps))
                 m_spriteBatch.DrawString(font, string.Format("{0:F1} fps", fps), new Vector2(10, 10), Color.White);
 
-            var time = gameTime.TotalGameTime;
+            m_spriteBatch.DrawString(font, string.Format(@"{0:hh\:mm\:ss}", gameTime.TotalGameTime), new Vector2(10, 22), Color.White);
 
-            m_spriteBatch.DrawString(font, string.Format(@"{0:hh\:mm\:ss}", time), new Vector2(10, 22), Color.White);
+            m_spriteBatch.DrawString(font, string.Format(@"Particles count: {0}", m_particles.Count), new Vector2(10, 34), Color.White);
         }
         private void GrabStaticObjects()
         {

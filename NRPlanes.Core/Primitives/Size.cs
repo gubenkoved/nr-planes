@@ -23,6 +23,15 @@ namespace NRPlanes.Core.Primitives
             Height = height;
         }
 
+        public static Size operator *(Size s, double d)
+        {
+            return new Size(d * s.Width, d * s.Height);
+        }
+        public static Size operator *(double d, Size s)
+        {
+            return s * d;
+        }
+
         public override string ToString()
         {
             return string.Format("{{{0}x{1}}}", Width, Height);

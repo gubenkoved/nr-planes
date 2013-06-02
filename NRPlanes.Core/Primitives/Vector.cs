@@ -63,38 +63,32 @@ namespace NRPlanes.Core.Primitives
             return new Vector(
                 X * cos + Y * sin,
                 -X * sin + Y * cos);
-        }
+        }        
 
         public static Vector operator +(Vector v1, Vector v2)
         {
             return new Vector(v1.X + v2.X, v1.Y + v2.Y);
         }
-
         public static Vector operator -(Vector v1, Vector v2)
         {
             return new Vector(v1.X - v2.X, v1.Y - v2.Y);
         }
-
         public static Vector operator *(Vector v, double d)
         {
             return new Vector(d * v.X, d * v.Y);
         }
-
         public static Vector operator *(double d, Vector v)
         {
             return v * d;
         }
-
         public static double operator *(Vector v1, Vector v2)
         {
             return v1.X * v2.X + v1.Y * v2.Y;
         }
-
         public static Vector operator /(Vector v, double d)
         {
             return new Vector(v.X / d, v.Y / d);
         }
-
         public static Vector operator - (Vector v)
         {
             return -1.0 * v;
