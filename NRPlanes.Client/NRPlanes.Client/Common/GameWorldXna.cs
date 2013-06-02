@@ -363,14 +363,11 @@ namespace NRPlanes.Client.Common
         {
             var font = Game.Content.Load<SpriteFont>("Fonts/information_font");
 
-            var fps = 1.0 / gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (!double.IsInfinity(fps))
-                m_spriteBatch.DrawString(font, string.Format("{0:F1} fps", fps), new Vector2(10, 10), Color.White);
-
+            m_spriteBatch.DrawString(font, string.Format("{0:F1} fps", 1.0 / gameTime.ElapsedGameTime.TotalSeconds), new Vector2(10, 10), Color.White);
             m_spriteBatch.DrawString(font, string.Format(@"{0:hh\:mm\:ss}", gameTime.TotalGameTime), new Vector2(10, 22), Color.White);
-
-            m_spriteBatch.DrawString(font, string.Format(@"Particles count: {0}", m_particles.Count), new Vector2(10, 34), Color.White);
+            m_spriteBatch.DrawString(font, string.Format(@"Particles: {0}", m_particles.Count), new Vector2(10, 34), Color.White);
+            m_spriteBatch.DrawString(font, string.Format(@"Game objects: {0}", Game.GameManager.GameWorld.GameObjectsCount), new Vector2(10, 46), Color.White);
+            m_spriteBatch.DrawString(font, string.Format(@"Drawable components: {0}", m_safeDrawableGameComponents.Count), new Vector2(10, 58), Color.White);
         }
         private void GrabStaticObjects()
         {
