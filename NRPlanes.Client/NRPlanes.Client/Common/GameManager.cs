@@ -69,7 +69,7 @@ namespace NRPlanes.Client.Common
 
             m_gameWorld.AddPlaneController(new LocalPlaneController(m_ownPlane));
 
-            m_gameWorldXna.CenterOfView = m_ownPlane;
+            m_gameWorldXna.CenterOfViewGameObject = m_ownPlane;
             m_gameWorldXna.ForceSetCameraOnCenterOfView();
             #endregion
 

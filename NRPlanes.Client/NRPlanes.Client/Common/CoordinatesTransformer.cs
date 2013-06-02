@@ -6,30 +6,60 @@ namespace NRPlanes.Client.Common
 {
     public class CoordinatesTransformer
     {
-        public Size FullLogicalSize { get; private set; }
-        
-        public Rectangle PhysicalRectangle { get; private set; }
-
-        private Rect _visibleLogicalRectangle;
-        public Rect VisibleLogicalRectangle
+        private readonly Size m_fullLogicalSize;
+        public Size FullLogicalSize
         {
-            get { return _visibleLogicalRectangle; }
+            get
+            {
+                return m_fullLogicalSize;
+            }
+        }
+        
+        private readonly Rectangle m_physicalRectangle;
+        public Rectangle PhysicalRectangle 
+        { 
+            get 
+            {
+                return m_physicalRectangle;
+            }
         }
 
+        private Rect m_visibleLogicalRectangle;
+        public Rect VisibleLogicalRectangle
+        {
+            get { return m_visibleLogicalRectangle; }
+        }
+
+        private readonly double m_aspect;
+        public double Aspect
+        {
+            get
+            {
+                return m_aspect;
+            }
+        }
+
+        private readonly Size m_normalSize;
         /// <summary>
         /// Visible logical rectangle size then scale factor equals 1
         /// </summary>
-        public Size NormalSize { get; private set; }
+        public Size NormalSize
+        {
+            get
+            {
+                return m_normalSize;
+            }
+        }
 
-        private double _scale;
+        private double m_scale;
         public double Scale
         {
-            get { return _scale; }
+            get { return m_scale; }
             set
             {
-                _scale = value;
+                m_scale = value;
 
-                ScaleFrom(NormalSize, _scale);
+                ScaleFrom(NormalSize, m_scale);
             }
         }
 
@@ -38,16 +68,15 @@ namespace NRPlanes.Client.Common
         {
         }
 
-        public CoordinatesTransformer(Size fullLogicalSize, Rectangle physicalRectangle, double normalWidth)
+        public CoordinatesTransformer(Size fullLogicalSize, Rectangle physicalRectangle, double normalLogicalWidth)
         {
-            FullLogicalSize = fullLogicalSize;
-
-            PhysicalRectangle = physicalRectangle;
-
-            _visibleLogicalRectangle = new Rect(new Size(MaximalVisibleLogicalSize().Width,
-                                                        MaximalVisibleLogicalSize().Height));
-
-            SetNormalSizeFromNormalWidth(normalWidth);
+            m_aspect = physicalRectangle.GetSize().Aspect;
+            m_fullLogicalSize = fullLogicalSize;
+            m_physicalRectangle = physicalRectangle;
+            m_visibleLogicalRectangle = new Rect(
+                new Size(MaximalVisibleLogicalSize().Width, 
+                    MaximalVisibleLogicalSize().Height));
+            m_normalSize = new Size(normalLogicalWidth, normalLogicalWidth / m_aspect);
 
             Scale = 1.0;
         }
@@ -57,13 +86,12 @@ namespace NRPlanes.Client.Common
             var newVisibleWidth = initSize.Width / scale;
             var newVisibleHeight = initSize.Height / scale;
 
-            _visibleLogicalRectangle.X -= (newVisibleWidth - _visibleLogicalRectangle.Width) / 2.0;
-            _visibleLogicalRectangle.Y -= (newVisibleHeight - _visibleLogicalRectangle.Height) / 2.0;
+            m_visibleLogicalRectangle.X -= (newVisibleWidth - m_visibleLogicalRectangle.Width) / 2.0;
+            m_visibleLogicalRectangle.Y -= (newVisibleHeight - m_visibleLogicalRectangle.Height) / 2.0;
 
-            _visibleLogicalRectangle.Width = newVisibleWidth;
-            _visibleLogicalRectangle.Height = newVisibleHeight;
+            m_visibleLogicalRectangle.Width = newVisibleWidth;
+            m_visibleLogicalRectangle.Height = newVisibleHeight;
         }
-
         private Size MaximalVisibleLogicalSize()
         {
             double logicalAspect = FullLogicalSize.Aspect;
@@ -86,11 +114,6 @@ namespace NRPlanes.Client.Common
             return new Size(visibleWidth, visibleHeight);
         }
 
-        public void SetNormalSizeFromNormalWidth(double normalLogicalWidth)
-        {
-            NormalSize = new Size(normalLogicalWidth, normalLogicalWidth / PhysicalRectangle.GetSize().Aspect);
-        }
-
         public void ScaleToFit()
         {
             double minScale = Math.Min(NormalSize.Width / FullLogicalSize.Width,
@@ -98,34 +121,31 @@ namespace NRPlanes.Client.Common
 
             Scale = minScale;
         }
-
         public void SetCenterOfView(Vector center, bool applyConstraints = true)
         {
-            _visibleLogicalRectangle.X = center.X - VisibleLogicalRectangle.Width / 2.0;
+            m_visibleLogicalRectangle.X = center.X - VisibleLogicalRectangle.Width / 2.0;
 
-            _visibleLogicalRectangle.Y = center.Y - VisibleLogicalRectangle.Height / 2.0;
+            m_visibleLogicalRectangle.Y = center.Y - VisibleLogicalRectangle.Height / 2.0;
 
             if (applyConstraints)
             {
-                _visibleLogicalRectangle.X = Math.Max(0, _visibleLogicalRectangle.X);
-                _visibleLogicalRectangle.X = Math.Min(FullLogicalSize.Width - _visibleLogicalRectangle.Width, _visibleLogicalRectangle.X);
+                m_visibleLogicalRectangle.X = Math.Max(0, m_visibleLogicalRectangle.X);
+                m_visibleLogicalRectangle.X = Math.Min(FullLogicalSize.Width - m_visibleLogicalRectangle.Width, m_visibleLogicalRectangle.X);
 
-                _visibleLogicalRectangle.Y = Math.Max(0, _visibleLogicalRectangle.Y);
-                _visibleLogicalRectangle.Y = Math.Min(FullLogicalSize.Height - _visibleLogicalRectangle.Height, _visibleLogicalRectangle.Y);
+                m_visibleLogicalRectangle.Y = Math.Max(0, m_visibleLogicalRectangle.Y);
+                m_visibleLogicalRectangle.Y = Math.Min(FullLogicalSize.Height - m_visibleLogicalRectangle.Height, m_visibleLogicalRectangle.Y);
             }
         }
-
         public Vector2 Transform(Vector vector)
         {
-            double multX = PhysicalRectangle.GetSize().Width / _visibleLogicalRectangle.Width;
-            double multY = PhysicalRectangle.GetSize().Height / _visibleLogicalRectangle.Height;
+            double multX = PhysicalRectangle.GetSize().Width / m_visibleLogicalRectangle.Width;
+            double multY = PhysicalRectangle.GetSize().Height / m_visibleLogicalRectangle.Height;
 
-            var transformed = new Vector2((float)(PhysicalRectangle.X + multX * (vector.X - _visibleLogicalRectangle.Left)),
-                                          (float)(PhysicalRectangle.Y + PhysicalRectangle.GetSize().Height - multY * (vector.Y - _visibleLogicalRectangle.Bottom)));
+            var transformed = new Vector2((float)(PhysicalRectangle.X + multX * (vector.X - m_visibleLogicalRectangle.Left)),
+                                          (float)(PhysicalRectangle.Y + PhysicalRectangle.GetSize().Height - multY * (vector.Y - m_visibleLogicalRectangle.Bottom)));
 
-            return transformed;
+            return transformed;            
         }
-
         public Rectangle Transform(Rect rect)
         {
             var leftTopTransormed = Transform(rect.TopLeft);
@@ -138,12 +158,11 @@ namespace NRPlanes.Client.Common
 
             return transformed;
         }
-
         public Vector2 CreateScaleVector(Size logicalSize, Size physicalSize)
         {
-            var needPhysicalWidth = logicalSize.Width * PhysicalRectangle.GetSize().Width / _visibleLogicalRectangle.Width;
+            var needPhysicalWidth = logicalSize.Width * PhysicalRectangle.GetSize().Width / m_visibleLogicalRectangle.Width;
 
-            var needPhysicalHeight = logicalSize.Height * PhysicalRectangle.GetSize().Height / _visibleLogicalRectangle.Height;
+            var needPhysicalHeight = logicalSize.Height * PhysicalRectangle.GetSize().Height / m_visibleLogicalRectangle.Height;
 
             var scaleVector = new Vector(needPhysicalWidth / physicalSize.Width,
                                          needPhysicalHeight / physicalSize.Height);
