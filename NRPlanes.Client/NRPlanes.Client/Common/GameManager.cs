@@ -62,6 +62,8 @@ namespace NRPlanes.Client.Common
             }
             
             m_gameWorldXna = new GameWorldXna(m_game, m_gameWorld, new Rectangle(0, 0, m_game.Graphics.PreferredBackBufferWidth, m_game.Graphics.PreferredBackBufferHeight));
+            m_gameWorldXna.Initialize();
+
             m_infoPanel = new InfoPanel(m_game, m_gameWorldXna);
             
             #region Create plane, controller and set camera
@@ -77,10 +79,8 @@ namespace NRPlanes.Client.Common
 
             m_gameWorld.AddGameObject(m_ownPlane); // Add after subscribing of GameWorld events
 
-            m_infoPanel.Initialize();
             m_infoPanel.PlaneInfoPanel.Plane = m_ownPlane;
-
-            m_gameWorldXna.Initialize();
+            m_infoPanel.Initialize();
         }
 
         public void Update(GameTime gameTime)

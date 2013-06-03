@@ -118,6 +118,11 @@ namespace NRPlanes.Core.Common
 
         private void ProcessUpdate(TimeSpan elapsed)
         {
+            foreach (var staticObject in m_staticObjects)
+            {
+                staticObject.Update(elapsed);
+            }
+
             using (var handle = m_safeGameObjects.SafeRead())
             {
                 GameObject[] copy = m_safeGameObjects.ToArray();

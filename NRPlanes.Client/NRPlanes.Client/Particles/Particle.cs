@@ -14,7 +14,8 @@ namespace NRPlanes.Client.Particles
         Circle,
         BluredCircle,        
         Star,
-        Diamond
+        Diamond,
+        Cross
     }
 
     public class Particle : MyDrawableGameComponent, ICloneable
@@ -28,15 +29,15 @@ namespace NRPlanes.Client.Particles
         public double Alpha = 1.0;
         public double AlphaVelocity;
         public Color Color = Color.White;
-        
+
+        /// <summary>
+        /// Particle engine never updates static partilce's mechanical params (size factor, position, velocity, rotation and rotation velocity)
+        /// </summary>
+        public bool IsStatic = false;
+
         public Size Size = new Size(1, 1);
         public Vector SizeFactor = new Vector(1, 1);
         public Vector SizeFactorVelocity;
-
-        /// <summary>
-        /// Then particle is static position, velocity, rotation and rotation velocity never updates
-        /// </summary>
-        public bool IsStatic = false;
 
         public Vector Position;
         public Vector Velocity;
@@ -93,6 +94,9 @@ namespace NRPlanes.Client.Particles
                         break;
                     case ParticleType.Diamond:
                         m_texture = Game.Content.Load<Texture2D>("Particles/diamond");
+                        break;
+                    case ParticleType.Cross:
+                        m_texture = Game.Content.Load<Texture2D>("Particles/cross");
                         break;
                     default:
                         throw new Exception("Unknown particle type");

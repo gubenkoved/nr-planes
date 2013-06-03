@@ -14,7 +14,8 @@ namespace NRPlanes.Client.GameComponents
             get { return base.StaticObject as RectangleGravityField; }
         }
 
-        private Texture2D _texture;
+        private Texture2D m_texture;
+        private Color m_color = Color.FromNonPremultiplied(5, 20, 50, 255);
 
         public RectangleGravityFieldXna(PlanesGame game, RectangleGravityField gravityField, CoordinatesTransformer coordinatesTransformer)
             : base(game, gravityField, coordinatesTransformer)
@@ -23,10 +24,10 @@ namespace NRPlanes.Client.GameComponents
         
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (_texture == null)
-                _texture = Game.Content.Load<Texture2D>("Images/gravity_field");
+            if (m_texture == null)
+                m_texture = Game.Content.Load<Texture2D>("Images/gravity_field");
 
-            var origin = new Vector2(_texture.Width / 2.0f, _texture.Height / 2.0f);
+            var origin = new Vector2(m_texture.Width / 2.0f, m_texture.Height / 2.0f);
 
             var angle = StaticObject.ForceDirection.Angle();
 
@@ -34,13 +35,12 @@ namespace NRPlanes.Client.GameComponents
                 CoordinatesTransformer.CreateScaleVector(
                     new Size(StaticObject.AbsoluteGeometry.BoundingRectangle.LongSide,
                              StaticObject.AbsoluteGeometry.BoundingRectangle.ShortSide),
-                    new Size(_texture.Width, _texture.Height));
+                    new Size(m_texture.Width, m_texture.Height));
 
-
-            spriteBatch.Draw(_texture,
+            spriteBatch.Draw(m_texture,
                              CoordinatesTransformer.Transform(StaticObject.AbsoluteGeometry.Center),
                              null,
-                             Color.CornflowerBlue,
+                             m_color,
                              (float) Helper.ToRadians(angle),
                              origin,
                              scaleVector,

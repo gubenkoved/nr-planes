@@ -93,7 +93,7 @@
   <Class Name="NRPlanes.Core.Common.PlaneEquipment" Collapsed="true">
     <Position X="4" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAQBAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAQBAAAAAAAAAAAAgACAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Common\PlaneEquipment.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -108,21 +108,22 @@
   <Class Name="NRPlanes.Core.Common.Shield" Collapsed="true">
     <Position X="7.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ABQEAACAAAAAAAAAEAAAAAAAAACAAAAAQAAAAAAAAAA=</HashCode>
+      <HashCode>ABQEAACAAAAAAAAAEAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
       <FileName>Common\Shield.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NRPlanes.Core.Common.StaticObject" Collapsed="true">
     <Position X="1.75" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Common\StaticObject.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="NRPlanes.Core.Common.Weapon" Collapsed="true">
     <Position X="0.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IBQAAAAAAAAAAAAAAAAAAAAAAAAEAAQAIGAAQAAAAAA=</HashCode>
+      <HashCode>IBUAAAAAAAAAAAAAAAAAAAAAAAAEAAQAIGAAQAAAAAA=</HashCode>
       <FileName>Common\Weapon.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -185,7 +186,7 @@
   <Class Name="NRPlanes.Core.StaticObjects.HealthRecoveryPlanet" Collapsed="true">
     <Position X="0.5" Y="10.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAAEAAAAAEAEAAAA=</HashCode>
       <FileName>StaticObjects\HealthRecoveryPlanet.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -235,14 +236,14 @@
   <Struct Name="NRPlanes.Core.Primitives.Size" Collapsed="true">
     <Position X="14" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAABAAAAEAEAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAABAAAAEAEIAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Primitives\Size.cs</FileName>
     </TypeIdentifier>
   </Struct>
   <Struct Name="NRPlanes.Core.Primitives.Vector" Collapsed="true">
     <Position X="15.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEaAUBABBAECAAAAAgAAAgAAAAYAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAEaAUAABBAECAAAAAgAAAgAAAAYAA=</HashCode>
       <FileName>Primitives\Vector.cs</FileName>
     </TypeIdentifier>
   </Struct>

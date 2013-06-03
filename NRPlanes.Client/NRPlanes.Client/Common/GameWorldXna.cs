@@ -104,8 +104,6 @@ namespace NRPlanes.Client.Common
                 false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PlatformContents);
 
             FillInstanceMapper();
-
-            GrabStaticObjects();
         }
 
         public override void Initialize()
@@ -113,6 +111,8 @@ namespace NRPlanes.Client.Common
             m_spriteBatch = new SpriteBatch(Game.Graphics.GraphicsDevice);
 
             m_background = Game.Content.Load<Texture2D>("Images/background");
+
+            GrabStaticObjects();
 
             base.Initialize();
         }
@@ -263,11 +263,9 @@ namespace NRPlanes.Client.Common
         public override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            
-            // draw xna game world
+                        
             m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);            
-            DrawBackground();
-            DrawAdditionalInfo(gameTime);
+            DrawBackground();            
             m_spriteBatch.End();
 
             m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
@@ -288,8 +286,10 @@ namespace NRPlanes.Client.Common
             m_spriteBatch.End();
 
             // sprite sorting not available through SpriteBatch.Begin calls            
-            
-            // end of drawing xna game world
+
+            m_spriteBatch.Begin();
+            DrawAdditionalInfo(gameTime);
+            m_spriteBatch.End();
 
 #if DEBUG_MODE
             m_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -351,7 +351,7 @@ namespace NRPlanes.Client.Common
             //float screensCount = (float) (m_coordinatesTransformer.FullLogicalSize.Width / m_coordinatesTransformer.NormalSize.Width);            
             float scale = m_coordinatesTransformer.PhysicalRectangle.Width / m_backgroundVisiblePartWidth;
 
-            m_spriteBatch.Draw(m_background, pos, null, Color.White, 0.0f, new Vector2(), scale, SpriteEffects.None, 1.0f);
+            m_spriteBatch.Draw(m_background, pos, null, Color.White, 0.0f, new Vector2(), scale, SpriteEffects.None, 0.0f);
         }
         private void DrawDebugInfo()
         {
@@ -386,12 +386,25 @@ namespace NRPlanes.Client.Common
         private void DrawAdditionalInfo(GameTime gameTime)
         {
             var font = Game.Content.Load<SpriteFont>("Fonts/information_font");
+            var strings = new[]
+                {
+                    string.Format("{0:F1} fps", 1.0 / gameTime.ElapsedGameTime.TotalSeconds),
+                    string.Format(@"{0:hh\:mm\:ss}", gameTime.TotalGameTime),
+                    string.Format(@"Particles: {0}", m_particles.Count),
+                    string.Format(@"Game objects: {0}", Game.GameManager.GameWorld.GameObjectsCount),
+                    string.Format(@"Drawable components: {0}", m_safeDrawableGameComponents.Count),
+                };
 
-            m_spriteBatch.DrawString(font, string.Format("{0:F1} fps", 1.0 / gameTime.ElapsedGameTime.TotalSeconds), new Vector2(10, 10), Color.White);
-            m_spriteBatch.DrawString(font, string.Format(@"{0:hh\:mm\:ss}", gameTime.TotalGameTime), new Vector2(10, 22), Color.White);
-            m_spriteBatch.DrawString(font, string.Format(@"Particles: {0}", m_particles.Count), new Vector2(10, 34), Color.White);
-            m_spriteBatch.DrawString(font, string.Format(@"Game objects: {0}", Game.GameManager.GameWorld.GameObjectsCount), new Vector2(10, 46), Color.White);
-            m_spriteBatch.DrawString(font, string.Format(@"Drawable components: {0}", m_safeDrawableGameComponents.Count), new Vector2(10, 58), Color.White);
+            const float x = 10f;
+            float y = 10f;
+            float dy = 12f;
+
+            for (int i = 0; i < strings.Length; i++)
+            {
+                m_spriteBatch.DrawString(font, strings[i], new Vector2(x, y), Color.White, 0f, new Vector2(), 1f, SpriteEffects.None, 0f);
+
+                y += dy;
+            }            
         }
         private void GrabStaticObjects()
         {
