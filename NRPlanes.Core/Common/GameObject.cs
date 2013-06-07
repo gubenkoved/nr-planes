@@ -7,7 +7,7 @@ namespace NRPlanes.Core.Common
     [DataContract]
     [KnownType(typeof(Bullet))]
     [KnownType(typeof(Plane))]
-    public abstract class GameObject : IUpdatable
+    public abstract class GameObject : IUpdatable, ICloneable
     {
         /// <summary>
         /// Used for unambiguous identification game objects for it parameters updating
@@ -101,6 +101,11 @@ namespace NRPlanes.Core.Common
         public void AffectImpulse(Vector impulse, Vector fulcrum)
         {
             PhysicEngine.ImpulseAffect(this, impulse, fulcrum);
+        }
+
+        public virtual object Clone()
+        {
+            return MemberwiseClone();
         }
     }
 }

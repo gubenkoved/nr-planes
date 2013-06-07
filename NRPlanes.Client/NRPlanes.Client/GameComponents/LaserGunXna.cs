@@ -48,7 +48,7 @@ namespace NRPlanes.Client.GameComponents
                     Size = new Size(1, 1),
                     AlphaVelocity = -3.0f,
                     TimeToLive = TimeSpan.FromSeconds(2),
-                    Velocity = Equipment.RelatedGameObject.Velocity + new Vector(0, 5).Rotate(Equipment.GetAbsoluteRotation()),
+                    Velocity = Equipment.RelatedGameObject.Velocity + new Vector(0, 10).Rotate(Equipment.GetAbsoluteRotation()),
                     SizeFactorVelocity = new Vector(6, 6)
                 }, 3);
             }

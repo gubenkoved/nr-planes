@@ -15,12 +15,18 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ScrollViewer Name="LogScrollView" Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Objects snapshot" Click="SnapshotButton_Click" />
+            </StackPanel>
+        </Grid>
+        <ScrollViewer Name="LogScrollView" Grid.Row="2" VerticalScrollBarVisibility="Auto">
             <ListBox Name="Log" FontWeight="Light" FontSize="12" />
         </ScrollViewer>
-        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <ListBox ItemsSource="{Binding Path=Parameters}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>

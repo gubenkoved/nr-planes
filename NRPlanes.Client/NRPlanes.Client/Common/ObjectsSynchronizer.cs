@@ -19,34 +19,34 @@ namespace NRPlanes.Client.Common
     /// </summary>
     public class ObjectsSynchronizer
     {
-        private readonly GameServiceClient _client;
-        private readonly GameWorld _world;
-        private readonly Guid _ownGuid;
-        private readonly Plane _ownPlane;
+        private readonly GameServiceClient m_client;
+        private readonly GameWorld m_world;
+        private readonly Guid m_ownGuid;
+        private readonly Plane m_ownPlane;
 
-        private int _maxId;
-        private List<GameObject> _commitQueue;
+        private int m_maxId;
+        private List<GameObject> m_commitQueue;
 
-        private Thread _workerThread;
-        private AutoResetEvent _updateEvent;
-        private bool _isFirstUpdate;
+        private Thread m_workerThread;
+        private AutoResetEvent m_updateEvent;
+        private bool m_isFirstUpdate;
 
         private const float MAX_UPDATE_RATE = 50.0f;
 
         public ObjectsSynchronizer(GameServiceClient client, GameWorld world, Guid ownGuid, Plane ownPlane)
         {
-            _ownGuid = ownGuid;
-            _ownPlane = ownPlane;
-            _client = client;
-            _world = world;
+            m_ownGuid = ownGuid;
+            m_ownPlane = ownPlane;
+            m_client = client;
+            m_world = world;
 
-            _isFirstUpdate = true;
-            _maxId = -1;
-            _commitQueue = new List<GameObject>();
+            m_isFirstUpdate = true;
+            m_maxId = -1;
+            m_commitQueue = new List<GameObject>();
 
-            _updateEvent = new AutoResetEvent(false);
-            _workerThread = new Thread(DoUpdateWork);
-            _workerThread.Start();
+            m_updateEvent = new AutoResetEvent(false);
+            m_workerThread = new Thread(DoUpdateWork);
+            m_workerThread.Start();
 
             world.GameObjectStatusChanged += GameObjectStatusChanged;            
         }
@@ -58,53 +58,53 @@ namespace NRPlanes.Client.Common
             // commit only uncommited objects
             if (args.Status == GameObjectStatus.Created && obj.Id == null)
             {
-                _commitQueue.Add(obj);
+                m_commitQueue.Add(obj);
             }
         }
 
         private void UpdateMaxId(int id)
         {
-            _maxId = Math.Max(_maxId, id);
+            m_maxId = Math.Max(m_maxId, id);
         }
 
         private void CommitNewObjects()
         {
-            if (_commitQueue.Count == 0)
+            if (m_commitQueue.Count == 0)
                 return;
 
-            CommitResult result = _client.CommitObjects(_ownGuid, _commitQueue.ToArray());
+            CommitResult result = m_client.CommitObjects(m_ownGuid, m_commitQueue.ToArray());
 
             for (int i = 0; i < result.ObjectsIds.Count; i++)
             {
                 UpdateMaxId(result.ObjectsIds[i]);
 
-                _commitQueue[i].Id = result.ObjectsIds[i];
+                m_commitQueue[i].Id = result.ObjectsIds[i];
             }
 
-            _commitQueue.Clear();
+            m_commitQueue.Clear();
         }
         private void GetAndProcessNewObjects()
         {
-            GetNewObjectsResult getNewObjectsResult = _client.GetNewObjects(_ownGuid, _maxId + 1);
+            GetNewObjectsResult getNewObjectsResult = m_client.GetNewObjects(m_ownGuid, m_maxId + 1);
 
             foreach (var obj in getNewObjectsResult.Objects)
             {
                 UpdateMaxId(obj.Id.Value);
 
-                _world.AddGameObject(IntegrityDataHelper.PreprocessRecieved(obj));
+                m_world.AddGameObject(IntegrityDataHelper.PreprocessRecieved(obj));
             }
         }
         private void SendOwnPlaneParameters()
         {
-            _client.UpdatePlane(_ownGuid, new PlaneMutableInformation(_ownPlane));
+            m_client.UpdatePlane(m_ownGuid, new PlaneMutableInformation(m_ownPlane));
         }
         private void UpdateEnemyPlanes()
         {
-            foreach (var enemyPlaneInfo in _client.GetPlanesInfo(_ownGuid))
+            foreach (var enemyPlaneInfo in m_client.GetPlanesInfo(m_ownGuid))
             {
                 Plane enemyPlane = null;
 
-                using (var handle = _world.GameObjectsSafeReadHandle)
+                using (var handle = m_world.GameObjectsSafeReadHandle)
                 {
                     enemyPlane = (Plane)handle.Items.SingleOrDefault(o => o.Id == enemyPlaneInfo.Id);
                 }
@@ -118,12 +118,12 @@ namespace NRPlanes.Client.Common
         {
             while (true)
             {
-                _updateEvent.WaitOne();
+                m_updateEvent.WaitOne();
 
-                if (_isFirstUpdate)
+                if (m_isFirstUpdate)
                 {
                     GetAndProcessNewObjects();
-                    _isFirstUpdate = false;
+                    m_isFirstUpdate = false;
                     continue;
                 }
 
@@ -137,7 +137,7 @@ namespace NRPlanes.Client.Common
         public void Update()
         {
             // allows worker thread to do the job
-            _updateEvent.Set();
+            m_updateEvent.Set();
         }
     }
 }

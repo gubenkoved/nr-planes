@@ -25,14 +25,14 @@ namespace NRPlanes.WpfServerHost
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ServiceHost _host;
-        private GameService _service;
+        private ServiceHost m_host;
+        private GameService m_service;
 
         public ObservableCollection<Parameter> Parameters { get; private set; }
 
-        private Parameter _statusParameter = new Parameter("Status", "Not started");
-        private Parameter _gameObjectsAmountParameter = new Parameter("Game object amount");
-        private Parameter _serverFPSParameter = new Parameter("Server FPS");
+        private Parameter m_statusParameter = new Parameter("Status", "Not started");
+        private Parameter m_gameObjectsAmountParameter = new Parameter("Game object amount");
+        private Parameter m_serverFPSParameter = new Parameter("Server FPS");
 
         public MainWindow()
         {
@@ -40,9 +40,9 @@ namespace NRPlanes.WpfServerHost
 
             InitializeComponent();
 
-            Parameters.Add(_statusParameter);
-            Parameters.Add(_gameObjectsAmountParameter);
-            Parameters.Add(_serverFPSParameter);
+            Parameters.Add(m_statusParameter);
+            Parameters.Add(m_gameObjectsAmountParameter);
+            Parameters.Add(m_serverFPSParameter);
         }
 
         private void Invoke(Action action)
@@ -57,46 +57,63 @@ namespace NRPlanes.WpfServerHost
                 {
                     try
                     {
-                        _service = new GameService(logString => { Invoke(() =>
+                        m_service = new GameService(logString => { Invoke(() =>
                                 {
                                     Log.Items.Add(logString);
                                     LogScrollView.ScrollToEnd();
                                 }); });
 
-                        _host = new ServiceHost(_service);
+                        m_host = new ServiceHost(m_service);
                         
-                        _host.Open();
+                        m_host.Open();
 
-                        int port = _host.Description.Endpoints.Single().ListenUri.Port;
+                        int port = m_host.Description.Endpoints.Single().ListenUri.Port;
 
                         string info = string.Format("Started on {0} port", port);
 
-                        Invoke(() => _statusParameter.Value = info);
+                        Invoke(() => m_statusParameter.Value = info);
 
                         Task.Factory.StartNew(() => UpdateParamters());
                     }
                     catch (Exception exc)
                     {
-                        Invoke(() => _statusParameter.Value = string.Format("Error ({0})", exc.Message));
+                        Invoke(() => m_statusParameter.Value = string.Format("Error ({0})", exc.Message));
                     }
                 });
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (_host != null)
-                _host.Close();
+            if (m_host != null)
+                m_host.Close();
         }
 
         private void UpdateParamters()
         {
             while (true)
             {
-                Invoke(() => _gameObjectsAmountParameter.Value = _service.World.GameObjectsCount);
-                Invoke(() => _serverFPSParameter.Value = _service.FPS.ToString("F2"));
+                Invoke(() => m_gameObjectsAmountParameter.Value = m_service.World.GameObjectsCount);
+                Invoke(() => m_serverFPSParameter.Value = m_service.FPS.ToString("F2"));
 
                 Thread.Sleep(100);
             }
+        }
+
+        private void SnapshotButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<object> dump = new List<object>();
+
+            using (var handle = m_service.World.GameObjectsSafeReadHandle)
+            {
+                foreach (var item in handle.Items)
+                {
+                    dump.Add(item.Clone());
+                }
+            }
+
+            SnapshotViewerWindow snapshotViewer = new SnapshotViewerWindow(dump);
+            snapshotViewer.Title = string.Format("Snapshot by {0:H:mm:ss}", DateTime.Now);
+            snapshotViewer.Show();
         }
     }
 }
