@@ -100,18 +100,32 @@ namespace NRPlanes.Client.Common
         }
         private void UpdateEnemyPlanes()
         {
+            // when server does not contains some client's worls planes - we should to destroy this plane on the client side
+
+            List<Plane> allLocalEnemyPlanes;            
+
+            using (var handle = m_world.GameObjectsSafeReadHandle)
+            {
+                allLocalEnemyPlanes = handle.Items
+                    .Where(gameObj => gameObj is Plane && gameObj != m_ownPlane)
+                    .Cast<Plane>()
+                    .ToList();
+            }
+
             foreach (var enemyPlaneInfo in m_client.GetPlanesInfo(m_ownGuid))
             {
-                Plane enemyPlane = null;
+                Plane localEnemyPlane = allLocalEnemyPlanes.SingleOrDefault(o => o.Id == enemyPlaneInfo.Id);
 
-                using (var handle = m_world.GameObjectsSafeReadHandle)
+                if (localEnemyPlane != null)
                 {
-                    enemyPlane = (Plane)handle.Items.SingleOrDefault(o => o.Id == enemyPlaneInfo.Id);
+                    enemyPlaneInfo.Apply(localEnemyPlane);
                 }
-
-                if (enemyPlane != null)
-                    enemyPlaneInfo.Apply(enemyPlane);
-            }
+                else
+                {
+                    //  there are some enemy planes that exists on the server but does not exists on the client side
+                    throw new Exception("FIX! Incorrect game situation");
+                }
+            }                
         }
 
         private void DoUpdateWork()
