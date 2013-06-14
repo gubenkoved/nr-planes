@@ -43,7 +43,10 @@ namespace NRPlanes.Core.Common
             }
         }
 
-        internal double Damage(double initPower)
+        /// <summary>
+        /// Returns finite damage value after shield absorpsion
+        /// </summary>
+        internal double CalculateEffectiveDamage(double initPower)
         {
             if (IsActive)
             {

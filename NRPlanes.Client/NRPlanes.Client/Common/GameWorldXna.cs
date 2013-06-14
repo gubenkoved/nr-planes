@@ -162,16 +162,17 @@ namespace NRPlanes.Client.Common
         {
             Collision collision = args.Collision;
 
+            // when it induced by server plane destruction
             if (collision.IsSelfCollision)
             {
                 AddExplosion(collision.FirstObject);
             }
             else
             {
-                if (collision.FirstObject.IsGarbage)
+                if (collision.FirstObject.IsGarbage && !(collision.FirstObject is Plane))
                     AddExplosion(collision.FirstObject);
 
-                if (collision.SecondObject.IsGarbage)
+                if (collision.SecondObject.IsGarbage && !(collision.SecondObject is Plane))
                     AddExplosion(collision.SecondObject);
             }
         }

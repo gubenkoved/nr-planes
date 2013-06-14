@@ -80,7 +80,7 @@ namespace NRPlanes.Core.Common
 
                 Vector initialVelocity = RelatedGameObject.Velocity + InitialBulletVelocity.Rotate(absoluteRotation);
 
-                Bullet bullet = BulletPrototype.Clone();
+                Bullet bullet = (Bullet)BulletPrototype.Clone();
 
                 bullet.Fire(absolutePosition + BulletOffset.Rotate(absoluteRotation), initialVelocity, absoluteRotation);
 

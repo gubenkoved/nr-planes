@@ -28,6 +28,8 @@ namespace NRPlanes.Core.Common
             get { return m_health; }
             private set
             {
+                m_health = value;
+
                 if (value <= 0.0)
                 {
                     m_health = 0.0;
@@ -86,21 +88,24 @@ namespace NRPlanes.Core.Common
             }
         }
 
-        public void Damage(double power)
+        public void Damage(double damage)
         {
-            if (power < 0.0)
+            if (damage < 0.0)
                 throw new ArgumentException("power must be >= 0");
 
             // now only 0 or 1 shield equipment is allowed
             Shield shield = (Shield)m_allEquipment.Where(e => e is Shield).SingleOrDefault();
 
+            double effectiveDamage = damage;
+
             if (shield != null)
+                effectiveDamage = shield.CalculateEffectiveDamage(damage);
+
+            m_health = Math.Max(0, m_health - effectiveDamage);
+
+            if (m_health == 0)
             {
-                Health -= shield.Damage(power);
-            }
-            else
-            {
-                Health -= power;
+                IsGarbage = true;
             }
         }
         public void Recover(double healthDelta)
@@ -108,7 +113,7 @@ namespace NRPlanes.Core.Common
             if (healthDelta < 0.0)
                 throw new ArgumentException("power must be >= 0");
 
-            Health += healthDelta;
+            m_health = Math.Min(MaximalHealth, m_health + healthDelta);
         }
 
         public abstract void StartMotion(MotionType motion);

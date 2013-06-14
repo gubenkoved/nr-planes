@@ -10,9 +10,7 @@ namespace NRPlanes.Client.InfoPanels
     public class PlaneInfoPanelItem : InfoPanelItem
     {
         private Texture2D m_background;
-
         private IndicatorsDrawer m_indicatorsDrawer;
-
         public Plane Plane { get; set; }
 
         public PlaneInfoPanelItem(PlanesGame game, Rectangle positionRectangle) 
@@ -51,15 +49,15 @@ namespace NRPlanes.Client.InfoPanels
                                                                PositionRectangle.Width - 2 * indention,
                                                                20);
 
-                m_indicatorsDrawer.Draw(spriteBatch,
-                                       indicatorPosition,
-                                       1,
-                                       Color.Transparent,
-                                       Color.Transparent,
-                                       string.Format("{0}, {1:F1}, V={2:F1}", Plane.Position, Plane.Rotation, Plane.Velocity.Length),
-                                       Color.FromNonPremultiplied(255, 255, 255, 200));
+                //m_indicatorsDrawer.Draw(spriteBatch,
+                //                       indicatorPosition,
+                //                       1,
+                //                       Color.Transparent,
+                //                       Color.Transparent,
+                //                       string.Format("{0}, {1:F1}, V={2:F1}", Plane.Position, Plane.Rotation, Plane.Velocity.Length),
+                //                       Color.FromNonPremultiplied(255, 255, 255, 200));
                 
-                indicatorPosition.Offset(0, 24);
+                //indicatorPosition.Offset(0, 24);
 
                 m_indicatorsDrawer.Draw(spriteBatch,
                                        indicatorPosition,

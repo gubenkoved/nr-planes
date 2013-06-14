@@ -5,39 +5,34 @@ namespace NRPlanes.Client.InfoPanels
 {
     public class IndicatorsDrawer
     {
-        private readonly Texture2D _background;
-
-        private readonly Texture2D _valueTexture;
-
-        private readonly SpriteFont _font;
+        private readonly Texture2D m_background;
+        private readonly Texture2D m_valueTexture;
+        private readonly SpriteFont m_font;
 
         public IndicatorsDrawer(Texture2D background, Texture2D valueTexture, SpriteFont font = null)
         {
-            _background = background;
-
-            _valueTexture = valueTexture;
-
-            _font = font;
+            m_background = background;
+            m_valueTexture = valueTexture;
+            m_font = font;
         }
 
         public void Draw(SpriteBatch spriteBatch, Rectangle position, double normalizedValue, Color backgroundColor, Color color, string text, Color textColor)
         {
-            spriteBatch.Draw(_background,
+            spriteBatch.Draw(m_background,
                              position,
                              backgroundColor);
 
-            var valueRectangle = new Rectangle(position.X, position.Y, (int)(position.Width * normalizedValue), position.Height);
-
-            var sourceRectangle = new Rectangle(0, 0, (int) (_valueTexture.Width * normalizedValue), _valueTexture.Height);
+            Rectangle valueRectangle = new Rectangle(position.X, position.Y, (int)(position.Width * normalizedValue), position.Height);
+            Rectangle sourceRectangle = new Rectangle(0, 0, (int)(m_valueTexture.Width * normalizedValue), m_valueTexture.Height);
             
-            spriteBatch.Draw(_valueTexture,
+            spriteBatch.Draw(m_valueTexture,
                              valueRectangle,
                              sourceRectangle,
                              color);
 
-            var textSize = _font.MeasureString(text);
+            Vector2 textSize = m_font.MeasureString(text);
 
-            spriteBatch.DrawString(_font,
+            spriteBatch.DrawString(m_font,
                                    text,
                                    new Vector2((int)(position.X + (position.Width - textSize.X) / 2.0f),
                                                (int)(position.Y + (position.Height - textSize.Y) / 2.0f)),

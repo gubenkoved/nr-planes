@@ -26,14 +26,15 @@ namespace NRPlanes.Core.Planes
             var mass = 10000.0;
             var angularMass = 1000.0;
 
-            var referenceArea = new ReferenceArea(new[]
-                                                      {
-                                                          new ReferenceAreaPoint(0, 1000),
-                                                          new ReferenceAreaPoint(90, 2000),
-                                                          new ReferenceAreaPoint(180, 4000),
-                                                          new ReferenceAreaPoint(270, 2000),
-                                                          new ReferenceAreaPoint(360, 1000)
-                                                      });
+            var referenceArea = new ReferenceArea
+                (new[] 
+                {
+                    new ReferenceAreaPoint(0, 1000),
+                    new ReferenceAreaPoint(90, 2000),
+                    new ReferenceAreaPoint(180, 4000),
+                    new ReferenceAreaPoint(270, 2000),
+                    new ReferenceAreaPoint(360, 1000)
+                });
 
             return new XWingPlane(mass, angularMass, referenceArea, initialPosition);
         }

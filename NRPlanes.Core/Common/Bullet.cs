@@ -55,11 +55,6 @@ namespace NRPlanes.Core.Common
             }
         }
 
-        public virtual Bullet Clone()
-        {
-            return MemberwiseClone() as Bullet;
-        }
-
         public void Fire(Vector initialPosition, Vector initialVelocity, double initialRotation)
         {
             Fired = true;
@@ -77,22 +72,17 @@ namespace NRPlanes.Core.Common
         {
             if (obj is Plane)
             {
-                var plane = (Plane)obj;
-
+                Plane plane = (Plane)obj;
                 plane.Damage(Power);
-
-                plane.AffectImpulse(Velocity * Mass, Position);
-
-                IsGarbage = true;
+                plane.AffectImpulse(Velocity * Mass, Position);             
             }
             else if (obj is Bullet)
             {
-                var bullet = (Bullet) obj;
-
+                Bullet bullet = (Bullet)obj;
                 bullet.IsGarbage = true;
-
-                IsGarbage = true;
             }
+
+            IsGarbage = true;
         }
     }
 }

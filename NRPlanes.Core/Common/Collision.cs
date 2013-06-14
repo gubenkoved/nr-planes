@@ -24,7 +24,7 @@ namespace NRPlanes.Core.Common
         }
 
         /// <summary>
-        /// Internal collision like bomb explosion
+        /// Self collision occurs by server signal (e.g. planes destruction)
         /// </summary>
         public static Collision CreateSelfCollision(GameObject obj)
         {

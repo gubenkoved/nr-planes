@@ -67,7 +67,7 @@ namespace NRPlanes.Server
 
             World = new GameWorld(new Size(800, 800));
             World.AddGravityBoundsWithPlanets(50, 13);
-            //World.AliensAppearingStrategy = new BasicAliensAppearingStrategy(World, TimeSpan.FromSeconds(10));
+            //World.AliensAppearingStrategy = new BasicAliensAppearingStrategy(World, TimeSpan.FromSeconds(60));
             World.AliensAppearingStrategy = new SingleAliensAppearingStrategy(World);
 
             Task.Factory.StartNew(GameWorldUpdate);                
@@ -105,7 +105,7 @@ namespace NRPlanes.Server
                 result.ObjectsIds.Add(obj.Id.Value);
             }
 
-            LogMessage(string.Format("{0} object(s) has commited (last ID={1})", objects.Count, m_lastObjectID));
+            LogMessage(string.Format("{0} object(s) has been commited (last ID={1})", objects.Count, m_lastObjectID));
 
             return result;
         }
@@ -126,7 +126,7 @@ namespace NRPlanes.Server
             }
 
             if (newObjectsResult.Objects.Count > 0)
-                LogMessage(string.Format("{0} objects has sent to player with id={1} (last ID={2})", newObjectsResult.Objects.Count, playerGuid, minId));
+                LogMessage(string.Format("{0} objects has been sent to player with id={1} (last ID={2})", newObjectsResult.Objects.Count, playerGuid, minId));
 
             return newObjectsResult;
         }
