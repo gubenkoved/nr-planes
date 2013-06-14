@@ -8,15 +8,15 @@ namespace NRPlanes.Client.GameComponents
 {
     public class GeometryDrawer
     {
-        private Texture2D _line;
-        private Texture2D _point;
-        private SpriteFont _font;
+        private Texture2D m_line;
+        private Texture2D m_point;
+        private SpriteFont m_font;
 
         public GeometryDrawer(Texture2D line, Texture2D point, SpriteFont font)
         {
-            _line = line;
-            _point = point;
-            _font = font;
+            m_line = line;
+            m_point = point;
+            m_font = font;
         } 
 
         public void Draw(SpriteBatch spriteBatch, CoordinatesTransformer coordinatesTransformer, Geometry geometry)
@@ -26,18 +26,18 @@ namespace NRPlanes.Client.GameComponents
                 var polygon = geometry as PolygonGeometry;
 
                 spriteBatch.DrawString(
-                    _font,
+                    m_font,
                     geometry.Center.ToString(),
                     coordinatesTransformer.Transform(geometry.Center).Round(),
                     Color.Yellow);
 
                 spriteBatch.Draw(
-                    _point,
+                    m_point,
                     coordinatesTransformer.Transform(geometry.Center),
                     null,
                     Color.White,
                     0,
-                    new Vector2(_point.Width / 2.0f, _point.Height / 2.0f),
+                    new Vector2(m_point.Width / 2.0f, m_point.Height / 2.0f),
                     1.0f,
                     SpriteEffects.None,
                     0f);
@@ -46,19 +46,16 @@ namespace NRPlanes.Client.GameComponents
 
                 foreach (var segment in polygon.Segments.Union(boundingRectanglePolygon.Segments))
                 {
-                    var centerSegment = (segment.Start + segment.End) / 2.0;
-
-                    var rotation = segment.Offset.Angle();
-
-                    var scale = coordinatesTransformer.CreateScaleVector(new Size(1.0, segment.Length), new Size(1.0, _line.Height));
-
-                    var origin = new Vector2(_line.Width / 2.0f, _line.Height / 2.0f);
+                    Vector centerSegment = (segment.Start + segment.End) / 2.0;
+                    double rotation = segment.Offset.Angle();
+                    Vector2 scale = coordinatesTransformer.CreateScaleVector(new Size(1.0, segment.Length), new Size(m_line.Width, m_line.Height));
+                    Vector2 origin = new Vector2(m_line.Width / 2.0f, m_line.Height / 2.0f);
 
                     spriteBatch.Draw(
-                        _line,
+                        m_line,
                         coordinatesTransformer.Transform(centerSegment),
                         null,
-                        Color.White,
+                        Color.FromNonPremultiplied(255, 255, 255, 200),
                         (float) Helper.ToRadians(rotation),
                         origin,
                         new Vector2(1, scale.Y),

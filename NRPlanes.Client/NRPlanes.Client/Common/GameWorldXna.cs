@@ -15,11 +15,12 @@ using NRPlanes.Core.Engines;
 using NRPlanes.Core.Planes;
 using NRPlanes.Core.StaticObjects;
 using NRPlanes.Core.Weapons;
-using Plane = NRPlanes.Core.Common.Plane;
 using NRPlanes.Client.Sound;
 using System.Threading;
 using System.Collections.Concurrent;
 using NRPlanes.Client.Particles;
+
+using Plane = NRPlanes.Core.Common.Plane;
 
 namespace NRPlanes.Client.Common
 {
@@ -363,10 +364,11 @@ namespace NRPlanes.Client.Common
         }
         private void DrawDebugInfo()
         {
-            var debugGeomertyDrawer = 
-                new GeometryDrawer(
-                    Game.Content.Load<Texture2D>("Debug/line"), 
-                    Game.Content.Load<Texture2D>("Debug/point"),
+            GeometryDrawer debugGeomertyDrawer = 
+                new GeometryDrawer(                    
+                    //Game.Content.Load<Texture2D>("Debug/line"), 
+                    Game.Content.Load<Texture2D>("Debug/pixel"),
+                    Game.Content.Load<Texture2D>("Debug/point2"),
                     Game.Content.Load<SpriteFont>("Fonts/debug"));
 
             using (var handle = m_safeDrawableGameComponents.SafeRead())
@@ -375,14 +377,14 @@ namespace NRPlanes.Client.Common
                 {
                     if (drawableObj is DrawableGameObject)
                     {
-                        var gameObject = ((DrawableGameObject)drawableObj).GameObject;
+                        GameObject gameObject = ((DrawableGameObject)drawableObj).GameObject;
 
                         debugGeomertyDrawer.Draw(m_spriteBatch, m_coordinatesTransformer, gameObject.CalculateAbsoluteGeometry());
 
                     }
                     else if (drawableObj is DrawableStaticObject)
                     {
-                        var staticObject = ((DrawableStaticObject)drawableObj).StaticObject;
+                        StaticObject staticObject = ((DrawableStaticObject)drawableObj).StaticObject;
 
                         debugGeomertyDrawer.Draw(m_spriteBatch, m_coordinatesTransformer, staticObject.AbsoluteGeometry);
                     }

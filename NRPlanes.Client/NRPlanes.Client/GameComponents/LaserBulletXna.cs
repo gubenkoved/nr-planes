@@ -20,6 +20,7 @@ namespace NRPlanes.Client.GameComponents
 
         private SymmetricParticlesEmitter m_particlesEmitter;
         private Texture2D m_texture;
+        private TrailDrawer m_trailDrawer;
 
         public LaserBulletXna(PlanesGame game, LaserBullet bullet, CoordinatesTransformer coordinatesTransformer)
             : base(game, bullet, coordinatesTransformer)
@@ -29,6 +30,7 @@ namespace NRPlanes.Client.GameComponents
             sound.Play();
 
             m_particlesEmitter = new SymmetricParticlesEmitter(game.GameManager.GameWorldXna);
+            m_trailDrawer = new TrailDrawer(game.Content.Load<Texture2D>("Other/line_3px"), coordinatesTransformer, Color.White, 0.3, 0.2f, 0.05f, 15, 3);
         }        
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -38,6 +40,11 @@ namespace NRPlanes.Client.GameComponents
 
             if (GameObject.TimeToLive > TimeSpan.Zero)
             {
+                m_trailDrawer.PathPoints.Add(GameObject.Position);
+
+                m_trailDrawer.DrawTrail(spriteBatch);
+
+                //// particles trail
                 //m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
                 //{
                 //    Color = Color.FromNonPremultiplied(20, 20, 20, 255),

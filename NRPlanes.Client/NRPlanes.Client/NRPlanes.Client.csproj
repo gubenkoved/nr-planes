@@ -121,6 +121,8 @@
     <Compile Include="Common\InstanceMapper.cs" />
     <Compile Include="Common\LayersDepths.cs" />
     <Compile Include="Common\MyDrawableGameComponent.cs" />
+    <Compile Include="GameComponents\GeometryDrawer.cs" />
+    <Compile Include="GameComponents\TrailDrawer.cs" />
     <Compile Include="Particles\ParticlesEmitterBase.cs" />
     <Compile Include="Particles\Particle.cs" />
     <Compile Include="Particles\AsymmetricParticlesEmitter.cs" />
@@ -131,7 +133,6 @@
     <Compile Include="Common\ObjectsSynchronizer.cs" />
     <Compile Include="Common\LocalPlaneController.cs" />
     <Compile Include="GameComponents\ExplosionXna.cs" />
-    <Compile Include="GameComponents\GeometryDrawer.cs" />
     <Compile Include="GameComponents\HealthRecoveryPlanetXna.cs" />
     <Compile Include="GameComponents\IonEngineXna.cs" />
     <Compile Include="GameComponents\RectangleGravityFieldXna.cs" />
