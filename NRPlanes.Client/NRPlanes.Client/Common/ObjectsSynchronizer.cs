@@ -47,6 +47,7 @@ namespace NRPlanes.Client.Common
 
             m_updateEvent = new AutoResetEvent(false);
             m_workerThread = new Thread(DoUpdateWork);
+            m_workerThread.Name = "ObjectsSynchronizer worker";            
             m_workerThread.Start();
 
             world.GameObjectStatusChanged += GameObjectStatusChanged;            

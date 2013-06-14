@@ -155,5 +155,15 @@ namespace NRPlanes.Core.Primitives
         {
             get { return new Vector(X + Width / 2.0, Y + Height / 2.0); }
         }
+
+        public bool HitTest(Vector vector)
+        {
+            if (X <= vector.X && X + Width >= vector.X && Y <= vector.Y && Y + Height >= vector.Y)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

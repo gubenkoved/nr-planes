@@ -81,6 +81,7 @@
     <Compile Include="Primitives\Matrix.cs" />
     <Compile Include="Primitives\PolygonGeometry.cs" />
     <Compile Include="Primitives\Rect.cs" />
+    <Compile Include="Primitives\RectGeomerty.cs" />
     <Compile Include="Primitives\Segment.cs" />
     <Compile Include="Primitives\Size.cs" />
     <Compile Include="Primitives\Vector.cs" />

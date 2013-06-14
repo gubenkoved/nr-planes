@@ -286,7 +286,7 @@ namespace NRPlanes.Client.Common
             }
             m_spriteBatch.End();
 
-            m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.Additive);
+            m_spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
             foreach (var particle in m_particles)
             {
                 particle.Draw(gameTime, m_spriteBatch);

@@ -44,10 +44,12 @@ namespace NRPlanes.Client.InfoPanels
             {
                 const int indention = 16;
 
-                var indicatorPosition = new Rectangle(PositionRectangle.X + indention,
-                                                               PositionRectangle.Y + indention,
-                                                               PositionRectangle.Width - 2 * indention,
-                                                               20);
+                Rectangle indicatorPosition = 
+                    new Rectangle(
+                        PositionRectangle.X + indention,
+                        PositionRectangle.Y + indention,
+                        PositionRectangle.Width - 2 * indention,
+                        20);
 
                 //m_indicatorsDrawer.Draw(spriteBatch,
                 //                       indicatorPosition,

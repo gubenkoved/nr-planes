@@ -8,7 +8,8 @@ namespace NRPlanes.Core.Primitives
     /// </summary>
     [DataContract]
     [KnownType(typeof(PolygonGeometry))]
-    [KnownType(typeof(CircleGeometry))]    
+    [KnownType(typeof(CircleGeometry))]
+    [KnownType(typeof(RectGeometry))]
     public abstract class Geometry
     {
         /// <summary>

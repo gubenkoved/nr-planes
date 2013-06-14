@@ -14,7 +14,7 @@ namespace NRPlanes.Core.StaticObjects
         public double Acceleration { get; private set; }
 
         public RectangleGravityField(Rect rectangle, Vector forceDirection, double acceleration)
-            : base(PolygonGeometry.FromRectangle(rectangle))
+            : base(new RectGeometry(rectangle))
         {
             ForceDirection = forceDirection.Ort();
 

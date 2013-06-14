@@ -38,16 +38,16 @@ namespace NRPlanes.Client.GameComponents
 
             if (GameObject.TimeToLive > TimeSpan.Zero)
             {
-                m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
-                {
-                    Color = Color.FromNonPremultiplied(20, 20, 20, 255),
-                    Position = GameObject.Position,
-                    Size = new Size(1, 10),
-                    AlphaVelocity = -1f,
-                    TimeToLive = TimeSpan.FromSeconds(1),
-                    Rotation = GameObject.Velocity.Angle(),
-                    IsStatic = true
-                }, 1);
+                //m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
+                //{
+                //    Color = Color.FromNonPremultiplied(20, 20, 20, 255),
+                //    Position = GameObject.Position,
+                //    Size = new Size(1, 10),
+                //    AlphaVelocity = -1f,
+                //    TimeToLive = TimeSpan.FromSeconds(1),
+                //    Rotation = GameObject.Velocity.Angle(),
+                //    IsStatic = true
+                //}, 1);
 
                 var origin = new Vector2(m_texture.Width / 2.0f, m_texture.Height / 2.0f);
 
