@@ -144,7 +144,7 @@ namespace NRPlanes.Server
 #if DETAILED_LOG
             LogMessage(string.Format("Planes infos for player with GUID={0}", playerGuid));
 #endif
-            Plane playerPlane = m_playerToPlaneMapping[playerGuid];
+            //Plane playerPlane = m_playerToPlaneMapping[playerGuid];
 
             List<PlaneMutableInformation> infos = new List<PlaneMutableInformation>();
 
@@ -152,7 +152,7 @@ namespace NRPlanes.Server
             {
                 foreach (Plane plane in handle.Items.Where(o => o is Plane))
                 {
-                    if (plane != playerPlane)
+                    //if (plane != playerPlane)
                     {
                         PlaneMutableInformation planeInfo = new PlaneMutableInformation(plane);
                         infos.Add(planeInfo);

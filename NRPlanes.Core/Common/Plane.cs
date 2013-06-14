@@ -22,38 +22,38 @@ namespace NRPlanes.Core.Common
         public double MaximalHealth { get; protected set; }
 
         [DataMember]
-        private double _health;
+        private double m_health;
         public double Health
         {
-            get { return _health; }
+            get { return m_health; }
             private set
             {
                 if (value <= 0.0)
                 {
-                    _health = 0.0;
+                    m_health = 0.0;
 
                     IsGarbage = true;
                 }
 
-                _health = Math.Min(MaximalHealth, value);
+                m_health = Math.Min(MaximalHealth, value);
             }
         }
 
         [DataMember]
-        private List<PlaneEquipment> _allEquipment;
+        private List<PlaneEquipment> m_allEquipment;
         public IEnumerable<PlaneEquipment> AllEquipment
         {
-            get { return _allEquipment; }
+            get { return m_allEquipment; }
         }
         IEnumerable<Equipment> IHaveEquipment.AllEquipment
         {
-            get { return _allEquipment; }
+            get { return m_allEquipment; }
         }
 
         protected Plane(double mass, double angularMass, ReferenceArea referenceArea, double maxHealth)
             : base(mass, angularMass, referenceArea)
         {
-            _allEquipment = new List<PlaneEquipment>();
+            m_allEquipment = new List<PlaneEquipment>();
 
             MaximalHealth = maxHealth;
 
@@ -62,8 +62,8 @@ namespace NRPlanes.Core.Common
 
         protected void AddEquipment(PlaneEquipment equipment)
         {
-            equipment.Id = _allEquipment.Count;
-            _allEquipment.Add(equipment);
+            equipment.Id = m_allEquipment.Count;
+            m_allEquipment.Add(equipment);
 
             equipment.RelatedGameObject = this;
         }
@@ -92,7 +92,7 @@ namespace NRPlanes.Core.Common
                 throw new ArgumentException("power must be >= 0");
 
             // now only 0 or 1 shield equipment is allowed
-            Shield shield = (Shield)_allEquipment.Where(e => e is Shield).SingleOrDefault();
+            Shield shield = (Shield)m_allEquipment.Where(e => e is Shield).SingleOrDefault();
 
             if (shield != null)
             {
@@ -103,12 +103,12 @@ namespace NRPlanes.Core.Common
                 Health -= power;
             }
         }
-        public void Recover(double power)
+        public void Recover(double healthDelta)
         {
-            if (power < 0.0)
+            if (healthDelta < 0.0)
                 throw new ArgumentException("power must be >= 0");
 
-            Health += power;
+            Health += healthDelta;
         }
 
         public abstract void StartMotion(MotionType motion);
@@ -116,7 +116,7 @@ namespace NRPlanes.Core.Common
 
         public void ActivateShield()
         {
-            foreach (Shield shield in _allEquipment.Where(e => e is Shield))
+            foreach (Shield shield in m_allEquipment.Where(e => e is Shield))
             {
                 shield.TurnOn();
             }
@@ -124,7 +124,7 @@ namespace NRPlanes.Core.Common
         }
         public void DeactivateShield()
         {
-            foreach (Shield shield in _allEquipment.Where(e => e is Shield))
+            foreach (Shield shield in m_allEquipment.Where(e => e is Shield))
             {
                 shield.TurnOff();
             }

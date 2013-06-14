@@ -160,13 +160,20 @@ namespace NRPlanes.Client.Common
         }
         private void CollisionDetected(object sender, CollisionEventArgs args)
         {
-            var collision = args.Collision;
+            Collision collision = args.Collision;
 
-            if (collision.One.IsGarbage)
-                AddExplosion(collision.One);
+            if (collision.IsSelfCollision)
+            {
+                AddExplosion(collision.FirstObject);
+            }
+            else
+            {
+                if (collision.FirstObject.IsGarbage)
+                    AddExplosion(collision.FirstObject);
 
-            if (collision.Two.IsGarbage)
-                AddExplosion(collision.Two);
+                if (collision.SecondObject.IsGarbage)
+                    AddExplosion(collision.SecondObject);
+            }
         }
         private void AddExplosion(GameObject exploded)
         {            
@@ -388,7 +395,7 @@ namespace NRPlanes.Client.Common
             var font = Game.Content.Load<SpriteFont>("Fonts/information_font");
             var strings = new[]
                 {
-                    string.Format("{0:F1} fps", 1.0 / gameTime.ElapsedGameTime.TotalSeconds),
+                    string.Format("{0:F1} fps", gameTime.ElapsedGameTime.TotalSeconds != 0 ? (1.0 / gameTime.ElapsedGameTime.TotalSeconds) : 0),
                     string.Format(@"{0:hh\:mm\:ss}", gameTime.TotalGameTime),
                     string.Format(@"Particles: {0}", m_particles.Count),
                     string.Format(@"Game objects: {0}", Game.GameManager.GameWorld.GameObjectsCount),

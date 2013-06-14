@@ -17,7 +17,7 @@ namespace NRPlanes.ServerData.MutableInformations
         [DataMember]
         public double Health;
 
-        private static PrivateValueAccessor _healthPrivateFieldAccessor = new PrivateValueAccessor(typeof(Plane), "_health");
+        private static PrivateValueAccessor m_healthPrivateFieldAccessor = new PrivateValueAccessor(typeof(Plane), "m_health");
 
         public PlaneMutableInformation(Plane plane)
             :base(plane)
@@ -42,7 +42,7 @@ namespace NRPlanes.ServerData.MutableInformations
 
             Plane plane = (Plane)obj;
 
-            _healthPrivateFieldAccessor.SetValue(obj, Health);
+            m_healthPrivateFieldAccessor.SetValue(obj, Health);
 
             foreach (var equipmentMutable in EquipmentMutableInformation)
             {

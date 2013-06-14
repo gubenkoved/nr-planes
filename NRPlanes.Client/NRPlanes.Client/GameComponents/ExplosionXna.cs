@@ -12,25 +12,25 @@ namespace NRPlanes.Client.GameComponents
 {
     public class ExplosionXna : MyDrawableGameComponent
     {
-        private static Random _random = new Random(Environment.TickCount);
+        //private static Random m_random = new Random(Environment.TickCount);
 
         private ParticlesEmitterBase m_particlesEmitter;
         private const int PARTICLES_DENSITY = 20;
         private int m_drawCount;
 
-        private AnimationSpriteDrawer _animationSpriteDrawer;
-        private float _angle;
-        private Rect _explosionPosition;
+        //private AnimationSpriteDrawer m_animationSpriteDrawer;
+        //private float m_angle;
+        private Rect m_explosionPosition;
 
         public ExplosionXna(PlanesGame game, GameObject exploded, CoordinatesTransformer coordinatesTransformer)
             : base(game, coordinatesTransformer)
         {
             //double explosionSideSize = Math.Max(10.0, exploded.RelativeGeometry.BoundingRectangle.LongSide * 5.0);            
-            _explosionPosition = new Rect(exploded.Position, exploded.RelativeGeometry.BoundingRectangle.Size);            
+            m_explosionPosition = new Rect(exploded.Position, exploded.RelativeGeometry.BoundingRectangle.Size);            
 
             m_particlesEmitter = new SymmetricParticlesEmitter(game.GameManager.GameWorldXna)
             {
-                PositionDeviationRadius = _explosionPosition.Width / 2,
+                PositionDeviationRadius = m_explosionPosition.Width / 2,
                 VelocityDeviationRadius = 5
             };
 
@@ -43,11 +43,11 @@ namespace NRPlanes.Client.GameComponents
 
             if (sound != null)
             {
-                sound.Position = _explosionPosition.Center;
+                sound.Position = m_explosionPosition.Center;
                 sound.Play();
             }
 
-            _angle = (float) (2 * Math.PI * _random.NextDouble());
+            //m_angle = (float) (2 * Math.PI * m_random.NextDouble());
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -59,7 +59,7 @@ namespace NRPlanes.Client.GameComponents
                 m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
                 {
                     Color = Color.OrangeRed,
-                    Position = _explosionPosition.Center,
+                    Position = m_explosionPosition.Center,
                     Size = new Size(3, 3),
                     AlphaVelocity = -0.5f,
                     TimeToLive = TimeSpan.FromSeconds(5),
@@ -67,12 +67,12 @@ namespace NRPlanes.Client.GameComponents
                     Rotation = 0,
                     Depth = LayersDepths.Explosion,
                     SizeFactorVelocity = new Vector(0.3, 0.3)
-                }, (int)(_explosionPosition.Area * Math.Pow(PARTICLES_DENSITY, 0.7)));
+                }, (int)(m_explosionPosition.Area * Math.Pow(PARTICLES_DENSITY, 0.7)));
 
                 m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
                 {
                     Color = Color.OrangeRed,
-                    Position = _explosionPosition.Center,
+                    Position = m_explosionPosition.Center,
                     Size = new Size(1, 1),
                     AlphaVelocity = -0.9f,
                     TimeToLive = TimeSpan.FromSeconds(5),
@@ -80,7 +80,7 @@ namespace NRPlanes.Client.GameComponents
                     Rotation = 0,
                     Depth = LayersDepths.Explosion,
                     SizeFactorVelocity = new Vector(25, 25)
-                }, (int)(Math.Max(1, _explosionPosition.Area * Math.Pow(PARTICLES_DENSITY, 0.3))));
+                }, (int)(Math.Max(1, m_explosionPosition.Area * Math.Pow(PARTICLES_DENSITY, 0.3))));
             }
 
             //if (_animationSpriteDrawer == null)

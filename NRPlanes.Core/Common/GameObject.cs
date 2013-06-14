@@ -87,10 +87,8 @@ namespace NRPlanes.Core.Common
 
         public virtual void Update(TimeSpan elapsed)
         {
-            if (!IsGarbage)
-            {
+            //if (!IsGarbage)
                 PhysicEngine.UpdateMechanicalParameters(this, elapsed);
-            }
         }
 
         public void Affect(Vector force, Vector fulcrum)

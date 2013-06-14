@@ -103,8 +103,6 @@ namespace NRPlanes.Core.Common
         /// </summary>
         public static IEnumerable<Collision> GetCollisions(GameObject[] objects)
         {
-            List<Collision> collisions = new List<Collision>();
-
             var absoluteGeomertyCache = new Dictionary<GameObject, Geometry>(); // absolute geometry cache
 
             for (int i = 0; i < objects.Length; i++)
@@ -125,16 +123,14 @@ namespace NRPlanes.Core.Common
                 {
                     if (absoluteGeomertyCache[objects[i]].IsIntersectsOrInclude(absoluteGeomertyCache[objects[j]]))
                     {
-                        // note: can make more exact collision position
+                        // NOTE: collision position can be determined exactly
 
                         var collisionPositon = objects[i].Position;
 
-                        collisions.Add(new Collision(objects[i], objects[j], collisionPositon));
+                       yield return new Collision(objects[i], objects[j], collisionPositon);
                     }
                 }
             }
-
-            return collisions;
         }
     }
 }

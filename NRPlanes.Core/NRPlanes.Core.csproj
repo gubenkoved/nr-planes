@@ -48,6 +48,7 @@
     <Compile Include="Bullets\LaserBullet.cs" />
     <Compile Include="Common\Bonus.cs" />
     <Compile Include="Common\Bullet.cs" />
+    <Compile Include="Common\Client\ClientGameWorld.cs" />
     <Compile Include="Common\Collision.cs" />
     <Compile Include="Common\CollisionEventArgs.cs" />
     <Compile Include="Common\Equipment.cs" />

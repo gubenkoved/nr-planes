@@ -7,6 +7,7 @@ using NRPlanes.Client.InfoPanels;
 using NRPlanes.Client.NRPlanesServerReference;
 using NRPlanes.ServerData.OperationResults;
 using NRPlanes.Core.Controllers;
+using NRPlanes.Core.Common.Client;
 
 namespace NRPlanes.Client.Common
 {
@@ -15,8 +16,8 @@ namespace NRPlanes.Client.Common
         private readonly PlanesGame m_game;
         private readonly GameServiceClient m_client;
 
-        private GameWorld m_gameWorld;
-        public GameWorld GameWorld
+        private ClientGameWorld m_gameWorld;
+        public ClientGameWorld GameWorld
         {
             get
             {
@@ -54,7 +55,7 @@ namespace NRPlanes.Client.Common
             JoinResult initInfo = m_client.Join();
             
             m_ownGuid = initInfo.PlayerGuid; // assigned by server unique own indetifier to identificate player
-            m_gameWorld = new GameWorld(initInfo.LogicalSize);
+            m_gameWorld = new ClientGameWorld(initInfo.LogicalSize);
 
             foreach (var staticObject in initInfo.StaticObjects)
             {
@@ -90,11 +91,11 @@ namespace NRPlanes.Client.Common
             //TimeSpan elapsed = TimeSpan.FromSeconds(0.10 * gameTime.ElapsedGameTime.TotalSeconds);
 
             TimeSpan elapsed = gameTime.ElapsedGameTime;
-
-            m_synchronizer.Update();
+            
             m_gameWorld.Update(elapsed);            
             m_infoPanel.Update(gameTime);
             m_gameWorldXna.Update(gameTime);
+            m_synchronizer.Update();
         }
 
         public void Draw(GameTime gameTime)

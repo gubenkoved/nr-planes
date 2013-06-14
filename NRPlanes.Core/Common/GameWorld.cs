@@ -12,7 +12,7 @@ namespace NRPlanes.Core.Common
 {
     public class GameWorld : IUpdatable
     {
-        private readonly ThreadSafeCollection<GameObject> m_safeGameObjects;        
+        protected readonly ThreadSafeCollection<GameObject> m_safeGameObjects;        
         public ThreadSafeCollection<GameObject>.SafeReadHandle GameObjectsSafeReadHandle
         {
             get { return m_safeGameObjects.SafeRead(); }
@@ -25,13 +25,13 @@ namespace NRPlanes.Core.Common
             }
         }
 
-        private readonly List<StaticObject> m_staticObjects;
+        protected readonly List<StaticObject> m_staticObjects;
         public IEnumerable<StaticObject> StaticObjects
         {
             get { return m_staticObjects; }
         }
 
-        private readonly List<PlaneControllerBase> m_planeControllers;
+        protected readonly List<PlaneControllerBase> m_planeControllers;
         public IEnumerable<PlaneControllerBase> PlaneControllers
         {
             get
@@ -40,10 +40,10 @@ namespace NRPlanes.Core.Common
             }
         }
 
-        public AliensAppearingStrategy AliensAppearingStrategy { get; set; }
+        protected readonly Random m_random = new Random(Environment.TickCount);
 
-        public Size Size { get; private set; }
-        public Random Random { get; private set; }
+        public AliensAppearingStrategy AliensAppearingStrategy { get; set; }
+        public Size Size { get; protected set; }
 
         public GameWorld(Size logicalSize)
         {
@@ -53,7 +53,6 @@ namespace NRPlanes.Core.Common
             m_staticObjects = new List<StaticObject>();
             m_planeControllers = new List<PlaneControllerBase>();           
 
-            Random = new Random(Environment.TickCount);
             Size = logicalSize;            
         }
 
@@ -65,11 +64,9 @@ namespace NRPlanes.Core.Common
                 AliensAppearingStrategy.Update(elapsed);
 
             ProcessControllersUpdate(elapsed);
-            
-            ProcessUpdate(elapsed);
-
+            ProcessStaticObjectsUpdate(elapsed);
+            ProcessGameObjectsUpdate(elapsed);
             ProcessStaticObjectsAffection(elapsed);
-
             ProcessCollisions();
         }
 
@@ -107,8 +104,8 @@ namespace NRPlanes.Core.Common
         }
         #endregion
 
-        #region Private methods
-        private void ProcessControllersUpdate(TimeSpan elapsed)
+        #region Protected methods
+        protected virtual void ProcessControllersUpdate(TimeSpan elapsed)
         {
             foreach (var controller in m_planeControllers)
             {
@@ -116,28 +113,33 @@ namespace NRPlanes.Core.Common
             }
         }
 
-        private void ProcessUpdate(TimeSpan elapsed)
+        protected virtual void ProcessStaticObjectsUpdate(TimeSpan elapsed)
         {
             foreach (var staticObject in m_staticObjects)
             {
                 staticObject.Update(elapsed);
             }
+        }
 
+        protected virtual void ProcessGameObjectsUpdate(TimeSpan elapsed)
+        {
             using (var handle = m_safeGameObjects.SafeRead())
             {
-                GameObject[] copy = m_safeGameObjects.ToArray();
+                List<GameObject> garbage = new List<GameObject>();
 
-                for (int i = copy.Length - 1; i >= 0; i--)
+                foreach (var gameObject in handle.Items)
                 {
-                    if (!copy[i].IsGarbage)
-                        copy[i].Update(elapsed);
+                    if (!gameObject.IsGarbage)
+                        gameObject.Update(elapsed);
                     else
-                        DeleteGameObject(copy[i]);
+                        garbage.Add(gameObject);
                 }
+
+                garbage.ForEach(garbageObject => DeleteGameObject(garbageObject));
             }
         }
 
-        private void ProcessStaticObjectsAffection(TimeSpan elapsed)
+        protected virtual void ProcessStaticObjectsAffection(TimeSpan elapsed)
         {
             // Note: Can be optimized by Sweep&Prune alg
 
@@ -156,14 +158,12 @@ namespace NRPlanes.Core.Common
             }
         }
 
-        private void ProcessCollisions()
-        {
-            var collisions = PhysicEngine.GetCollisions(m_safeGameObjects.ToArray()).ToList();
-
-            foreach (var collision in collisions)
+        protected virtual void ProcessCollisions()
+        {            
+            foreach (var collision in PhysicEngine.GetCollisions(m_safeGameObjects.ToArray()))
             {
-                var a = collision.One;
-                var b = collision.Two;
+                var a = collision.FirstObject;
+                var b = collision.SecondObject;
 
                 if (a is Bullet)
                     ((Bullet)a).CollideWith(b);
@@ -174,60 +174,45 @@ namespace NRPlanes.Core.Common
             }
         }        
 
-        private void DeleteGameObject(GameObject obj)
+        protected void DeleteGameObject(GameObject obj)
         {
             m_safeGameObjects.Remove(obj);
 
             OnGameObjectStatusChanged(null, new GameObjectStatusChangedEventArg(GameObjectStatus.Deleted, obj));
         }
 
-        private static IEnumerable<StaticObject> GenerateGravityBounds(Size worldSize, double gravityBoundsLenght)
+        protected static IEnumerable<StaticObject> GenerateGravityBounds(Size worldSize, double gravityBoundsLenght)
         {
             const double acceleration = 100;
 
-            List<StaticObject> gravityFields = new List<StaticObject>();
-
-            var topField = new RectangleGravityField(new Rect(0, worldSize.Height - gravityBoundsLenght, worldSize.Width, gravityBoundsLenght), new Vector(0, -1), acceleration);
-            var bottomField = new RectangleGravityField(new Rect(0, 0, worldSize.Width, gravityBoundsLenght), new Vector(0, +1), acceleration);
-            var leftField = new RectangleGravityField(new Rect(0, 0, gravityBoundsLenght, worldSize.Height), new Vector(+1, 0), acceleration);
-            var rightField = new RectangleGravityField(new Rect(worldSize.Width - gravityBoundsLenght, 0, gravityBoundsLenght, worldSize.Height), new Vector(-1, 0), acceleration);
-
-            gravityFields.Add(topField);
-            gravityFields.Add(bottomField);
-            gravityFields.Add(leftField);
-            gravityFields.Add(rightField);
-
-            return gravityFields;
+            // top field
+            yield return new RectangleGravityField(new Rect(0, worldSize.Height - gravityBoundsLenght, worldSize.Width, gravityBoundsLenght), new Vector(0, -1), acceleration);
+            // bottom
+            yield return new RectangleGravityField(new Rect(0, 0, worldSize.Width, gravityBoundsLenght), new Vector(0, +1), acceleration);
+            // left
+            yield return new RectangleGravityField(new Rect(0, 0, gravityBoundsLenght, worldSize.Height), new Vector(+1, 0), acceleration);
+            // right
+            yield return new RectangleGravityField(new Rect(worldSize.Width - gravityBoundsLenght, 0, gravityBoundsLenght, worldSize.Height), new Vector(-1, 0), acceleration);
         }
 
-        private static IEnumerable<StaticObject> GenerateRandomPlanets(int amount, Rect rect)
+        protected static IEnumerable<StaticObject> GenerateRandomPlanets(int amount, Rect rect)
         {
             Random random = new Random(Environment.TickCount);
 
-            List<StaticObject> planets = new List<StaticObject>();
-
             for (int i = 0; i < amount; i++)
             {
-                //var xPos = GravityBoundsLength + random.NextDouble() * (Size.Width - 2 * GravityBoundsLength);
-                var xPos = rect.X + random.NextDouble() * rect.Width;
-                //var yPos = GravityBoundsLength + random.NextDouble() * (Size.Height - 2 * GravityBoundsLength);
-                var yPos = rect.Y + random.NextDouble() * rect.Height;
+                Vector position = new Vector(
+                    rect.X + random.NextDouble() * rect.Width,
+                    rect.Y + random.NextDouble() * rect.Height);
+                double planetValueSeed = 0.5 + 0.5 * random.NextDouble(); // in [0.5, 1.0]
 
-                var position = new Vector(xPos, yPos);
-
-                var planetValue = 0.5 + 0.5 * random.NextDouble(); // in [0.5, 1.0]
-
-                var planet = new HealthRecoveryPlanet(position, planetValue * 30.0, planetValue * 6.0);
-
-                planets.Add(planet);
+                yield return new HealthRecoveryPlanet(position, planetValueSeed * 30.0, planetValueSeed * 6.0);
             }
-
-            return planets;
         }
         #endregion
 
         #region Events
-        private void OnGameObjectStatusChanged(object sender, GameObjectStatusChangedEventArg arg)
+        protected void OnGameObjectStatusChanged(object sender, GameObjectStatusChangedEventArg arg)
         {
             if (GameObjectStatusChanged != null)
                 GameObjectStatusChanged.Invoke(sender, arg);
@@ -235,7 +220,7 @@ namespace NRPlanes.Core.Common
 
         public event EventHandler<GameObjectStatusChangedEventArg> GameObjectStatusChanged;
 
-        private void OnCollisionDetected(object sender, CollisionEventArgs args)
+        protected void OnCollisionDetected(object sender, CollisionEventArgs args)
         {
             if (CollisionDetected != null)
                 CollisionDetected.Invoke(sender, args);

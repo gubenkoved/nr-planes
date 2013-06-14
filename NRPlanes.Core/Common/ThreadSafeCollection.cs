@@ -10,6 +10,7 @@ namespace NRPlanes.Core.Common
     /// Thread-safe collection for:
     /// <para>- Add/remove items</para>
     /// <para>- Enumerating items through safe-handle</para>
+    /// <para>- Thread safe geting snapshot through ToArray method</para>
     /// <para>Uses ReaderWriterLockSlim</para>
     /// <para>Enumeration usage example: </para>
     /// <para>using(var handle = collection.SafeRead()){ </para>
@@ -105,7 +106,13 @@ namespace NRPlanes.Core.Common
         }
         public T[] ToArray()
         {
-            return m_list.ToArray();
+            m_RWLock.EnterReadLock();
+
+            T[] copy = m_list.ToArray();
+
+            m_RWLock.ExitReadLock();
+
+            return copy;
         }
     }
 }

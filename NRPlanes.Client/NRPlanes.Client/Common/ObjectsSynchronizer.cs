@@ -8,6 +8,7 @@ using NRPlanes.ServerData.MutableInformations;
 using NRPlanes.ServerData.OperationResults;
 using NRPlanes.ServerData;
 using System.Threading;
+using NRPlanes.Core.Common.Client;
 
 namespace NRPlanes.Client.Common
 {
@@ -20,7 +21,7 @@ namespace NRPlanes.Client.Common
     public class ObjectsSynchronizer
     {
         private readonly GameServiceClient m_client;
-        private readonly GameWorld m_world;
+        private readonly ClientGameWorld m_clientWorld;
         private readonly Guid m_ownGuid;
         private readonly Plane m_ownPlane;
 
@@ -33,12 +34,12 @@ namespace NRPlanes.Client.Common
 
         private const float MAX_UPDATE_RATE = 50.0f;
 
-        public ObjectsSynchronizer(GameServiceClient client, GameWorld world, Guid ownGuid, Plane ownPlane)
+        public ObjectsSynchronizer(GameServiceClient client, ClientGameWorld world, Guid ownGuid, Plane ownPlane)
         {
             m_ownGuid = ownGuid;
             m_ownPlane = ownPlane;
             m_client = client;
-            m_world = world;
+            m_clientWorld = world;
 
             m_isFirstUpdate = true;
             m_maxId = -1;
@@ -91,7 +92,7 @@ namespace NRPlanes.Client.Common
             {
                 UpdateMaxId(obj.Id.Value);
 
-                m_world.AddGameObject(IntegrityDataHelper.PreprocessRecieved(obj));
+                m_clientWorld.AddGameObject(IntegrityDataHelper.PreprocessRecieved(obj));
             }
         }
         private void SendOwnPlaneParameters()
@@ -102,30 +103,41 @@ namespace NRPlanes.Client.Common
         {
             // when server does not contains some client's worls planes - we should to destroy this plane on the client side
 
-            List<Plane> allLocalEnemyPlanes;            
+            List<Plane> localPlanes;
 
-            using (var handle = m_world.GameObjectsSafeReadHandle)
+            using (var handle = m_clientWorld.GameObjectsSafeReadHandle)
             {
-                allLocalEnemyPlanes = handle.Items
-                    .Where(gameObj => gameObj is Plane && gameObj != m_ownPlane)
+                localPlanes = handle.Items
+                    .Where(gameObj => gameObj is Plane)
                     .Cast<Plane>()
                     .ToList();
             }
 
-            foreach (var enemyPlaneInfo in m_client.GetPlanesInfo(m_ownGuid))
-            {
-                Plane localEnemyPlane = allLocalEnemyPlanes.SingleOrDefault(o => o.Id == enemyPlaneInfo.Id);
+            List<Plane> detectedPlanes = new List<Plane>();
 
-                if (localEnemyPlane != null)
+            foreach (var planeInfo in m_client.GetPlanesInfo(m_ownGuid))
+            {
+                Plane localPlane = localPlanes.SingleOrDefault(o => o.Id == planeInfo.Id);
+
+                if (localPlane != null)
                 {
-                    enemyPlaneInfo.Apply(localEnemyPlane);
+                    if (localPlane != m_ownPlane)
+                        planeInfo.Apply(localPlane);
+
+                    detectedPlanes.Add(localPlane);
                 }
                 else
                 {
                     //  there are some enemy planes that exists on the server but does not exists on the client side
                     throw new Exception("FIX! Incorrect game situation");
                 }
-            }                
+            }
+
+            // if some local plane remains it means that on server side it was destructed - then we should to destruct it on the client side
+            foreach (var garbagePlane in localPlanes.Except(detectedPlanes))
+            {
+                m_clientWorld.ExplicitlyRemoveGameObject(garbagePlane);
+            }
         }
 
         private void DoUpdateWork()
