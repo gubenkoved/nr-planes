@@ -19,9 +19,7 @@ namespace NRPlanes.Core.Common
             : base(maxCharge, regeneration)
         {
             TractionForce = tractionForce;
-
             MaximumCharge = maxCharge;
-
             Regeneration = regeneration;
         }
 

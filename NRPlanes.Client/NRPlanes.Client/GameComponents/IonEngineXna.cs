@@ -59,16 +59,18 @@ namespace NRPlanes.Client.GameComponents
             {
                 m_particlesEmitter.LongitualDirection = new Vector(0, 1).Rotate(Equipment.GetAbsoluteRotation());
 
+                int pCount = Equipment.Charge > Equipment.MaximumCharge / 10 ? 5 : 3;
+
                 m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
                 {
                     Color = Color.LightBlue,
-                    Position = Equipment.GetAbsolutePosition() + new Vector(0, -0.5).Rotate(Equipment.GetAbsoluteRotation()),
+                    Position = Equipment.GetAbsolutePosition() + new Vector(0, -0.8).Rotate(Equipment.GetAbsoluteRotation()),
                     Size = new Size(1.5, 1.5),
                     AlphaVelocity = -5.0f,
                     TimeToLive = TimeSpan.FromSeconds(1),
                     Velocity = Equipment.RelatedGameObject.Velocity + new Vector(0, -20).Rotate(Equipment.GetAbsoluteRotation()),
                     Rotation = Equipment.GetAbsoluteRotation()
-                }, 5);
+                }, pCount);
 
                 //var origin = new Vector2((float)m_animationSpriteDrawer.FrameSize.Width / 2.0f,
                 //                         (float)m_animationSpriteDrawer.FrameSize.Height / 2.0f);
