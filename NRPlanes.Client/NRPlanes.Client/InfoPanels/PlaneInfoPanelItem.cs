@@ -11,6 +11,7 @@ namespace NRPlanes.Client.InfoPanels
     {
         private Texture2D m_background;
         private IndicatorsDrawer m_indicatorsDrawer;
+        
         public Plane Plane { get; set; }
 
         public PlaneInfoPanelItem(PlanesGame game, Rectangle positionRectangle) 
@@ -24,6 +25,7 @@ namespace NRPlanes.Client.InfoPanels
 
             m_indicatorsDrawer = new IndicatorsDrawer(Game.Content.Load<Texture2D>("PlaneInfo/indicator_backround"),
                                                      Game.Content.Load<Texture2D>("PlaneInfo/indicator_value"),
+                                                     Game.Content.Load<Texture2D>("PlaneInfo/low_charge"),
                                                      Game.Content.Load<SpriteFont>("Fonts/infopanel_font"));
 
             base.Initialize();
@@ -42,14 +44,14 @@ namespace NRPlanes.Client.InfoPanels
 
             if (Plane != null)
             {
-                const int indention = 16;
+                const int indention = 10;
 
                 Rectangle indicatorPosition = 
                     new Rectangle(
                         PositionRectangle.X + indention,
                         PositionRectangle.Y + indention,
                         PositionRectangle.Width - 2 * indention,
-                        20);
+                        24);
 
                 //m_indicatorsDrawer.Draw(spriteBatch,
                 //                       indicatorPosition,
@@ -61,17 +63,16 @@ namespace NRPlanes.Client.InfoPanels
                 
                 //indicatorPosition.Offset(0, 24);
 
-                m_indicatorsDrawer.Draw(spriteBatch,
-                                       indicatorPosition,
-                                       Plane.Health / Plane.MaximalHealth,
-                                       Color.Black, 
-                                       Color.Red, 
-                                       string.Format("{0:F0} HP", Plane.Health), 
-                                       Color.FromNonPremultiplied(255, 255, 255, 120));
+                m_indicatorsDrawer.Draw(
+                    spriteBatch,
+                    indicatorPosition,
+                    Plane.Health / Plane.MaximalHealth,
+                    Color.Black, 
+                    Color.Red, 
+                    string.Format("{0:F0} HP", Plane.Health), 
+                    Color.FromNonPremultiplied(255, 255, 255, 120));
 
-                var equipmentWithIndicator = Plane.AllEquipment.Where(e => e.Info != null).ToList();
-
-                foreach (var equipment in equipmentWithIndicator)
+                foreach (var equipment in Plane.AllEquipment.Where(e => !string.IsNullOrEmpty(e.Info)))
                 {
                     Color color;
 
@@ -84,15 +85,15 @@ namespace NRPlanes.Client.InfoPanels
                     else
                         color = Color.Gray;
 
-                    indicatorPosition.Offset(0, 24);
+                    indicatorPosition.Offset(0, 26);
 
-                    m_indicatorsDrawer.Draw(spriteBatch,
-                                           indicatorPosition,
-                                           equipment.Charge / equipment.MaximumCharge,
-                                           Color.Black,
-                                           color,
-                                           equipment.Info,
-                                           Color.FromNonPremultiplied(255, 255, 255, 120));
+                    m_indicatorsDrawer.Draw(
+                        spriteBatch,
+                        indicatorPosition,
+                        Color.Black,
+                        color,                                           
+                        Color.FromNonPremultiplied(255, 255, 255, 120),
+                        equipment);
                 }
             }
         }

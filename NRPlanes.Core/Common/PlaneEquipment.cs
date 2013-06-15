@@ -30,6 +30,14 @@ namespace NRPlanes.Core.Common
         [DataMember]
         public double MinimalChargeToActivate { get; protected set; }
 
+        public virtual bool IsLowCharge
+        {
+            get
+            {
+                return Charge < MaximumCharge / 10.0;
+            }
+        }
+
         /// <summary>
         /// Time during restores one unit of charge
         /// </summary>

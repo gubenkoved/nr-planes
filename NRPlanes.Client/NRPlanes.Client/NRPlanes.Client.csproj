@@ -146,7 +146,7 @@
     <Compile Include="InfoPanels\InfoPanelItem.cs" />
     <Compile Include="InfoPanels\IOnMinimapDrawable.cs" />
     <Compile Include="InfoPanels\Minimap.cs" />
-    <Compile Include="InfoPanels\PlaneInfo.cs" />
+    <Compile Include="InfoPanels\PlaneInfoPanelItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="PlanesGame.cs" />

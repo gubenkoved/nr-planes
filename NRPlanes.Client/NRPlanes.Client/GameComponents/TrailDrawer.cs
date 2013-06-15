@@ -62,7 +62,7 @@ namespace NRPlanes.Client.GameComponents
 
                 if (trailSegments.Count == SegmentsCount)
                 {
-                    // rest part can be deleted
+                    // rest part can be deleted to reduce memory consumptions
                     PathPoints.RemoveRange(0, i);
 
                     break;
