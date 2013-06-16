@@ -15,7 +15,7 @@ namespace NRPlanes.Core.Common
     public class ReferenceArea
     {
         [DataMember]
-        private List<ReferenceAreaPoint> _points;
+        private List<ReferenceAreaPoint> m_points;
 
         public ReferenceArea(double constantReferenceArea)
             : this(new[]
@@ -31,9 +31,9 @@ namespace NRPlanes.Core.Common
             if (points.Length < 2)
                 throw new Exception("When you use this constructor you must pass at least two known points");
 
-            _points = points.ToList();
+            m_points = points.ToList();
 
-            _points.Sort();
+            m_points.Sort();
         }
 
         /// <returns>Linear interpolation of referece area in point with specified angle</returns>
@@ -42,8 +42,8 @@ namespace NRPlanes.Core.Common
             angle = angle % 360;
             angle = angle < 0 ? angle + 360.0 : angle;
 
-            var b = _points.First(p => p.Angle >= angle);
-            var a = _points.Last(p => p.Angle <= angle);
+            var b = m_points.First(p => p.Angle >= angle);
+            var a = m_points.Last(p => p.Angle <= angle);
 
             if (a == b) return a.ReferenceArea;
 

@@ -12,14 +12,14 @@ namespace NRPlanes.Core.Planes
     public class XWingPlane : Plane
     {
         [DataMember]
-        private Engine _leftDeflectingEngine;
+        private Engine m_leftDeflectingEngine;
         [DataMember]
-        private Engine _rightDeflectingEngine;
+        private Engine m_rightDeflectingEngine;
 
         [DataMember]
-        private Engine _leftForwardEngine;
+        private Engine m_leftForwardEngine;
         [DataMember]
-        private Engine _rightForwardEngine;
+        private Engine m_rightForwardEngine;
 
         public static XWingPlane BasicConfiguration(Vector initialPosition)
         {
@@ -55,15 +55,14 @@ namespace NRPlanes.Core.Planes
                                                            new Vector(-0.5, -0.6)
                                                        });
 
-            _leftForwardEngine = new RocketEngine(new Vector(-1.55, -6.6), 5, 200000.0) { Info = "Left primary engine" };
-            _rightForwardEngine = new RocketEngine(new Vector(+1.55, -6.6), -5, 200000.0) { Info = "Right primary engine"};
+            m_leftForwardEngine = new RocketEngine(new Vector(-1.55, -6.6), 5, 200000.0) { Info = "Left primary engine" };
+            m_rightForwardEngine = new RocketEngine(new Vector(+1.55, -6.6), -5, 200000.0) { Info = "Right primary engine"};
 
-            _leftDeflectingEngine = new IonEngine(new Vector(+0.6, 2.8), -80, 50000.0) { Info = "Left deflector"};
-            _rightDeflectingEngine = new IonEngine(new Vector(-0.6, 2.8), 80, 50000.0) { Info = "Right deflector"};
+            m_leftDeflectingEngine = new IonEngine(new Vector(+0.6, 2.8), -80, 50000.0) { Info = "Left deflector"};
+            m_rightDeflectingEngine = new IonEngine(new Vector(-0.6, 2.8), 80, 50000.0) { Info = "Right deflector"};
 
             Weapon leftLaserGun = new LaserGun(new Vector(-1.5, -0.4),
                                             0,
-                                            WeaponPosition.LeftFront,
                                             TimeSpan.FromMilliseconds(120),
                                             100.0,
                                             30,
@@ -73,7 +72,6 @@ namespace NRPlanes.Core.Planes
 
             Weapon rightLaserGun = new LaserGun(new Vector(1.5, -0.4),
                                              0,
-                                             WeaponPosition.RightFront,
                                              TimeSpan.FromMilliseconds(120),
                                              100.0,
                                              30,
@@ -83,13 +81,13 @@ namespace NRPlanes.Core.Planes
 
             Shield shield = new Shield(10.0, 0.5, 1.0, 0.03) { Info = "Shield" };
 
-            AddEquipment(_leftForwardEngine);
-            AddEquipment(_rightForwardEngine);
-            AddEquipment(_leftDeflectingEngine);
-            AddEquipment(_rightDeflectingEngine);
+            AddEquipment(m_leftForwardEngine);
+            AddEquipment(m_rightForwardEngine);
+            AddEquipment(m_leftDeflectingEngine);
+            AddEquipment(m_rightDeflectingEngine);
 
-            AddEquipment(leftLaserGun);
-            AddEquipment(rightLaserGun);
+            AddWeapon(leftLaserGun, WeaponPosition.LeftFront);
+            AddWeapon(rightLaserGun, WeaponPosition.RightFront);
 
             AddEquipment(shield);
         }
@@ -99,20 +97,20 @@ namespace NRPlanes.Core.Planes
             switch (motion)
             {
                 case MotionType.Forward:
-                    _leftForwardEngine.TurnOn();
-                    _rightForwardEngine.TurnOn();
+                    m_leftForwardEngine.TurnOn();
+                    m_rightForwardEngine.TurnOn();
                     break;
                 case MotionType.Left:
-                    _leftDeflectingEngine.TurnOn();
+                    m_leftDeflectingEngine.TurnOn();
                     break;
                 case MotionType.Right:
-                    _rightDeflectingEngine.TurnOn();
+                    m_rightDeflectingEngine.TurnOn();
                     break;
                 case MotionType.All:
-                    _leftForwardEngine.TurnOn();
-                    _rightForwardEngine.TurnOn();
-                    _leftDeflectingEngine.TurnOn();
-                    _rightDeflectingEngine.TurnOn();
+                    m_leftForwardEngine.TurnOn();
+                    m_rightForwardEngine.TurnOn();
+                    m_leftDeflectingEngine.TurnOn();
+                    m_rightDeflectingEngine.TurnOn();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("motion");
@@ -124,20 +122,20 @@ namespace NRPlanes.Core.Planes
             switch (motion)
             {
                 case MotionType.Forward:
-                    _leftForwardEngine.TurnOff();
-                    _rightForwardEngine.TurnOff();
+                    m_leftForwardEngine.TurnOff();
+                    m_rightForwardEngine.TurnOff();
                     break;
                 case MotionType.Left:
-                    _leftDeflectingEngine.TurnOff();
+                    m_leftDeflectingEngine.TurnOff();
                     break;
                 case MotionType.Right:
-                    _rightDeflectingEngine.TurnOff();
+                    m_rightDeflectingEngine.TurnOff();
                     break;
                 case MotionType.All:
-                    _leftForwardEngine.TurnOff();
-                    _rightForwardEngine.TurnOff();
-                    _leftDeflectingEngine.TurnOff();
-                    _rightDeflectingEngine.TurnOff();
+                    m_leftForwardEngine.TurnOff();
+                    m_rightForwardEngine.TurnOff();
+                    m_leftDeflectingEngine.TurnOff();
+                    m_rightDeflectingEngine.TurnOff();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("motion");

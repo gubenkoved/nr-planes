@@ -8,22 +8,14 @@ namespace NRPlanes.Core.Common
     [KnownType(typeof(Weapons.LaserGun))]
     public abstract class Weapon : PlaneEquipment
     {
-        protected Weapon(WeaponPosition position, TimeSpan minimalTimeBetweenShots, double initialVelocity, double maximumCharge, double regeneration, Bullet bulletPrototype, Vector bulletOffset)
+        protected Weapon(TimeSpan minimalTimeBetweenShots, double initialVelocity, double maximumCharge, double regeneration, Bullet bulletPrototype, Vector bulletOffset)
             : base(maximumCharge, regeneration)
         {
             BulletOffset = bulletOffset;
-
             BulletPrototype = bulletPrototype;
-
-            OnPlanePosition = position;
-
             InitialBulletVelocity = new Vector(0, initialVelocity);
-
             ReloadingTime = minimalTimeBetweenShots;
         }
-
-        [DataMember]
-        public WeaponPosition OnPlanePosition { get; private set; }
 
         /// <summary>
         /// Offset between this weapon position and bullet position

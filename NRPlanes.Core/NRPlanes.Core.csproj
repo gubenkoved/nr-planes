@@ -45,6 +45,7 @@
     <Compile Include="Aliens\AliensAppearingStrategy.cs" />
     <Compile Include="Aliens\BasicAliensAppearingStrategy.cs" />
     <Compile Include="Aliens\SingleAliensAppearingStrategy.cs" />
+    <Compile Include="Bonuses\Bonus.cs" />
     <Compile Include="Bullets\LaserBullet.cs" />
     <Compile Include="Common\Bonus.cs" />
     <Compile Include="Common\Bullet.cs" />
@@ -91,9 +92,7 @@
     <Compile Include="StaticObjects\RectangleGravityField.cs" />
     <Compile Include="Weapons\LaserGun.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Bonuses\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
   </ItemGroup>

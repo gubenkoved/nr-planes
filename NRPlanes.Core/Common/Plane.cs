@@ -52,38 +52,51 @@ namespace NRPlanes.Core.Common
             get { return m_allEquipment; }
         }
 
+        [DataMember]
+        private Dictionary<WeaponPosition, Weapon> m_weapons;
+        public IDictionary<WeaponPosition, Weapon> Weapons;
+
         protected Plane(double mass, double angularMass, ReferenceArea referenceArea, double maxHealth)
             : base(mass, angularMass, referenceArea)
         {
             m_allEquipment = new List<PlaneEquipment>();
+            m_weapons = new Dictionary<WeaponPosition, Weapon>();
 
             MaximalHealth = maxHealth;
-
             Health = MaximalHealth / 2.0;
         }
 
         protected void AddEquipment(PlaneEquipment equipment)
         {
-            equipment.Id = m_allEquipment.Count;
-            m_allEquipment.Add(equipment);
-
             equipment.RelatedGameObject = this;
+            equipment.Id = m_allEquipment.Count;
+
+            m_allEquipment.Add(equipment);
+        }
+
+        protected void AddWeapon(Weapon weapon, WeaponPosition position)
+        {
+            weapon.RelatedGameObject = this;
+            weapon.Id = m_allEquipment.Count;
+
+            m_allEquipment.Add(weapon);
+            m_weapons[position] = weapon;
         }
 
         public void Fire(WeaponPosition weaponPosition = WeaponPosition.Unknown)
         {
             if (weaponPosition == WeaponPosition.Unknown)
             {
-                foreach (var weapon in AllEquipment.OfType<Weapon>())
+                foreach (var weapon in m_weapons.Values)
                 {
                     weapon.Fire();
                 }
             }
             else
             {
-                foreach (var weapon in AllEquipment.OfType<Weapon>().Where(w => w.OnPlanePosition == weaponPosition))
+                if (m_weapons.ContainsKey(weaponPosition))
                 {
-                    weapon.Fire();
+                    m_weapons[weaponPosition].Fire();
                 }
             }
         }

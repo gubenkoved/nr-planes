@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NRPlanes.Core.Primitives;
+using System.Collections;
 
 namespace NRPlanes.Core.Common
 {
@@ -49,7 +50,7 @@ namespace NRPlanes.Core.Common
             Vector radiusVector = fulcrum - obj.Position;
             double angle = Vector.AngleBetween(radiusVector, force);
 
-            var momentOfForce = Math.Sin(Helper.ToRadians(angle)) * force.Length * radiusVector.Length;
+            double momentOfForce = Math.Sin(Helper.ToRadians(angle)) * force.Length * radiusVector.Length;
 
             obj.RotationAcceleration += momentOfForce / obj.AngularMass;
             #endregion
@@ -75,13 +76,11 @@ namespace NRPlanes.Core.Common
         {
             const double alpha = 0.1;
 
-            if (obj.Velocity.Length > 0.0)
+            if (obj.Velocity.Length > 0.0 && obj.ReferenceArea != null)
             {
-                var angleBetweenVelocityAndRotation = obj.Velocity.Angle() - obj.Rotation;
-
-                var referenceArea = obj.ReferenceArea.GetValue(angleBetweenVelocityAndRotation);
-
-                var ort = obj.Velocity.Ort();
+                double angleBetweenVelocityAndRotation = obj.Velocity.Angle() - obj.Rotation;
+                double referenceArea = obj.ReferenceArea.GetValue(angleBetweenVelocityAndRotation);
+                Vector ort = obj.Velocity.Ort();
 
                 return -alpha * referenceArea * obj.Velocity.LengthSquared * ort;
             }
