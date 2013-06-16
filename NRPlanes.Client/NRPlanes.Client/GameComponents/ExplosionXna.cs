@@ -52,7 +52,7 @@ namespace NRPlanes.Client.GameComponents
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            var frameSize = new Size(320, 240);
+            //var frameSize = new Size(320, 240);
 
             if (m_drawCount++ == 0)
             {
@@ -63,7 +63,7 @@ namespace NRPlanes.Client.GameComponents
                     Size = new Size(3, 3),
                     AlphaVelocity = -0.5f,
                     TimeToLive = TimeSpan.FromSeconds(5),
-                    Velocity = new Vector(),
+                    Velocity = Vector.Zero,
                     Rotation = 0,
                     Depth = LayersDepths.Explosion,
                     SizeFactorVelocity = new Vector(0.3, 0.3)
@@ -76,7 +76,7 @@ namespace NRPlanes.Client.GameComponents
                     Size = new Size(1, 1),
                     AlphaVelocity = -0.9f,
                     TimeToLive = TimeSpan.FromSeconds(5),
-                    Velocity = new Vector(),
+                    Velocity = Vector.Zero,
                     Rotation = 0,
                     Depth = LayersDepths.Explosion,
                     SizeFactorVelocity = new Vector(25, 25)

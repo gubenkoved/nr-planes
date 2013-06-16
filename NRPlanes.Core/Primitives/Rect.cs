@@ -60,9 +60,11 @@ namespace NRPlanes.Core.Primitives
 
         public bool IntersectsWith(Rect rect)
         {
-            if (Helper.RangeIntersects(X, Width, rect.X, rect.Width) 
+            if (Helper.RangeIntersects(X, Width, rect.X, rect.Width)
                 && Helper.RangeIntersects(Y, Height, rect.Y, rect.Height))
+            {
                 return true;
+            }
 
             return false;
         }
@@ -86,7 +88,6 @@ namespace NRPlanes.Core.Primitives
                 return new Vector(X, Y + Height);
             }
         }
-
         public Vector BottomLeft
         {
             get
@@ -94,7 +95,6 @@ namespace NRPlanes.Core.Primitives
                 return new Vector(X, Y);
             }
         }
-
         public Vector TopRight
         {
             get
@@ -102,7 +102,6 @@ namespace NRPlanes.Core.Primitives
                 return new Vector(X + Width, Y + Height);
             }
         }
-
         public Vector BottomRight
         {
             get
@@ -110,22 +109,23 @@ namespace NRPlanes.Core.Primitives
                 return new Vector(X + Width, Y);
             }
         }
+        public Vector Center
+        {
+            get { return new Vector(X + Width / 2.0, Y + Height / 2.0); }
+        }
 
         public double Left
         {
             get { return X; }
         }
-
         public double Right
         {
             get { return X + Width; }
         }
-
         public double Top
         {
             get { return Y + Height; }
         }
-
         public double Bottom
         {
             get { return Y; }
@@ -145,15 +145,9 @@ namespace NRPlanes.Core.Primitives
         {
             get { return Math.Max(Width, Height); }
         }
-
         public double ShortSide
         {
             get { return Math.Min(Width, Height); }
-        }
-
-        public Vector Center
-        {
-            get { return new Vector(X + Width / 2.0, Y + Height / 2.0); }
         }
 
         public bool HitTest(Vector vector)

@@ -7,6 +7,7 @@ using NRPlanes.Core.StaticObjects;
 using NRPlanes.Core.Controllers;
 using NRPlanes.Core.Aliens;
 using NRPlanes.Core.Logging;
+using NRPlanes.Core.Bonuses;
 
 namespace NRPlanes.Core.Common
 {
@@ -165,20 +166,55 @@ namespace NRPlanes.Core.Common
                 var a = collision.FirstObject;
                 var b = collision.SecondObject;
 
-                if (a is Bullet)
-                    ((Bullet)a).CollideWith(b);
-                else if (b is Bullet)
-                    ((Bullet)b).CollideWith(a);
+                if (a is Bullet || b is Bullet)
+                {
+                    Bullet bullet = a is Bullet ? (Bullet)a : (Bullet)b;
+                    GameObject obj = a is Bullet ? b : a;
+
+                    bullet.CollideWith(obj);
+                }
+
+                if (a is Bonus && b is Plane || b is Bonus && a is Plane)
+                {
+                    Bonus bonus = a is Bonus ? (Bonus)a : (Bonus)b;
+                    Plane plane = a is Bonus ? (Plane)b : (Plane) a;
+
+                    if (!plane.IsGarbage)
+                    {
+                        Logger.Log(string.Format("Apply bonus {0}", bonus));
+
+                        bonus.Apply(plane);
+                    }
+                }
 
                 OnCollisionDetected(this, new CollisionEventArgs(collision));
             }
-        }        
+        }
 
         protected void DeleteGameObject(GameObject obj)
         {
+            BeforeDeleteGameObject(obj);
+
             m_safeGameObjects.Remove(obj);
 
             OnGameObjectStatusChanged(null, new GameObjectStatusChangedEventArg(GameObjectStatus.Deleted, obj));
+        }
+
+        protected virtual void BeforeDeleteGameObject(GameObject obj)
+        {
+            if (obj is Plane)
+            {
+                GenerateBonus(obj.Position);
+            }
+        }
+
+        private void GenerateBonus(Vector position)
+        {
+            Bonus bonus = new HealthBonus(position, 100);
+
+            Logger.Log(string.Format("Add bonus {0} in position {1}", bonus, position));
+
+            m_safeGameObjects.Add(bonus);
         }
 
         protected static IEnumerable<StaticObject> GenerateGravityBounds(Size worldSize, double gravityBoundsLenght)

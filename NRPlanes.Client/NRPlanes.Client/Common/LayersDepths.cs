@@ -13,6 +13,7 @@ namespace NRPlanes.Client.Common
         public const float Background = 1.0f;
         public const float StaticObject = 0.95f;
         public const float GravityField = 0.90f;
+        public const float Bonuses = 0.87f;
         public const float ParticlesDefault = 0.85f;
         public const float Engine = 0.8f;
         public const float Bullet = 0.3f;

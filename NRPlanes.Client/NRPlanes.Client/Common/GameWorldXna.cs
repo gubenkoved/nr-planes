@@ -21,6 +21,7 @@ using System.Collections.Concurrent;
 using NRPlanes.Client.Particles;
 
 using Plane = NRPlanes.Core.Common.Plane;
+using NRPlanes.Core.Bonuses;
 
 namespace NRPlanes.Client.Common
 {
@@ -120,27 +121,25 @@ namespace NRPlanes.Client.Common
 
         private void FillInstanceMapper()
         {
-            #region GameObjects
-
+            #region Game objects
             m_instanceMapper.AddMapping(typeof(XWingPlane), typeof(XWingPlaneXna));
             m_instanceMapper.AddMapping(typeof(LaserBullet), typeof(LaserBulletXna));
-
             #endregion
 
             #region Equipments
-
             m_instanceMapper.AddMapping(typeof(RocketEngine), typeof(RocketEngineXna));
             m_instanceMapper.AddMapping(typeof(IonEngine), typeof(IonEngineXna));
             m_instanceMapper.AddMapping(typeof(LaserGun), typeof(LaserGunXna));
             m_instanceMapper.AddMapping(typeof(Shield), typeof(ShieldXna));
-
             #endregion
 
-            #region StaticObjects
-
+            #region Static objects
             m_instanceMapper.AddMapping(typeof(RectangleGravityField), typeof(RectangleGravityFieldXna));
             m_instanceMapper.AddMapping(typeof(HealthRecoveryPlanet), typeof(HealthRecoveryPlanetXna));
+            #endregion
 
+            #region Bonuses
+            m_instanceMapper.AddMapping(typeof(HealthBonus), typeof(BonusXna), new object[] { Color.Red, Game.Content.Load<Texture2D>("Bonuses/bonus") });
             #endregion
 
         }
@@ -163,17 +162,24 @@ namespace NRPlanes.Client.Common
         {
             Collision collision = args.Collision;
 
-            // when it induced by server plane destruction
-            if (collision.IsSelfCollision)
+            if (collision.FirstObject is Bullet && collision.SecondObject is Bullet)
             {
-                AddExplosion(collision.FirstObject);
-            }
-            else
-            {
-                if (collision.FirstObject.IsGarbage && !(collision.FirstObject is Plane))
+                if (collision.FirstObject.IsGarbage)
                     AddExplosion(collision.FirstObject);
 
-                if (collision.SecondObject.IsGarbage && !(collision.SecondObject is Plane))
+                if (collision.SecondObject.IsGarbage)
+                    AddExplosion(collision.SecondObject);
+            }
+
+            if (collision.FirstObject is Bullet && collision.SecondObject is Plane)
+            {
+                if (collision.FirstObject.IsGarbage)
+                    AddExplosion(collision.FirstObject);
+            }
+
+            if (collision.FirstObject is Plane && collision.SecondObject is Bullet)
+            {
+                if (collision.SecondObject.IsGarbage)
                     AddExplosion(collision.SecondObject);
             }
         }
@@ -188,7 +194,7 @@ namespace NRPlanes.Client.Common
             var xnaRelatedGameObject = (DrawableGameObject)m_instanceMapper.CreateInstance(gameObject);
 
             m_gameObjectMapping[gameObject] = xnaRelatedGameObject;
-
+            
             m_safeDrawableGameComponents.Add(xnaRelatedGameObject);
 
             if (gameObject is IHaveEquipment)
@@ -201,10 +207,15 @@ namespace NRPlanes.Client.Common
         }
         private void WhenGameObjectDeleted(GameObject gameObject)
         {
-            var drawableGameObject = m_gameObjectMapping[gameObject];
+            // add explosion when plane deleted
+            if (gameObject is Plane)
+            {
+                AddExplosion(gameObject);
+            }
+
+            DrawableGameObject drawableGameObject = m_gameObjectMapping[gameObject];
 
             m_gameObjectMapping.Remove(gameObject);
-
             m_safeDrawableGameComponents.Remove(drawableGameObject);
 
             if (gameObject is IHaveEquipment)

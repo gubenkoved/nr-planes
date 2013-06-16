@@ -56,11 +56,12 @@ namespace NRPlanes.Core.Common.Client
 
         public void ExplicitlyRemoveGameObject(GameObject obj)
         {
-            // when object destructed by server signal - raise collision with null as second object
-            Collision collision = Collision.CreateSelfCollision(obj);
-
-            base.OnCollisionDetected(this, new CollisionEventArgs(collision));
             base.DeleteGameObject(obj);
+        }
+
+        protected override void BeforeDeleteGameObject(GameObject obj)
+        {
+            // do nothing - bonuses generates only by server
         }
 
     }

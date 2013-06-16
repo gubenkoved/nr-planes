@@ -9,7 +9,7 @@ namespace NRPlanes.Core.Common
     public static class PhysicEngine
     {
         public static void UpdateMechanicalParameters(GameObject obj, TimeSpan elapsed)
-        {
+        {            
             double elapsedSeconds = elapsed.TotalSeconds;
 
             #region Position
@@ -17,7 +17,7 @@ namespace NRPlanes.Core.Common
 
             obj.Velocity += obj.Acceleration * elapsedSeconds;
 
-            obj.Acceleration = new Vector();
+            obj.Acceleration = Vector.Zero;
 
             obj.Affect(CalculateAirResistanceForce(obj), obj.Position);
             #endregion
@@ -29,7 +29,6 @@ namespace NRPlanes.Core.Common
             obj.RotationVelocity += obj.RotationAcceleration * elapsedSeconds;
 
             obj.RotationAcceleration = 0.0;
-
             obj.RotationAcceleration = CalculateAngularResistance(obj);
             #endregion
         }
@@ -86,7 +85,7 @@ namespace NRPlanes.Core.Common
             }
             else
             {
-                return new Vector();
+                return Vector.Zero;
             }
         }
 

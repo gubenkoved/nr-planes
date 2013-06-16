@@ -6,52 +6,65 @@ namespace NRPlanes.Client.Common
 {
     public class InstanceMapper
     {
-        private readonly PlanesGame _game;
-
-        private readonly CoordinatesTransformer _coordinatesTransformer;
-
-        private readonly Dictionary<Type, ConstructorInfo> _classMapDictionary;
+        private readonly PlanesGame m_game;
+        private readonly CoordinatesTransformer m_coordinatesTransformer;
+        private readonly Dictionary<Type, Tuple<ConstructorInfo, object[]>> m_classMapDictionary;
 
         public InstanceMapper(PlanesGame game, CoordinatesTransformer coordinatesTransformer)
         {
-            _game = game;
+            m_game = game;
 
-            _coordinatesTransformer = coordinatesTransformer;
+            m_coordinatesTransformer = coordinatesTransformer;
 
-            _classMapDictionary = new Dictionary<Type, ConstructorInfo>();
+            m_classMapDictionary = new Dictionary<Type, Tuple<ConstructorInfo, object[]>>();
         }
 
-        public void AddMapping(Type modelType, Type xnaType)
+        /// <summary>
+        /// Register model class -> drawable class mapping.
+        /// <para>Every drawable class constructor will be called with next parameters:</para>
+        /// <para>1. Planes game reference</para>
+        /// <para>2. Model object reference</para>
+        /// <para>3. Coordinates transformer reference</para>
+        /// <para>All other parameters (optional)</para>
+        /// </summary>
+        public void AddMapping(Type modelType, Type xnaType, object[] additionalCtorParams = null)
         {
-            var constructors = xnaType.GetConstructors();
+            if (additionalCtorParams == null)
+                additionalCtorParams = new object[0];
+
+            ConstructorInfo[] constructors = xnaType.GetConstructors();
 
             if (constructors.Length != 1)
                 throw new Exception("Xna UI classes must have ONLY ONE public constructor");
 
-            var constructor = constructors[0];
+            ConstructorInfo constructor = constructors[0];
 
-            _classMapDictionary.Add(modelType, constructor);
+            m_classMapDictionary.Add(modelType, new Tuple<ConstructorInfo, object[]>(constructor, additionalCtorParams));
         }
 
         public MyDrawableGameComponent CreateInstance(object modelObject)
         {
-            var modelObjType = modelObject.GetType();
+            Type modelObjType = modelObject.GetType();
 
-            if (!_classMapDictionary.ContainsKey(modelObjType))
+            if (!m_classMapDictionary.ContainsKey(modelObjType))
             {
                 throw new Exception("This model type not matched");
             }
 
-            var constructor = _classMapDictionary[modelObjType];
+            ConstructorInfo constructor = m_classMapDictionary[modelObjType].Item1;
+            object[] additionalParams = m_classMapDictionary[modelObjType].Item2;
 
-            var xnaObj = (MyDrawableGameComponent) constructor.Invoke(new object[]
-                                                                          {
-                                                                              _game,
-                                                                              modelObject,
-                                                                              _coordinatesTransformer
-                                                                          });
+            object[] parameters = new object[3 + additionalParams.Length];
+            parameters[0] = m_game;
+            parameters[1] = modelObject;
+            parameters[2] = m_coordinatesTransformer;
 
-            return xnaObj;
+            for (int i = 0; i < additionalParams.Length; i++)
+            {
+                parameters[i + 3] = additionalParams[i];
+            }
+
+            return (MyDrawableGameComponent)constructor.Invoke(parameters);
         }
     }
 }

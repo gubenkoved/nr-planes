@@ -122,6 +122,7 @@
     <Compile Include="Common\LayersDepths.cs" />
     <Compile Include="Common\MyDrawableGameComponent.cs" />
     <Compile Include="GameComponents\GeometryDrawer.cs" />
+    <Compile Include="GameComponents\BonusXna.cs" />
     <Compile Include="GameComponents\TrailDrawer.cs" />
     <Compile Include="Particles\ParticlesEmitterBase.cs" />
     <Compile Include="Particles\Particle.cs" />

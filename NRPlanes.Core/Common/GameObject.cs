@@ -1,12 +1,14 @@
 ﻿using System;
 using NRPlanes.Core.Primitives;
 using System.Runtime.Serialization;
+using NRPlanes.Core.Bonuses;
 
 namespace NRPlanes.Core.Common
 {
     [DataContract]
     [KnownType(typeof(Bullet))]
     [KnownType(typeof(Plane))]
+    [KnownType(typeof(Bonus))]
     public abstract class GameObject : IUpdatable, ICloneable
     {
         /// <summary>
@@ -100,6 +102,11 @@ namespace NRPlanes.Core.Common
         {
             PhysicEngine.ImpulseAffect(this, impulse, fulcrum);
         }
+
+        //public void Destruct()
+        //{
+        //    IsGarbage = true;
+        //}
 
         public virtual object Clone()
         {

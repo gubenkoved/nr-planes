@@ -6,22 +6,22 @@ namespace NRPlanes.Core.Primitives
     public class CircleGeometry : Geometry
     {
         [DataMember]
-        private double _radius;
+        private double m_radius;
         public double Radius
         {
             get
             {
-                return _radius;
+                return m_radius;
             }
         }
 
         [DataMember]
-        private Vector _center;
+        private Vector m_center;
         public override Vector Center
         {
             get
             {
-                return _center;
+                return m_center;
             }
         }
 
@@ -32,29 +32,26 @@ namespace NRPlanes.Core.Primitives
 
         public CircleGeometry(Vector center, double radius)
         {
-            _radius = radius;
+            m_radius = radius;
 
-            _center = center;
+            m_center = center;
         }
 
         public override void Translate(Vector translateVector)
         {
-            _center += translateVector;
+            m_center += translateVector;
         }
-
         public override void Rotate(double rotation)
         {
-            _center = _center.Rotate(rotation);
+            m_center = m_center.Rotate(rotation);
         }
-
         public override bool HitTest(Vector vector)
         {
             return (vector - Center).Length <= Radius;
         }
-
         public override Geometry Clone()
         {
-            return new CircleGeometry(_center, Radius);
+            return new CircleGeometry(m_center, Radius);
         }
     }
 }

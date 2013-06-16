@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using NRPlanes.Core.Primitives;
 using System.Runtime.Serialization;
+using NRPlanes.Core.Bonuses;
 
 namespace NRPlanes.Core.Common
 {
@@ -80,6 +81,10 @@ namespace NRPlanes.Core.Common
             {
                 Bullet bullet = (Bullet)obj;
                 bullet.IsGarbage = true;
+            }
+            else if (obj is Bonus)
+            {
+                ((Bonus)obj).Damage(Power);
             }
 
             IsGarbage = true;

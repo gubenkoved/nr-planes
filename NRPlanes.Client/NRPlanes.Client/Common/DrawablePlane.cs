@@ -10,7 +10,7 @@ namespace NRPlanes.Client.Common
 {
     public abstract class DrawablePlane : DrawableGameObject, IOnMinimapDrawable
     {
-        private Texture2D _minimapImage;
+        private Texture2D m_minimapTexture;
 
         public new Plane GameObject { get { return base.GameObject as Plane; } }
 
@@ -21,12 +21,12 @@ namespace NRPlanes.Client.Common
 
         public void DrawOnMinimap(GameTime gameTime, SpriteBatch minimapSpriteBatch, CoordinatesTransformer coordinatesTransformer)
         {
-            if (_minimapImage == null)
-                _minimapImage = Game.Content.Load<Texture2D>("Minimap/arrow");
+            if (m_minimapTexture == null)
+                m_minimapTexture = Game.Content.Load<Texture2D>("Minimap/arrow");
 
-            var origin = new Vector2(_minimapImage.Width / 2.0f, _minimapImage.Height / 2.0f);
+            var origin = new Vector2(m_minimapTexture.Width / 2.0f, m_minimapTexture.Height / 2.0f);
 
-            minimapSpriteBatch.Draw(_minimapImage,
+            minimapSpriteBatch.Draw(m_minimapTexture,
                                     coordinatesTransformer.Transform(GameObject.Position),
                                     null,
                                     Color.White,

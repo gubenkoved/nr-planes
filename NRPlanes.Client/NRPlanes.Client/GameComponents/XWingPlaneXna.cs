@@ -13,7 +13,7 @@ namespace NRPlanes.Client.GameComponents
     {
         public new XWingPlane GameObject { get { return base.GameObject as XWingPlane; } }
 
-        private Texture2D _texture;
+        private Texture2D m_texture;
 
         public XWingPlaneXna(PlanesGame game, XWingPlane xWingPlane, CoordinatesTransformer coordinatesTransformer)
             : base(game, xWingPlane, coordinatesTransformer)
@@ -22,15 +22,15 @@ namespace NRPlanes.Client.GameComponents
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (_texture == null)
-                _texture = Game.Content.Load<Texture2D>("Images/x_wing");
+            if (m_texture == null)
+                m_texture = Game.Content.Load<Texture2D>("Images/x_wing");
 
-            var origin = new Vector2(_texture.Width / 2.0f, _texture.Height / 2.0f);
+            var origin = new Vector2(m_texture.Width / 2.0f, m_texture.Height / 2.0f);
 
             var scaleVector = CoordinatesTransformer.CreateScaleVector(GameObject.RelativeGeometry.BoundingRectangle.Size,
-                                                                       new Size(_texture.Width, _texture.Height));
+                                                                       new Size(m_texture.Width, m_texture.Height));
 
-            spriteBatch.Draw(_texture,
+            spriteBatch.Draw(m_texture,
                              CoordinatesTransformer.Transform(GameObject.Position),
                              null,
                              Color.White,

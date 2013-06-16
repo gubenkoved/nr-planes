@@ -23,10 +23,17 @@ namespace NRPlanes.Core.Primitives
         {
             get { return Math.Sqrt(LengthSquared); }
         }
-
         public double LengthSquared
         {
             get { return X * X + Y * Y; }
+        }
+        
+        static public Vector Zero
+        {
+            get
+            {
+                return new Vector(0, 0);
+            }
         }
 
         /// <summary>
@@ -65,31 +72,31 @@ namespace NRPlanes.Core.Primitives
                 -X * sin + Y * cos);
         }        
 
-        public static Vector operator +(Vector v1, Vector v2)
+        static public Vector operator +(Vector v1, Vector v2)
         {
             return new Vector(v1.X + v2.X, v1.Y + v2.Y);
         }
-        public static Vector operator -(Vector v1, Vector v2)
+        static public Vector operator -(Vector v1, Vector v2)
         {
             return new Vector(v1.X - v2.X, v1.Y - v2.Y);
         }
-        public static Vector operator *(Vector v, double d)
+        static public Vector operator *(Vector v, double d)
         {
             return new Vector(d * v.X, d * v.Y);
         }
-        public static Vector operator *(double d, Vector v)
+        static public Vector operator *(double d, Vector v)
         {
             return v * d;
         }
-        public static double operator *(Vector v1, Vector v2)
+        static public double operator *(Vector v1, Vector v2)
         {
             return v1.X * v2.X + v1.Y * v2.Y;
         }
-        public static Vector operator /(Vector v, double d)
+        static public Vector operator /(Vector v, double d)
         {
             return new Vector(v.X / d, v.Y / d);
         }
-        public static Vector operator - (Vector v)
+        static public Vector operator - (Vector v)
         {
             return -1.0 * v;
         }
@@ -97,10 +104,8 @@ namespace NRPlanes.Core.Primitives
         /// <summary>
         /// Angle between vectors in degrees (-180; 180]
         /// </summary>
-        /// <param name="v1">First vector</param>
-        /// <param name="v2">Second vector</param>
         /// <returns>Value in range (-180; 180]</returns>
-        public static double AngleBetween(Vector v1, Vector v2)
+        static public double AngleBetween(Vector v1, Vector v2)
         {
             // from System.Windows AngleBetween
 

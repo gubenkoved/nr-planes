@@ -46,8 +46,9 @@
     <Compile Include="Aliens\BasicAliensAppearingStrategy.cs" />
     <Compile Include="Aliens\SingleAliensAppearingStrategy.cs" />
     <Compile Include="Bonuses\Bonus.cs" />
+    <Compile Include="Bonuses\HealthBonus.cs" />
+    <Compile Include="Bonuses\RandomBonus.cs" />
     <Compile Include="Bullets\LaserBullet.cs" />
-    <Compile Include="Common\Bonus.cs" />
     <Compile Include="Common\Bullet.cs" />
     <Compile Include="Common\Client\ClientGameWorld.cs" />
     <Compile Include="Common\Collision.cs" />
