@@ -25,21 +25,20 @@ namespace NRPlanes.Client.Sound
         /// <summary>
         /// This PlanesGame reference used to automate sound effects creation process
         /// </summary>
-        private readonly PlanesGame _game;
-
-        private readonly Func<Rect> _getVisibleRectangleDelegate;
+        private readonly PlanesGame m_game;
+        private readonly Func<Rect> m_getVisibleRectangleDelegate;
 
         /// <summary>
         /// Function delegate which takes visible rectangle and sound position and returns sound volume multiplier
         /// </summary>
-        private Func<Rect, Vector, float> _volumeEsimationFunction;
+        private Func<Rect, Vector, float> m_volumeEsimationFunction;
 
         private SoundManager(PlanesGame game, Func<Rect> getVisibleRectangleDelegate)
         {
-            _game = game;
-            _getVisibleRectangleDelegate = getVisibleRectangleDelegate;
+            m_game = game;
+            m_getVisibleRectangleDelegate = getVisibleRectangleDelegate;
 
-            _volumeEsimationFunction = (Rect visible, Vector position) =>
+            m_volumeEsimationFunction = (Rect visible, Vector position) =>
                 {
                     double distanceToCenterOfVisibleRect = (visible.Center - position).Length;
                     double halfDiagonalLen = new Vector(visible.Width, visible.Height).Length / 2;
@@ -54,20 +53,20 @@ namespace NRPlanes.Client.Sound
         /// <summary>
         /// Weak references is used to allow GC to garbage collect unnecessary sound effects 
         /// </summary>
-        private List<WeakReference> _registeredSounds = new List<WeakReference>();
+        private List<WeakReference> m_registeredSounds = new List<WeakReference>();
 
         /// <summary>
         /// Some of sound effects have to have GC root to prevent garbage collect because it have no other references.
         /// After playback sound will be removed from this collection
         /// </summary>
-        private List<BasicSoundEffect> _soundHardLinks = new List<BasicSoundEffect>();
+        private List<BasicSoundEffect> m_soundHardLinks = new List<BasicSoundEffect>();
 
         /// <summary>
         /// Only registered sounds will be controlled by Manager
         /// </summary>
         private void RegisterWeak(BasicSoundEffect effect)
         {
-            _registeredSounds.Add(new WeakReference(effect));
+            m_registeredSounds.Add(new WeakReference(effect));
 
             AdjustEffect(effect);
         }
@@ -77,25 +76,25 @@ namespace NRPlanes.Client.Sound
         /// </summary>
         private void RegisterHard(BasicSoundEffect effect)
         {
-            _soundHardLinks.Add(effect);
+            m_soundHardLinks.Add(effect);
         }
 
         private void AdjustEffect(BasicSoundEffect effect)
         {
-            Rect visibleRectange = _getVisibleRectangleDelegate();
+            Rect visibleRectange = m_getVisibleRectangleDelegate();
 
             if (effect.Position.HasValue)
-                effect.SoundVolumeMultiplier = _volumeEsimationFunction(visibleRectange, effect.Position.Value);
+                effect.SoundVolumeMultiplier = m_volumeEsimationFunction(visibleRectange, effect.Position.Value);
         }
 
         public void Update(TimeSpan elapsed)
         {
             #region Process weak references
-            for (int i = _registeredSounds.Count - 1; i >= 0; i--)
+            for (int i = m_registeredSounds.Count - 1; i >= 0; i--)
             {
-                if (_registeredSounds[i].IsAlive)
+                if (m_registeredSounds[i].IsAlive)
                 {
-                    var effect = (BasicSoundEffect)_registeredSounds[i].Target;
+                    var effect = (BasicSoundEffect)m_registeredSounds[i].Target;
 
                     if (effect is INeedToUpdate)
                         ((INeedToUpdate)effect).Update(elapsed);
@@ -104,16 +103,16 @@ namespace NRPlanes.Client.Sound
                 }
                 else
                 {
-                    _registeredSounds.RemoveAt(i);
+                    m_registeredSounds.RemoveAt(i);
                 }
             } 
             #endregion
 
             #region Process GC roots
-            for (int i = _soundHardLinks.Count - 1; i >= 0; i--)
+            for (int i = m_soundHardLinks.Count - 1; i >= 0; i--)
             {
-                if (_soundHardLinks[i].IsStopped)
-                    _soundHardLinks.RemoveAt(i);
+                if (m_soundHardLinks[i].IsStopped)
+                    m_soundHardLinks.RemoveAt(i);
             } 
             #endregion
         }
@@ -122,7 +121,7 @@ namespace NRPlanes.Client.Sound
         {
             string path = string.Format("Sounds/{0}", relativeSoundName);
 
-            var effect = new BasicSoundEffect(_game.Content.Load<SoundEffect>(path).CreateInstance());
+            var effect = new BasicSoundEffect(m_game.Content.Load<SoundEffect>(path).CreateInstance());
 
             RegisterWeak(effect);
 
@@ -137,7 +136,7 @@ namespace NRPlanes.Client.Sound
         {
             string path = string.Format("Sounds/{0}", relativeSoundName);
 
-            var effect = new FadeInOutSoundEffect(_game.Content.Load<SoundEffect>(path).CreateInstance(), fadeIn, fadeOut);
+            var effect = new FadeInOutSoundEffect(m_game.Content.Load<SoundEffect>(path).CreateInstance(), fadeIn, fadeOut);
 
             RegisterWeak(effect);
 

@@ -162,7 +162,8 @@ namespace NRPlanes.Client.Common
         {
             Collision collision = args.Collision;
 
-            if (collision.FirstObject is Bullet && collision.SecondObject is Bullet)
+            if (collision.CheckTypes(typeof(Bullet)) 
+                || collision.CheckTypes(typeof(Bullet), typeof(Bonus)))
             {
                 if (collision.FirstObject.IsGarbage)
                     AddExplosion(collision.FirstObject);
@@ -171,20 +172,16 @@ namespace NRPlanes.Client.Common
                     AddExplosion(collision.SecondObject);
             }
 
-            if (collision.FirstObject is Bullet && collision.SecondObject is Plane)
+            if (collision.CheckTypes(typeof(Bullet), typeof(Plane)))
             {
-                if (collision.FirstObject.IsGarbage)
+                if (collision.FirstObject is Bullet)
                     AddExplosion(collision.FirstObject);
-            }
-
-            if (collision.FirstObject is Plane && collision.SecondObject is Bullet)
-            {
-                if (collision.SecondObject.IsGarbage)
+                else
                     AddExplosion(collision.SecondObject);
-            }
+            }           
         }
         private void AddExplosion(GameObject exploded)
-        {            
+        {
             ExplosionXna explosion = new ExplosionXna(Game, exploded, m_coordinatesTransformer);
 
             m_safeDrawableGameComponents.Add(explosion);
@@ -196,6 +193,13 @@ namespace NRPlanes.Client.Common
             m_gameObjectMapping[gameObject] = xnaRelatedGameObject;
             
             m_safeDrawableGameComponents.Add(xnaRelatedGameObject);
+
+            if (gameObject is Bonus)
+            {
+                Bonus bonus = (Bonus)gameObject;
+
+                bonus.Applied += WhenBonusApplied;
+            }
 
             if (gameObject is IHaveEquipment)
             {
@@ -228,6 +232,16 @@ namespace NRPlanes.Client.Common
                 }
             }
         }
+        private void WhenBonusApplied(Bonus bonus, Plane plane)
+        {
+            if (bonus is HealthBonus)
+            {
+                BasicSoundEffect effect = m_soundManager.CreateBasicSoundEffect("health_bonus", true);
+                effect.Position = plane.Position;
+                effect.Play();
+            }
+        }
+
         private void AddEquipment(Equipment equipment)
         {
             var xnaRelatedEquipment = (DrawableEquipment)m_instanceMapper.CreateInstance(equipment);

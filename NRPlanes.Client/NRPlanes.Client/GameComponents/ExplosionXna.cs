@@ -7,6 +7,7 @@ using NRPlanes.Core.Primitives;
 using NRPlanes.Client.Sound;
 using NRPlanes.Core.Common;
 using NRPlanes.Client.Particles;
+using NRPlanes.Core.Bonuses;
 
 namespace NRPlanes.Client.GameComponents
 {
@@ -16,23 +17,38 @@ namespace NRPlanes.Client.GameComponents
 
         private ParticlesEmitterBase m_particlesEmitter;
         private const int PARTICLES_DENSITY = 20;
-        private int m_drawCount;
 
         //private AnimationSpriteDrawer m_animationSpriteDrawer;
         //private float m_angle;
         private Rect m_explosionPosition;
+        private GameObject m_exploded;
 
         public ExplosionXna(PlanesGame game, GameObject exploded, CoordinatesTransformer coordinatesTransformer)
             : base(game, coordinatesTransformer)
         {
-            //double explosionSideSize = Math.Max(10.0, exploded.RelativeGeometry.BoundingRectangle.LongSide * 5.0);            
-            m_explosionPosition = new Rect(exploded.Position, exploded.RelativeGeometry.BoundingRectangle.Size);            
+            m_exploded = exploded;
+            m_explosionPosition = new Rect(exploded.Position, exploded.RelativeGeometry.BoundingRectangle.Size);
 
-            m_particlesEmitter = new SymmetricParticlesEmitter(game.GameManager.GameWorldXna)
+            if (exploded is NRPlanes.Core.Common.Plane || exploded is Bullet)
             {
-                PositionDeviationRadius = m_explosionPosition.Width / 2,
-                VelocityDeviationRadius = 5
-            };
+                m_particlesEmitter = new SymmetricParticlesEmitter(game.GameManager.GameWorldXna)
+                {
+                    PositionDeviationRadius = m_explosionPosition.Width / 2,
+                    VelocityDeviationRadius = 5
+                };
+            }
+            else if (exploded is Bonus)
+            {
+                m_particlesEmitter = new SymmetricParticlesEmitter(game.GameManager.GameWorldXna)
+                {
+                    PositionDeviationRadius = m_explosionPosition.Width / 3,
+                    VelocityDeviationRadius = 20,
+                    RotationDeviation = 180,
+                    RotationVelocityDeviation = 60
+                };
+            }
+
+            
 
             BasicSoundEffect sound = null;
 
@@ -40,6 +56,8 @@ namespace NRPlanes.Client.GameComponents
                 sound = SoundManager.Instance.CreateBasicSoundEffect("plane_explosion");
             else if (exploded is Bullet)
                 sound = SoundManager.Instance.CreateBasicSoundEffect("bullet_explosion");
+            else if (exploded is Bonus)
+                sound = SoundManager.Instance.CreateBasicSoundEffect("debris_explosion");
 
             if (sound != null)
             {
@@ -54,33 +72,66 @@ namespace NRPlanes.Client.GameComponents
         {
             //var frameSize = new Size(320, 240);
 
-            if (m_drawCount++ == 0)
+            //if (m_drawCount++ == 0)
             {
-                m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
+                if (m_exploded is Bullet || m_exploded is NRPlanes.Core.Common.Plane)
                 {
-                    Color = Color.OrangeRed,
-                    Position = m_explosionPosition.Center,
-                    Size = new Size(3, 3),
-                    AlphaVelocity = -0.5f,
-                    TimeToLive = TimeSpan.FromSeconds(5),
-                    Velocity = Vector.Zero,
-                    Rotation = 0,
-                    Depth = LayersDepths.Explosion,
-                    SizeFactorVelocity = new Vector(0.3, 0.3)
-                }, (int)(m_explosionPosition.Area * Math.Pow(PARTICLES_DENSITY, 0.7)));
+                    m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
+                    {
+                        Color = Color.OrangeRed,
+                        Position = m_explosionPosition.Center,
+                        Size = new Size(3, 3),
+                        AlphaVelocity = -0.5f,
+                        TimeToLive = TimeSpan.FromSeconds(5),
+                        Velocity = Vector.Zero,
+                        Rotation = 0,
+                        Depth = LayersDepths.Explosion,
+                        SizeFactorVelocity = new Vector(0.3, 0.3)
+                    }, (int)(m_explosionPosition.Area * Math.Pow(PARTICLES_DENSITY, 0.7)));
 
-                m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
-                {
-                    Color = Color.OrangeRed,
-                    Position = m_explosionPosition.Center,
-                    Size = new Size(1, 1),
-                    AlphaVelocity = -0.9f,
-                    TimeToLive = TimeSpan.FromSeconds(5),
-                    Velocity = Vector.Zero,
-                    Rotation = 0,
-                    Depth = LayersDepths.Explosion,
-                    SizeFactorVelocity = new Vector(25, 25)
-                }, (int)(Math.Max(1, m_explosionPosition.Area * Math.Pow(PARTICLES_DENSITY, 0.3))));
+                    m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
+                    {
+                        Color = Color.OrangeRed,
+                        Position = m_explosionPosition.Center,
+                        Size = new Size(1, 1),
+                        AlphaVelocity = -0.9f,
+                        TimeToLive = TimeSpan.FromSeconds(5),
+                        Velocity = Vector.Zero,
+                        Rotation = 0,
+                        Depth = LayersDepths.Explosion,
+                        SizeFactorVelocity = new Vector(25, 25)
+                    }, (int)(Math.Max(1, m_explosionPosition.Area * Math.Pow(PARTICLES_DENSITY, 0.3))));
+                }
+                else if (m_exploded is Bonus)
+                {                    
+                    m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer, ParticleType.Debris)
+                    {
+                        Color = Color.Red,
+                        Position = m_explosionPosition.Center,
+                        Size = new Size(2, 2),
+                        AlphaVelocity = -0.5f,
+                        TimeToLive = TimeSpan.FromSeconds(5),
+                        Velocity = Vector.Zero,
+                        Rotation = 0,
+                        Depth = LayersDepths.Explosion,
+                        SizeFactorVelocity = new Vector(0.3, 0.3)
+                    }, (int)(m_explosionPosition.Area * Math.Pow(PARTICLES_DENSITY, 0.3)));
+
+                    m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
+                    {
+                        Color = Color.OrangeRed,
+                        Position = m_explosionPosition.Center,
+                        Size = new Size(1, 1),
+                        AlphaVelocity = -0.9f,
+                        TimeToLive = TimeSpan.FromSeconds(2),
+                        Velocity = Vector.Zero,
+                        Rotation = 0,
+                        Depth = LayersDepths.Explosion,
+                        SizeFactorVelocity = new Vector(25, 25)
+                    }, (int)(Math.Max(1, m_explosionPosition.Area * Math.Pow(PARTICLES_DENSITY, 0.3))));
+                }
+
+                IsGarbage = true;
             }
 
             //if (_animationSpriteDrawer == null)

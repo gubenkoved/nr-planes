@@ -9,7 +9,7 @@ namespace NRPlanes.Client.Sound
 {
     public class BasicSoundEffect
     {
-        private readonly SoundEffectInstance _sound;
+        private readonly SoundEffectInstance m_sound;
 
         /// <summary>
         /// Real sound source position. 
@@ -17,7 +17,7 @@ namespace NRPlanes.Client.Sound
         /// </summary>
         public Vector? Position { get; set; }
 
-        private float _soundVolumeMultiplier;
+        private float m_soundVolumeMultiplier;
         /// <summary>
         /// Usually adjusted by SoundManager.
         /// Affects on result sound volume
@@ -26,17 +26,17 @@ namespace NRPlanes.Client.Sound
         {
             get
             {
-                return _soundVolumeMultiplier;
+                return m_soundVolumeMultiplier;
             }
             set
             {
-                _soundVolumeMultiplier = value;
+                m_soundVolumeMultiplier = value;
 
                 UpdateRealVolume();
             }
         }
 
-        private float _volume;
+        private float m_volume;
         /// <summary>
         /// Value is [0; 1] which will be multiplied on SoundVolumeMultiplier to get result volume value
         /// </summary>
@@ -44,11 +44,11 @@ namespace NRPlanes.Client.Sound
         {
             get
             {
-                return _volume;
+                return m_volume;
             }
             set
             {
-                _volume = value;
+                m_volume = value;
 
                 UpdateRealVolume();
             }
@@ -58,43 +58,43 @@ namespace NRPlanes.Client.Sound
         {
             get
             {
-                return _sound.IsLooped;
+                return m_sound.IsLooped;
             }
             set
             {
-                _sound.IsLooped = value;
+                m_sound.IsLooped = value;
             }
         }
         public bool IsStopped
         {
             get
             {
-                return _sound.State == SoundState.Stopped;
+                return m_sound.State == SoundState.Stopped;
             }
         }
 
         public BasicSoundEffect(SoundEffectInstance sound)
         {
-            _sound = sound;
+            m_sound = sound;
 
-            _soundVolumeMultiplier = 1.0f;
-            _volume = 1.0f;
+            m_soundVolumeMultiplier = 1.0f;
+            m_volume = 1.0f;
         }
 
         public virtual void Play()
         {
             UpdateRealVolume();
 
-            _sound.Play();
+            m_sound.Play();
         }
         public virtual void Stop()
         {            
-            _sound.Stop();
+            m_sound.Stop();
         }
 
         private void UpdateRealVolume()
         {
-            _sound.Volume = Volume * SoundVolumeMultiplier;
+            m_sound.Volume = Volume * SoundVolumeMultiplier;
         }
     }
 }

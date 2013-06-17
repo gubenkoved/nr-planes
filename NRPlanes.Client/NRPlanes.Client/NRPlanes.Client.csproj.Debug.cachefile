@@ -44,3 +44,9 @@ Content\Other\line_3px.xnb
 Content\PlaneInfo\low_charge.xnb
 Content\Bonuses\bonus.xnb
 Content\Minimap\bonus.xnb
+Content\Particles\debris_1.xnb
+Content\Particles\debris_2.xnb
+Content\Particles\debris_3.xnb
+Content\Sounds\debris_explosion.xnb
+Content\Sounds\depth_explosion.xnb
+Content\Sounds\health_bonus.xnb

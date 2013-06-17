@@ -23,10 +23,10 @@ namespace NRPlanes.Core.Bonuses
             }
         }
 
-        public Bonus(Vector position, double health = 100)
+        public Bonus(Vector position, double health = 1000)
             :base(1, 1, null)
         {
-            m_health = 100;
+            m_health = health;
 
             Position = position;
             RelativeGeometry = new CircleGeometry(Vector.Zero, 5);
@@ -45,11 +45,17 @@ namespace NRPlanes.Core.Bonuses
         /// </summary>
         public void Apply(Plane plane)
         {
-            IsGarbage = true;
-
             ApplyImpl(plane);
+
+            if (Applied != null)
+                Applied.Invoke(this, plane);
+
+            IsGarbage = true;
         }
 
         protected abstract void ApplyImpl(Plane plane);
+
+        public delegate void BonusAppliedHandler(Bonus bonus, Plane plane);
+        public event BonusAppliedHandler Applied;
     }
 }

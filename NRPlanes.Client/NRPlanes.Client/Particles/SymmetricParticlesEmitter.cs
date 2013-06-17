@@ -19,6 +19,11 @@ namespace NRPlanes.Client.Particles
         /// </summary>
         public double RotationDeviation;
 
+        /// <summary>
+        /// Deviates rotation velocity property with +-RotationDeviation degrees/sec
+        /// </summary>
+        public double RotationVelocityDeviation;
+
         public double AlphaVelocityDeviationFactor;
 
         public SymmetricParticlesEmitter(GameWorldXna world)
@@ -37,6 +42,7 @@ namespace NRPlanes.Client.Particles
             particle.Position += GenerateRandomVectorWithRadius(PositionDeviationRadius);
             particle.Velocity += GenerateRandomVectorWithRadius(VelocityDeviationRadius);
             particle.Rotation += (m_random.NextDouble() - 0.5) * 2 * RotationDeviation;
+            particle.RotationVelocity += (m_random.NextDouble() - 0.5) * 2 * RotationVelocityDeviation;
 
             particle.AlphaVelocity *= 1 + 2 * (m_random.NextDouble() - 0.5) * AlphaVelocityDeviationFactor;
         }

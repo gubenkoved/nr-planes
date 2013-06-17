@@ -29,9 +29,12 @@ namespace NRPlanes.Client.GameComponents
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
+        {            
             Vector2 origin = new Vector2(m_texture.Width / 2.0f, m_texture.Height / 2.0f);
             Vector2 scaleVector = CoordinatesTransformer.CreateScaleVector(Bonus.RelativeGeometry.BoundingRectangle.Size, new Size(m_texture.Width, m_texture.Height));
+
+            // pulsation
+            scaleVector = Vector2.Multiply(scaleVector, (float)(1.0 + Math.Sin(gameTime.TotalGameTime.TotalSeconds * 5) / 10.0));
 
             spriteBatch.Draw(
                 m_texture,
@@ -61,6 +64,6 @@ namespace NRPlanes.Client.GameComponents
                                     1.0f,
                                     SpriteEffects.None,
                                     1.0f);
-        }
+        }        
     }
 }
