@@ -25,7 +25,7 @@ namespace NRPlanes.Client.GameComponents
         public LaserBulletXna(PlanesGame game, LaserBullet bullet, CoordinatesTransformer coordinatesTransformer)
             : base(game, bullet, coordinatesTransformer)
         {
-            var sound = SoundManager.Instance.CreateBasicSoundEffect("bullet_sound");
+            var sound = game.GameManager.GameWorldXna.SoundManager.CreateBasicSoundEffect("bullet_sound");
             sound.Position = bullet.Position;
             sound.Play();
 

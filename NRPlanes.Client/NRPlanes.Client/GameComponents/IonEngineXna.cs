@@ -21,7 +21,7 @@ namespace NRPlanes.Client.GameComponents
         public IonEngineXna(PlanesGame game, IonEngine ionEngine, CoordinatesTransformer coordinatesTransformer)
             : base(game, ionEngine, coordinatesTransformer)
         {
-            m_workSoundEffect = SoundManager.Instance.CreateFadeInOutSoundEffect("deflecting_engine_work",
+            m_workSoundEffect = game.GameManager.GameWorldXna.SoundManager.CreateFadeInOutSoundEffect("deflecting_engine_work",
                 TimeSpan.FromSeconds(0.4), TimeSpan.FromSeconds(0.1));
 
             m_particlesEmitter = new AsymmetricParticlesEmitter(game.GameManager.GameWorldXna)

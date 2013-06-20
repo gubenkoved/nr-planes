@@ -21,7 +21,7 @@ namespace NRPlanes.Client.GameComponents
         public RocketEngineXna(PlanesGame game, RocketEngine rocketEngine, CoordinatesTransformer coordinatesTransformer)
             : base(game, rocketEngine, coordinatesTransformer)
         {
-            m_workSoundEffect = SoundManager.Instance.CreateFadeInOutSoundEffect("engine_work", 
+            m_workSoundEffect = game.GameManager.GameWorldXna.SoundManager.CreateFadeInOutSoundEffect("engine_work", 
                 TimeSpan.FromSeconds(0.4), TimeSpan.FromSeconds(0.1));
 
             m_particlesEmitter = new AsymmetricParticlesEmitter(game.GameManager.GameWorldXna)

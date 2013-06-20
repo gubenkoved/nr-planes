@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NRPlanes.Client.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
+using NRPlanes.Client.Common;
 using NRPlanes.Client.InfoPanels;
 using NRPlanes.Core.Bonuses;
 using NRPlanes.Core.Primitives;
+using NRPlanes.Client.Sound;
+using NRPlanes.Client.Particles;
 
 namespace NRPlanes.Client.GameComponents
 {
@@ -19,13 +22,26 @@ namespace NRPlanes.Client.GameComponents
         public Color Color { get; private set; }
         public Bonus Bonus { get; private set; }
 
+        private SymmetricParticlesEmitter m_emitter;
+
+        private const int PARTICLES_DENSITY = 10;
+
         public BonusXna(PlanesGame game, Bonus bonus, CoordinatesTransformer coordinatesTransformer, Color color, Texture2D texture)
             :base(game, bonus, coordinatesTransformer)
         {
+            bonus.Applied += WhenBonusApplied;
+
             Bonus = bonus;
             Color = color;
 
             m_texture = texture;
+
+            m_emitter = new SymmetricParticlesEmitter(game.GameManager.GameWorldXna)
+            {
+                PositionDeviationRadius = Bonus.RelativeGeometry.BoundingRectangle.LongSide * 2.0 / 3.0,
+                VelocityDeviationRadius = 10,
+                AlphaVelocityDeviationFactor = 0.3
+            };
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -64,6 +80,26 @@ namespace NRPlanes.Client.GameComponents
                                     1.0f,
                                     SpriteEffects.None,
                                     1.0f);
-        }        
+        }
+
+        private void WhenBonusApplied(Bonus bonus, NRPlanes.Core.Common.Plane plane)
+        {
+            if (bonus is HealthBonus)
+            {
+                BasicSoundEffect effect = Game.GameManager.GameWorldXna.SoundManager.CreateBasicSoundEffect("health_bonus", true);
+                effect.Position = plane.Position;
+                effect.Play();
+
+                m_emitter.Emit(new Particle(Game, CoordinatesTransformer, ParticleType.Cross)
+                {
+                    Color = Color.Red,
+                    Position = bonus.Position,
+                    Size = new Size(2, 2),
+                    AlphaVelocity = -0.3f,
+                    TimeToLive = TimeSpan.FromSeconds(5),
+                    Depth = LayersDepths.BonusesParticles,                    
+                }, (int)(Math.Max(1, bonus.RelativeGeometry.BoundingRectangle.Area * Math.Pow(PARTICLES_DENSITY, 0.3))));
+            }
+        }
     }
 }

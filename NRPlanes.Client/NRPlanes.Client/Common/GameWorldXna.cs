@@ -59,6 +59,13 @@ namespace NRPlanes.Client.Common
 
         private readonly InstanceMapper m_instanceMapper;        
         private readonly SoundManager m_soundManager;
+        public SoundManager SoundManager
+        {
+            get
+            {
+                return m_soundManager;
+            }
+        }
 
         private RenderTarget2D m_lastFrameRenderTarget;
 
@@ -99,7 +106,7 @@ namespace NRPlanes.Client.Common
             m_gameObjectMapping = new Dictionary<GameObject, DrawableGameObject>();
             m_equipmentMapping = new Dictionary<Equipment, DrawableEquipment>();
 
-            m_soundManager = SoundManager.CreateInstance(game, () => m_coordinatesTransformer.VisibleLogicalRectangle);
+            m_soundManager = new SoundManager(game, () => m_coordinatesTransformer.VisibleLogicalRectangle);
 
             m_lastFrameRenderTarget = new RenderTarget2D(game.Graphics.GraphicsDevice,
                 game.Graphics.PreferredBackBufferWidth, game.Graphics.PreferredBackBufferHeight,
@@ -194,13 +201,6 @@ namespace NRPlanes.Client.Common
             
             m_safeDrawableGameComponents.Add(xnaRelatedGameObject);
 
-            if (gameObject is Bonus)
-            {
-                Bonus bonus = (Bonus)gameObject;
-
-                bonus.Applied += WhenBonusApplied;
-            }
-
             if (gameObject is IHaveEquipment)
             {
                 foreach (var equipment in (gameObject as IHaveEquipment).AllEquipment)
@@ -230,15 +230,6 @@ namespace NRPlanes.Client.Common
                 {
                     DeleteEquipment(equipment);
                 }
-            }
-        }
-        private void WhenBonusApplied(Bonus bonus, Plane plane)
-        {
-            if (bonus is HealthBonus)
-            {
-                BasicSoundEffect effect = m_soundManager.CreateBasicSoundEffect("health_bonus", true);
-                effect.Position = plane.Position;
-                effect.Play();
             }
         }
 

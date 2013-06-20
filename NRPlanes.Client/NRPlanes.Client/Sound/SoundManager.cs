@@ -8,20 +8,10 @@ using NRPlanes.Core.Primitives;
 namespace NRPlanes.Client.Sound
 {
     /// <summary>
-    /// Manages the playback of sounds (such as volume).
-    /// This class designed as singletone to grant access from any part of client and there is no need to have multiply instance
+    /// Manages the playback of sounds (such as volume).    
     /// </summary>
     public class SoundManager
     {
-        public static SoundManager Instance {get; private set;}
-
-        public static SoundManager CreateInstance(PlanesGame game, Func<Rect> getVisibleRectangleDelegate)
-        {
-            Instance = new SoundManager(game, getVisibleRectangleDelegate);
-
-            return Instance;
-        }
-
         /// <summary>
         /// This PlanesGame reference used to automate sound effects creation process
         /// </summary>
@@ -33,7 +23,7 @@ namespace NRPlanes.Client.Sound
         /// </summary>
         private Func<Rect, Vector, float> m_volumeEsimationFunction;
 
-        private SoundManager(PlanesGame game, Func<Rect> getVisibleRectangleDelegate)
+        public SoundManager(PlanesGame game, Func<Rect> getVisibleRectangleDelegate)
         {
             m_game = game;
             m_getVisibleRectangleDelegate = getVisibleRectangleDelegate;

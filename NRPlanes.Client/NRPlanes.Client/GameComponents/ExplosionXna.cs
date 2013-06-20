@@ -48,16 +48,14 @@ namespace NRPlanes.Client.GameComponents
                 };
             }
 
-            
-
             BasicSoundEffect sound = null;
 
             if (exploded is NRPlanes.Core.Common.Plane)
-                sound = SoundManager.Instance.CreateBasicSoundEffect("plane_explosion");
+                sound = game.GameManager.GameWorldXna.SoundManager.CreateBasicSoundEffect("plane_explosion");
             else if (exploded is Bullet)
-                sound = SoundManager.Instance.CreateBasicSoundEffect("bullet_explosion");
+                sound = game.GameManager.GameWorldXna.SoundManager.CreateBasicSoundEffect("bullet_explosion");
             else if (exploded is Bonus)
-                sound = SoundManager.Instance.CreateBasicSoundEffect("debris_explosion");
+                sound = game.GameManager.GameWorldXna.SoundManager.CreateBasicSoundEffect("debris_explosion");
 
             if (sound != null)
             {
