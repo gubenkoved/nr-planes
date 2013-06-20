@@ -2,6 +2,7 @@
 using NRPlanes.Core.Primitives;
 using System.Runtime.Serialization;
 using NRPlanes.Core.Bonuses;
+using NRPlanes.Core.Bullets;
 
 namespace NRPlanes.Core.Common
 {

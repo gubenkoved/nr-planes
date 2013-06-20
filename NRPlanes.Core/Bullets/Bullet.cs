@@ -3,8 +3,9 @@ using System.Diagnostics;
 using NRPlanes.Core.Primitives;
 using System.Runtime.Serialization;
 using NRPlanes.Core.Bonuses;
+using NRPlanes.Core.Common;
 
-namespace NRPlanes.Core.Common
+namespace NRPlanes.Core.Bullets
 {
     [DataContract]
     [KnownType(typeof(Bullets.LaserBullet))]
@@ -28,9 +29,12 @@ namespace NRPlanes.Core.Common
         [DataMember]
         public Vector? StartPosition { get; protected set; }
 
-        public static Bullet Prototype()
+        public static Bullet Default
         {
-            throw new InvalidOperationException("Must be hided by derivative class");
+            get
+            {
+                throw new InvalidOperationException("Must be hided by derivative class");
+            }
         }
 
         protected Bullet(double mass, double angularMass, ReferenceArea referenceArea, double power, TimeSpan timeToLive)

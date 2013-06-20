@@ -4,6 +4,9 @@ using System.Reflection;
 
 namespace NRPlanes.Client.Common
 {
+    /// <summary>
+    /// Every game world essence (GameObject-derived, Equipment-derived classes) that should be drawn have to be mapped to some MyDrawableGameComponent-derived class
+    /// </summary>
     public class InstanceMapper
     {
         private readonly PlanesGame m_game;
@@ -13,9 +16,7 @@ namespace NRPlanes.Client.Common
         public InstanceMapper(PlanesGame game, CoordinatesTransformer coordinatesTransformer)
         {
             m_game = game;
-
             m_coordinatesTransformer = coordinatesTransformer;
-
             m_classMapDictionary = new Dictionary<Type, Tuple<ConstructorInfo, object[]>>();
         }
 

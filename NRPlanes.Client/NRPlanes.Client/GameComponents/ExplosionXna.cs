@@ -8,6 +8,7 @@ using NRPlanes.Client.Sound;
 using NRPlanes.Core.Common;
 using NRPlanes.Client.Particles;
 using NRPlanes.Core.Bonuses;
+using NRPlanes.Core.Bullets;
 
 namespace NRPlanes.Client.GameComponents
 {

@@ -49,7 +49,8 @@
     <Compile Include="Bonuses\HealthBonus.cs" />
     <Compile Include="Bonuses\RandomBonus.cs" />
     <Compile Include="Bullets\LaserBullet.cs" />
-    <Compile Include="Common\Bullet.cs" />
+    <Compile Include="Bullets\Rocket.cs" />
+    <Compile Include="Bullets\Bullet.cs" />
     <Compile Include="Common\Client\ClientGameWorld.cs" />
     <Compile Include="Common\Collision.cs" />
     <Compile Include="Common\CollisionEventArgs.cs" />
@@ -75,8 +76,8 @@
     <Compile Include="Equipments\WeaponPosition.cs" />
     <Compile Include="Controllers\AlienPlaneController.cs" />
     <Compile Include="Controllers\PlaneControllerBase.cs" />
-    <Compile Include="Engines\IonEngine.cs" />
-    <Compile Include="Engines\RocketEngine.cs" />
+    <Compile Include="Equipments\Engines\IonEngine.cs" />
+    <Compile Include="Equipments\Engines\RocketEngine.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Planes\XWingPlane.cs" />
     <Compile Include="Primitives\CircleGeometry.cs" />
@@ -94,10 +95,9 @@
     <Compile Include="StaticObjects\HealthRecoveryPlanet.cs" />
     <Compile Include="StaticObjects\Planet.cs" />
     <Compile Include="StaticObjects\RectangleGravityField.cs" />
-    <Compile Include="Weapons\LaserGun.cs" />
-    <Compile Include="Weapons\RocketGun.cs" />
+    <Compile Include="Equipments\Weapons\LaserGun.cs" />
+    <Compile Include="Equipments\Weapons\RocketGun.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
   </ItemGroup>

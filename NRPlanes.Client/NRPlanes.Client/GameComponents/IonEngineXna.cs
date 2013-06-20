@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using NRPlanes.Client.Common;
-using NRPlanes.Core.Engines;
+using NRPlanes.Core.Equipments.Engines;
 using NRPlanes.Client.Sound;
 using NRPlanes.Client.Particles;
 

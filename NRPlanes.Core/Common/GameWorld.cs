@@ -8,6 +8,7 @@ using NRPlanes.Core.Controllers;
 using NRPlanes.Core.Aliens;
 using NRPlanes.Core.Logging;
 using NRPlanes.Core.Bonuses;
+using NRPlanes.Core.Bullets;
 
 namespace NRPlanes.Core.Common
 {
@@ -166,7 +167,7 @@ namespace NRPlanes.Core.Common
                 var a = collision.FirstObject;
                 var b = collision.SecondObject;
 
-                if (a is Bullet || b is Bullet)
+                if (collision.CheckTypesBoth(typeof(Bullet), typeof(GameObject)))
                 {
                     Bullet bullet = a is Bullet ? (Bullet)a : (Bullet)b;
                     GameObject obj = a is Bullet ? b : a;
@@ -174,7 +175,7 @@ namespace NRPlanes.Core.Common
                     bullet.CollideWith(obj);
                 }
 
-                if (a is Bonus && b is Plane || b is Bonus && a is Plane)
+                if (collision.CheckTypesBoth(typeof(Bonus), typeof(Plane)))
                 {
                     Bonus bonus = a is Bonus ? (Bonus)a : (Bonus)b;
                     Plane plane = a is Bonus ? (Plane)b : (Plane)a;

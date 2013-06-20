@@ -2,8 +2,8 @@
 using NRPlanes.Core.Primitives;
 using NRPlanes.Core.Bullets;
 using NRPlanes.Core.Common;
-using NRPlanes.Core.Engines;
-using NRPlanes.Core.Weapons;
+using NRPlanes.Core.Equipments.Engines;
+using NRPlanes.Core.Equipments.Weapons;
 using System.Runtime.Serialization;
 using NRPlanes.Core.Equipments;
 

@@ -3,7 +3,7 @@ using NRPlanes.Core.Common;
 using System.Runtime.Serialization;
 using NRPlanes.Core.Equipments;
 
-namespace NRPlanes.Core.Engines
+namespace NRPlanes.Core.Equipments.Engines
 {
     [DataContract]
     public class IonEngine : Engine

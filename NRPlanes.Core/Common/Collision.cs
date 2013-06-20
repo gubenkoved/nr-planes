@@ -19,7 +19,7 @@ namespace NRPlanes.Core.Common
         /// <summary>
         /// Returns true when collided object has specified types
         /// </summary>
-        public bool CheckTypes(Type type1, Type type2)
+        public bool CheckTypesBoth(Type type1, Type type2)
         {
             return type1.IsInstanceOfType(FirstObject) && type2.IsInstanceOfType(SecondObject)
                 || type2.IsInstanceOfType(FirstObject) && type1.IsInstanceOfType(SecondObject);
@@ -27,7 +27,7 @@ namespace NRPlanes.Core.Common
         /// <summary>
         /// Returns true when both collided object has specified types
         /// </summary>
-        public bool CheckTypes(Type type)
+        public bool CheckTypesBoth(Type type)
         {
             return type.IsInstanceOfType(FirstObject) && type.IsInstanceOfType(SecondObject);                
         }

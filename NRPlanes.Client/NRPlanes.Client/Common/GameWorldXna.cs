@@ -11,10 +11,10 @@ using Microsoft.Xna.Framework.Input;
 using NRPlanes.Client.GameComponents;
 using NRPlanes.Core.Bullets;
 using NRPlanes.Core.Common;
-using NRPlanes.Core.Engines;
+using NRPlanes.Core.Equipments.Engines;
 using NRPlanes.Core.Planes;
 using NRPlanes.Core.StaticObjects;
-using NRPlanes.Core.Weapons;
+using NRPlanes.Core.Equipments.Weapons;
 using NRPlanes.Client.Sound;
 using System.Threading;
 using System.Collections.Concurrent;
@@ -170,8 +170,8 @@ namespace NRPlanes.Client.Common
         {
             Collision collision = args.Collision;
 
-            if (collision.CheckTypes(typeof(Bullet)) 
-                || collision.CheckTypes(typeof(Bullet), typeof(Bonus)))
+            if (collision.CheckTypesBoth(typeof(Bullet)) 
+                || collision.CheckTypesBoth(typeof(Bullet), typeof(Bonus)))
             {
                 if (collision.FirstObject.IsGarbage)
                     AddExplosion(collision.FirstObject);
@@ -180,7 +180,7 @@ namespace NRPlanes.Client.Common
                     AddExplosion(collision.SecondObject);
             }
 
-            if (collision.CheckTypes(typeof(Bullet), typeof(Plane)))
+            if (collision.CheckTypesBoth(typeof(Bullet), typeof(Plane)))
             {
                 if (collision.FirstObject is Bullet)
                     AddExplosion(collision.FirstObject);

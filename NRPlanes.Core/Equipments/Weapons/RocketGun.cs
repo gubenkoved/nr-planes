@@ -6,8 +6,9 @@ using NRPlanes.Core.Common;
 using System.Runtime.Serialization;
 using NRPlanes.Core.Primitives;
 using NRPlanes.Core.Equipments;
+using NRPlanes.Core.Bullets;
 
-namespace NRPlanes.Core.Weapons
+namespace NRPlanes.Core.Equipments.Weapons
 {
     [DataContract]
     public class RocketGun : Weapon

@@ -8,18 +8,20 @@ namespace NRPlanes.Core.Bullets
     [DataContract]
     public class LaserBullet : Bullet
     {
-        public new static LaserBullet Prototype()
+        public static LaserBullet Default
         {
-            return Prototype(5.0, 10.0, 20.0, TimeSpan.FromSeconds(20.0));
-        }
+            get
+            {
+                return new LaserBullet(
+                    mass: 5.0,
+                    angularMass: 10.0,
+                    power: 20.0,
+                    timeToLive: TimeSpan.FromSeconds(20.0));
+            }
+        }        
 
-        public static LaserBullet Prototype(double mass, double angularMass, double power, TimeSpan timeToLive)
-        {
-            return new LaserBullet(mass, angularMass, new ReferenceArea(0.0), power, timeToLive);
-        }
-
-        public LaserBullet(double mass, double angularMass, ReferenceArea referenceArea, double power, TimeSpan timeToLive)
-            : base(mass, angularMass, referenceArea, power, timeToLive)
+        private LaserBullet(double mass, double angularMass, double power, TimeSpan timeToLive)
+            : base(mass, angularMass, new ReferenceArea(0.0), power, timeToLive)
         {
             const double radius = 0.35;
 
@@ -33,5 +35,7 @@ namespace NRPlanes.Core.Bullets
                                                    new Vector(-radius, -radius)
                                                });
         }
+
+        
     }
 }

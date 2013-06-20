@@ -1,8 +1,9 @@
 ﻿using System;
 using NRPlanes.Core.Primitives;
 using System.Runtime.Serialization;
-using NRPlanes.Core.Weapons;
+using NRPlanes.Core.Equipments.Weapons;
 using NRPlanes.Core.Common;
+using NRPlanes.Core.Bullets;
 
 namespace NRPlanes.Core.Equipments
 {

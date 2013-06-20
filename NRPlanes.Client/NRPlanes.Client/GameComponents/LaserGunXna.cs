@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using NRPlanes.Client.Common;
 using NRPlanes.Core.Common;
 using NRPlanes.Core.Planes;
-using NRPlanes.Core.Weapons;
+using NRPlanes.Core.Equipments.Weapons;
 using NRPlanes.Client.Particles;
 
 namespace NRPlanes.Client.GameComponents
