@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NRPlanes.Core.Common;
 using NRPlanes.Core.Primitives;
+using NRPlanes.Core.Equipments;
 
 namespace NRPlanes.Core.Controllers
 {
@@ -23,7 +24,7 @@ namespace NRPlanes.Core.Controllers
         public override void Update(TimeSpan elapsed)
         {
             // disable previous motions
-            ControlledPlane.EndMotion(MotionType.All);
+            ControlledPlane.EndMotion(PlaneMotionType.All);
 
             Plane nearestPlayer = FindNearestPlayersPlane();
 
@@ -35,11 +36,11 @@ namespace NRPlanes.Core.Controllers
 
             if (rotationDelta > 180) // rotate through left side
             {
-                ControlledPlane.StartMotion(MotionType.Left);                
+                ControlledPlane.StartMotion(PlaneMotionType.Left);                
             }
             else
             {
-                ControlledPlane.StartMotion(MotionType.Right);
+                ControlledPlane.StartMotion(PlaneMotionType.Right);
             }
 
             // when player too close and angle deviation too small
@@ -52,7 +53,7 @@ namespace NRPlanes.Core.Controllers
             }
             else
             {
-                ControlledPlane.StartMotion(MotionType.Forward);
+                ControlledPlane.StartMotion(PlaneMotionType.Forward);
             }
         }
 

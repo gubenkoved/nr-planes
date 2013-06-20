@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using NRPlanes.Core.Common;
+using NRPlanes.Core.Equipments;
 
 namespace NRPlanes.Client.Common
 {

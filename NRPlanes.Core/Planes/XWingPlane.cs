@@ -5,6 +5,7 @@ using NRPlanes.Core.Common;
 using NRPlanes.Core.Engines;
 using NRPlanes.Core.Weapons;
 using System.Runtime.Serialization;
+using NRPlanes.Core.Equipments;
 
 namespace NRPlanes.Core.Planes
 {
@@ -55,58 +56,46 @@ namespace NRPlanes.Core.Planes
                                                            new Vector(-0.5, -0.6)
                                                        });
 
-            m_leftForwardEngine = new RocketEngine(new Vector(-1.55, -6.6), 5, 200000.0) { Info = "Left primary engine" };
-            m_rightForwardEngine = new RocketEngine(new Vector(+1.55, -6.6), -5, 200000.0) { Info = "Right primary engine"};
+            m_leftForwardEngine = new RocketEngine(200000.0) { Info = "Left primary engine" };
+            m_rightForwardEngine = new RocketEngine(200000.0) { Info = "Right primary engine"};
 
-            m_leftDeflectingEngine = new IonEngine(new Vector(+0.6, 2.8), -80, 50000.0) { Info = "Left deflector"};
-            m_rightDeflectingEngine = new IonEngine(new Vector(-0.6, 2.8), 80, 50000.0) { Info = "Right deflector"};
+            m_leftDeflectingEngine = new IonEngine(50000.0) { Info = "Left deflector"};
+            m_rightDeflectingEngine = new IonEngine(50000.0) { Info = "Right deflector"};
 
-            Weapon leftLaserGun = new LaserGun(new Vector(-1.5, -0.4),
-                                            0,
-                                            TimeSpan.FromMilliseconds(120),
-                                            100.0,
-                                            30,
-                                            1.0,
-                                            LaserBullet.Prototype(),
-                                            new Vector(0.0, 1.5)) {Info = "Left laser gun"};
+            Weapon leftLaserGun = LaserGun.CreateDefault();
+            leftLaserGun.Info = "Left laser gun";
 
-            Weapon rightLaserGun = new LaserGun(new Vector(1.5, -0.4),
-                                             0,
-                                             TimeSpan.FromMilliseconds(120),
-                                             100.0,
-                                             30,
-                                             1.0,
-                                             LaserBullet.Prototype(),
-                                             new Vector(0.0, 1.5)) { Info = "Right laser gun" };
+            Weapon rightLaserGun = LaserGun.CreateDefault();
+            rightLaserGun.Info = "Right laser gun";
 
             Shield shield = new Shield(10.0, 0.5, 1.0, 0.03) { Info = "Shield" };
 
-            AddEquipment(m_leftForwardEngine);
-            AddEquipment(m_rightForwardEngine);
-            AddEquipment(m_leftDeflectingEngine);
-            AddEquipment(m_rightDeflectingEngine);
+            AddEquipment(m_leftForwardEngine, new PlaneEquipmentRelativeInfo() { RelativeToOriginPosition = new Vector(-1.55, -6.6), RelativeRotation = 5 });
+            AddEquipment(m_rightForwardEngine, new PlaneEquipmentRelativeInfo() { RelativeToOriginPosition = new Vector(+1.55, -6.6), RelativeRotation = -5 });
+            AddEquipment(m_leftDeflectingEngine, new PlaneEquipmentRelativeInfo() { RelativeToOriginPosition = new Vector(+0.6, 2.8), RelativeRotation = -80 });
+            AddEquipment(m_rightDeflectingEngine, new PlaneEquipmentRelativeInfo() { RelativeToOriginPosition = new Vector(-0.6, 2.8), RelativeRotation = 80 });
 
-            AddWeapon(leftLaserGun, WeaponPosition.LeftFront);
-            AddWeapon(rightLaserGun, WeaponPosition.RightFront);
+            AddEquipment(leftLaserGun, new PlaneWeaponRelativeInfo() { WeaponPosition = WeaponPosition.LeftFront, RelativeToOriginPosition = new Vector(-1.5, -0.4), RelativeRotation = 0 });
+            AddEquipment(rightLaserGun, new PlaneWeaponRelativeInfo() { WeaponPosition = WeaponPosition.LeftFront, RelativeToOriginPosition = new Vector(1.5, -0.4), RelativeRotation = 0 });
 
-            AddEquipment(shield);
+            AddEquipment(shield, new PlaneEquipmentRelativeInfo());
         }
 
-        public override void StartMotion(MotionType motion)
+        public override void StartMotion(PlaneMotionType motion)
         {
             switch (motion)
             {
-                case MotionType.Forward:
+                case PlaneMotionType.Forward:
                     m_leftForwardEngine.TurnOn();
                     m_rightForwardEngine.TurnOn();
                     break;
-                case MotionType.Left:
+                case PlaneMotionType.Left:
                     m_leftDeflectingEngine.TurnOn();
                     break;
-                case MotionType.Right:
+                case PlaneMotionType.Right:
                     m_rightDeflectingEngine.TurnOn();
                     break;
-                case MotionType.All:
+                case PlaneMotionType.All:
                     m_leftForwardEngine.TurnOn();
                     m_rightForwardEngine.TurnOn();
                     m_leftDeflectingEngine.TurnOn();
@@ -117,21 +106,21 @@ namespace NRPlanes.Core.Planes
             }
         }
 
-        public override void EndMotion(MotionType motion)
+        public override void EndMotion(PlaneMotionType motion)
         {
             switch (motion)
             {
-                case MotionType.Forward:
+                case PlaneMotionType.Forward:
                     m_leftForwardEngine.TurnOff();
                     m_rightForwardEngine.TurnOff();
                     break;
-                case MotionType.Left:
+                case PlaneMotionType.Left:
                     m_leftDeflectingEngine.TurnOff();
                     break;
-                case MotionType.Right:
+                case PlaneMotionType.Right:
                     m_rightDeflectingEngine.TurnOff();
                     break;
-                case MotionType.All:
+                case PlaneMotionType.All:
                     m_leftForwardEngine.TurnOff();
                     m_rightForwardEngine.TurnOff();
                     m_leftDeflectingEngine.TurnOff();

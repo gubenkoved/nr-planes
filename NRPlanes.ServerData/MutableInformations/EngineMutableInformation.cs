@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using NRPlanes.Core.Common;
+using NRPlanes.Core.Equipments;
 
 namespace NRPlanes.ServerData.MutableInformations
 {

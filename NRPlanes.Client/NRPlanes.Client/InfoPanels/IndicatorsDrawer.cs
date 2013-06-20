@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using NRPlanes.Core.Common;
 using System;
+using NRPlanes.Core.Equipments;
 
 namespace NRPlanes.Client.InfoPanels
 {

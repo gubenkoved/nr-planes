@@ -22,6 +22,7 @@ using NRPlanes.Client.Particles;
 
 using Plane = NRPlanes.Core.Common.Plane;
 using NRPlanes.Core.Bonuses;
+using NRPlanes.Core.Equipments;
 
 namespace NRPlanes.Client.Common
 {

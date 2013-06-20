@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using NRPlanes.Core.Equipments;
+using NRPlanes.Core.Primitives;
 
 namespace NRPlanes.Core.Common
 {
-    public enum MotionType
-    {
-        Forward,
-        Left,
-        Right,
-        All
-    }
-
     [DataContract]
     [KnownType(typeof(Planes.XWingPlane))]
     public abstract class Plane : GameObject, IHaveEquipment<PlaneEquipment>
@@ -42,61 +36,69 @@ namespace NRPlanes.Core.Common
         }
 
         [DataMember]
-        private List<PlaneEquipment> m_allEquipment;
-        public IEnumerable<PlaneEquipment> AllEquipment
+        private Dictionary<PlaneEquipmentRelativeInfo, PlaneEquipment> m_allEquipment;
+        public IDictionary<PlaneEquipmentRelativeInfo, PlaneEquipment> AllEquipment
         {
             get { return m_allEquipment; }
+        }
+        IEnumerable<PlaneEquipment> IHaveEquipment<PlaneEquipment>.AllEquipment
+        {
+            get { return m_allEquipment.Values; }
         }
         IEnumerable<Equipment> IHaveEquipment.AllEquipment
         {
-            get { return m_allEquipment; }
+            get { return m_allEquipment.Values; }
         }
-
-        [DataMember]
-        private Dictionary<WeaponPosition, Weapon> m_weapons;
-        public IDictionary<WeaponPosition, Weapon> Weapons;
 
         protected Plane(double mass, double angularMass, ReferenceArea referenceArea, double maxHealth)
             : base(mass, angularMass, referenceArea)
         {
-            m_allEquipment = new List<PlaneEquipment>();
-            m_weapons = new Dictionary<WeaponPosition, Weapon>();
+            m_allEquipment = new Dictionary<PlaneEquipmentRelativeInfo, PlaneEquipment>();
 
             MaximalHealth = maxHealth;
             Health = MaximalHealth / 2.0;
         }
 
-        protected void AddEquipment(PlaneEquipment equipment)
+        protected void AddEquipment(PlaneEquipment equipment, PlaneEquipmentRelativeInfo relInfo)
         {
             equipment.RelatedGameObject = this;
             equipment.Id = m_allEquipment.Count;
 
-            m_allEquipment.Add(equipment);
+            m_allEquipment.Add(relInfo, equipment);
         }
 
-        protected void AddWeapon(Weapon weapon, WeaponPosition position)
+        public Vector GetEquipmentAbsolutePosition(PlaneEquipment planeEquipment)
         {
-            weapon.RelatedGameObject = this;
-            weapon.Id = m_allEquipment.Count;
+            PlaneEquipmentRelativeInfo equipmentInfo = m_allEquipment.Single(kvp => kvp.Value == planeEquipment).Key;
 
-            m_allEquipment.Add(weapon);
-            m_weapons[position] = weapon;
+            return Position + equipmentInfo.RelativeToOriginPosition.Rotate(Rotation);
+        }
+
+        public double GetEquipmentAbsoluteRotation(PlaneEquipment planeEquipment)
+        {
+            PlaneEquipmentRelativeInfo equipmentInfo = m_allEquipment.Single(kvp => kvp.Value == planeEquipment).Key;
+
+            return Rotation + equipmentInfo.RelativeRotation;
         }
 
         public void Fire(WeaponPosition weaponPosition = WeaponPosition.Unknown)
         {
             if (weaponPosition == WeaponPosition.Unknown)
             {
-                foreach (var weapon in m_weapons.Values)
+                foreach (var weapon in m_allEquipment.Values.Where(equip => equip is Weapon).Cast<Weapon>())
                 {
                     weapon.Fire();
                 }
             }
             else
             {
-                if (m_weapons.ContainsKey(weaponPosition))
+                foreach (var infoWithWeapon in m_allEquipment.Where(infoPlusWeaponPair => infoPlusWeaponPair.Key is PlaneWeaponRelativeInfo))
                 {
-                    m_weapons[weaponPosition].Fire();
+                    PlaneWeaponRelativeInfo weaponRelInfo = (PlaneWeaponRelativeInfo)infoWithWeapon.Key;
+                    Weapon weapon = (Weapon)infoWithWeapon.Value;
+
+                    if (weaponRelInfo.WeaponPosition == weaponPosition)
+                        weapon.Fire();
                 }
             }
         }
@@ -107,7 +109,7 @@ namespace NRPlanes.Core.Common
                 throw new ArgumentException("power must be >= 0");
 
             // now only 0 or 1 shield equipment is allowed
-            Shield shield = (Shield)m_allEquipment.Where(e => e is Shield).SingleOrDefault();
+            Shield shield = (Shield)m_allEquipment.Values.SingleOrDefault(e => e is Shield);
 
             double effectiveDamage = damage;
 
@@ -129,12 +131,12 @@ namespace NRPlanes.Core.Common
             m_health = Math.Min(MaximalHealth, m_health + healthDelta);
         }
 
-        public abstract void StartMotion(MotionType motion);
-        public abstract void EndMotion(MotionType motion);
+        public abstract void StartMotion(PlaneMotionType motion);
+        public abstract void EndMotion(PlaneMotionType motion);
 
         public void ActivateShield()
         {
-            foreach (Shield shield in m_allEquipment.Where(e => e is Shield))
+            foreach (Shield shield in m_allEquipment.Values.Where(e => e is Shield))
             {
                 shield.TurnOn();
             }
@@ -142,7 +144,7 @@ namespace NRPlanes.Core.Common
         }
         public void DeactivateShield()
         {
-            foreach (Shield shield in m_allEquipment.Where(e => e is Shield))
+            foreach (Shield shield in m_allEquipment.Values.Where(e => e is Shield))
             {
                 shield.TurnOff();
             }
@@ -152,7 +154,7 @@ namespace NRPlanes.Core.Common
         {
             base.Update(elapsed);
 
-            foreach (var planeEquipment in AllEquipment)
+            foreach (var planeEquipment in m_allEquipment.Values)
             {
                 planeEquipment.Update(elapsed);
             }

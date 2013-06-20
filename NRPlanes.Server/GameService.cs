@@ -128,7 +128,7 @@ namespace NRPlanes.Server
             if (newObjectsResult.Objects.Count > 0)
                 LogMessage(string.Format("{0} objects has been sent to player with id={1} (last ID={2})", newObjectsResult.Objects.Count, playerGuid, minId));
 
-            return newObjectsResult;
+            return newObjectsResult;            
         }
 
         public void UpdatePlane(Guid playerGuid, PlaneMutableInformation info)

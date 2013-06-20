@@ -177,18 +177,23 @@ namespace NRPlanes.Core.Common
                 if (a is Bonus && b is Plane || b is Bonus && a is Plane)
                 {
                     Bonus bonus = a is Bonus ? (Bonus)a : (Bonus)b;
-                    Plane plane = a is Bonus ? (Plane)b : (Plane) a;
+                    Plane plane = a is Bonus ? (Plane)b : (Plane)a;
 
                     if (!plane.IsGarbage)
                     {
-                        Logger.Log(string.Format("Apply bonus {0}", bonus));
-
-                        bonus.Apply(plane);
+                        ApplyBonus(bonus, plane);
                     }
                 }
 
                 OnCollisionDetected(this, new CollisionEventArgs(collision));
             }
+        }
+
+        protected virtual void ApplyBonus(Bonus bonus, Plane plane)
+        {
+            Logger.Log(string.Format("Apply bonus {0}", bonus));
+
+            bonus.Apply(plane);
         }
 
         protected void DeleteGameObject(GameObject obj)
@@ -202,6 +207,7 @@ namespace NRPlanes.Core.Common
 
         protected virtual void BeforeDeleteGameObject(GameObject obj)
         {
+            // if some plane destructed - generate bonus
             if (obj is Plane)
             {
                 GenerateBonus(obj.Position);
@@ -210,7 +216,7 @@ namespace NRPlanes.Core.Common
 
         private void GenerateBonus(Vector position)
         {
-            Bonus bonus = new HealthBonus(position, 100);
+            Bonus bonus = new HealthBonus(position, 333);
 
             Logger.Log(string.Format("Add bonus {0} in position {1}", bonus, position));
 

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using NRPlanes.Core.Planes;
 using NRPlanes.Core.Primitives;
+using NRPlanes.Core.Equipments;
 
 namespace NRPlanes.Client.GameComponents
 {

@@ -1,7 +1,8 @@
 ﻿using NRPlanes.Core.Primitives;
 using System.Runtime.Serialization;
+using NRPlanes.Core.Common;
 
-namespace NRPlanes.Core.Common
+namespace NRPlanes.Core.Equipments
 {
     [DataContract]
     public abstract class Equipment
@@ -19,32 +20,10 @@ namespace NRPlanes.Core.Common
         public Size Size { get; protected set; }
 
         /// <summary>
-        /// Origin of equipment relative to related object origin
-        /// </summary>
-        [DataMember]
-        public Vector RelativeToOriginPosition { get; protected set; }
-
-        /// <summary>
-        /// Related angle of rotation
-        /// </summary>
-        [DataMember]
-        public double RelativeRotation { get; protected set; }
-
-        /// <summary>
         /// Additional information
         /// </summary>
         [DataMember]
-        public string Info { get; set; }
-
-        public Vector GetAbsolutePosition()
-        {
-            return RelatedGameObject.Position + RelativeToOriginPosition.Rotate(RelatedGameObject.Rotation);
-        }
-
-        public double GetAbsoluteRotation()
-        {
-            return RelatedGameObject.Rotation + RelativeRotation;
-        }
+        public string Info { get; set; }        
     }
 
     [DataContract]

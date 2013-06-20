@@ -2,7 +2,7 @@
 using NRPlanes.Core.Primitives;
 using System.Runtime.Serialization;
 
-namespace NRPlanes.Core.Common
+namespace NRPlanes.Core.Equipments
 {
     [DataContract]
     [KnownType(typeof(Engines.IonEngine))]
@@ -39,9 +39,12 @@ namespace NRPlanes.Core.Common
 
             if (IsActive && Charge > elapsed.TotalSeconds)
             {
-                var tractionForce = new Vector(0, TractionForce).Rotate(GetAbsoluteRotation());
+                double absoluteRotation = RelatedGameObject.GetEquipmentAbsoluteRotation(this);
+                Vector absolutePosition = RelatedGameObject.GetEquipmentAbsolutePosition(this);
 
-                RelatedGameObject.Affect(tractionForce, GetAbsolutePosition());
+                Vector tractionForce = new Vector(0, TractionForce).Rotate(absoluteRotation);
+
+                RelatedGameObject.Affect(tractionForce, absolutePosition);
 
                 Charge -= elapsed.TotalSeconds;
             }

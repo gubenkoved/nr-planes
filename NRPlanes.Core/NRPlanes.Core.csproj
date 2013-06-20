@@ -53,23 +53,26 @@
     <Compile Include="Common\Client\ClientGameWorld.cs" />
     <Compile Include="Common\Collision.cs" />
     <Compile Include="Common\CollisionEventArgs.cs" />
-    <Compile Include="Common\Equipment.cs" />
-    <Compile Include="Common\GameObjectEquipmentStatusChangedArgs.cs" />
+    <Compile Include="Common\PlaneMotionType.cs" />
+    <Compile Include="Equipments\Equipment.cs" />
+    <Compile Include="Equipments\GameObjectEquipmentStatusChangedArgs.cs" />
     <Compile Include="Common\GameObjectStatusChangedEventArg.cs" />
     <Compile Include="Common\GameWorld.cs" />
-    <Compile Include="Common\IHaveEquipment.cs" />
+    <Compile Include="Equipments\IHaveEquipment.cs" />
     <Compile Include="Common\IUpdatable.cs" />
     <Compile Include="Common\PhysicEngine.cs" />
-    <Compile Include="Common\PlaneEquipment.cs" />
-    <Compile Include="Common\Engine.cs" />
+    <Compile Include="Equipments\PlaneEquipment.cs" />
+    <Compile Include="Equipments\Engine.cs" />
     <Compile Include="Common\GameObject.cs" />
     <Compile Include="Common\Plane.cs" />
     <Compile Include="Common\ReferenceArea.cs" />
-    <Compile Include="Common\Shield.cs" />
+    <Compile Include="Equipments\PlaneEquipmentRelativeInfo.cs" />
+    <Compile Include="Equipments\PlaneWeaponRelativeInfo.cs" />
+    <Compile Include="Equipments\Shield.cs" />
     <Compile Include="Common\StaticObject.cs" />
     <Compile Include="Common\ThreadSafeCollection.cs" />
-    <Compile Include="Common\Weapon.cs" />
-    <Compile Include="Common\WeaponPosition.cs" />
+    <Compile Include="Equipments\Weapon.cs" />
+    <Compile Include="Equipments\WeaponPosition.cs" />
     <Compile Include="Controllers\AlienPlaneController.cs" />
     <Compile Include="Controllers\PlaneControllerBase.cs" />
     <Compile Include="Engines\IonEngine.cs" />
@@ -92,6 +95,7 @@
     <Compile Include="StaticObjects\Planet.cs" />
     <Compile Include="StaticObjects\RectangleGravityField.cs" />
     <Compile Include="Weapons\LaserGun.cs" />
+    <Compile Include="Weapons\RocketGun.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NRPlanes.Core.Common
+namespace NRPlanes.Core.Equipments
 {
     //public enum GameObjectEquipmentStatus
     //{

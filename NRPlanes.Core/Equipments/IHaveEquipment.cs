@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NRPlanes.Core.Common
+namespace NRPlanes.Core.Equipments
 {
     public interface IHaveEquipment
     {

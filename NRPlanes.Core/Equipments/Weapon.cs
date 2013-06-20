@@ -1,11 +1,14 @@
 ﻿using System;
 using NRPlanes.Core.Primitives;
 using System.Runtime.Serialization;
+using NRPlanes.Core.Weapons;
+using NRPlanes.Core.Common;
 
-namespace NRPlanes.Core.Common
+namespace NRPlanes.Core.Equipments
 {
     [DataContract]
-    [KnownType(typeof(Weapons.LaserGun))]
+    [KnownType(typeof(LaserGun))]
+    [KnownType(typeof(RocketGun))]
     public abstract class Weapon : PlaneEquipment
     {
         protected Weapon(TimeSpan minimalTimeBetweenShots, double initialVelocity, double maximumCharge, double regeneration, Bullet bulletPrototype, Vector bulletOffset)
@@ -52,7 +55,9 @@ namespace NRPlanes.Core.Common
 
         private void AffectByMomentumConservationLaw(Bullet bullet)
         {
-            var impulse = (InitialBulletVelocity * bullet.Mass).Rotate(GetAbsoluteRotation());
+            double absoluteRotation = RelatedGameObject.GetEquipmentAbsoluteRotation(this);
+
+            Vector impulse = (InitialBulletVelocity * bullet.Mass).Rotate(absoluteRotation);
 
             RelatedGameObject.AffectImpulse(-impulse, bullet.Position);
         }
@@ -67,8 +72,8 @@ namespace NRPlanes.Core.Common
 
                 LastShotDateTime = DateTime.Now;
 
-                Vector absolutePosition = GetAbsolutePosition();
-                double absoluteRotation = GetAbsoluteRotation();
+                double absoluteRotation = RelatedGameObject.GetEquipmentAbsoluteRotation(this);
+                Vector absolutePosition = RelatedGameObject.GetEquipmentAbsolutePosition(this);
 
                 Vector initialVelocity = RelatedGameObject.Velocity + InitialBulletVelocity.Rotate(absoluteRotation);
 

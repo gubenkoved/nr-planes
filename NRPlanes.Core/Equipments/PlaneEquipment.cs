@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using NRPlanes.Core.Common;
+using NRPlanes.Core.Primitives;
 
-namespace NRPlanes.Core.Common
+namespace NRPlanes.Core.Equipments
 {
     [DataContract]
     [KnownType(typeof(Weapon))]
@@ -43,6 +45,16 @@ namespace NRPlanes.Core.Common
         /// </summary>
         [DataMember]
         public double Regeneration { get; protected set; }
+
+        public Vector GetAbsolutePosition()
+        {
+            return ((Plane)RelatedGameObject).GetEquipmentAbsolutePosition(this);
+            //return RelatedGameObject.Position + RelativeToOriginPosition.Rotate(RelatedGameObject.Rotation);
+        }
+        public double GetAbsoluteRotation()
+        {
+            return ((Plane)RelatedGameObject).GetEquipmentAbsoluteRotation(this);
+        }
 
         public virtual void Update(TimeSpan elapsed)
         {

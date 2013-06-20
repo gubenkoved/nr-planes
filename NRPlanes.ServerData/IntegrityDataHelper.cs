@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NRPlanes.Core.Common;
+using NRPlanes.Core.Equipments;
 
 namespace NRPlanes.ServerData
 {

@@ -5,6 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using NRPlanes.Core.Common;
 using System.Reflection;
+using NRPlanes.Core.Equipments;
 
 namespace NRPlanes.ServerData.MutableInformations
 {
@@ -26,7 +27,7 @@ namespace NRPlanes.ServerData.MutableInformations
 
             EquipmentMutableInformation = new List<PlaneEquipmentMutableInformation>();
 
-            foreach (var equipment in plane.AllEquipment)
+            foreach (var equipment in ((IHaveEquipment<PlaneEquipment>)plane).AllEquipment)
             {
                 if (equipment is Engine)
                     EquipmentMutableInformation.Add(new EngineMutableInformation((Engine)equipment));
@@ -46,7 +47,7 @@ namespace NRPlanes.ServerData.MutableInformations
 
             foreach (var equipmentMutable in EquipmentMutableInformation)
             {
-                PlaneEquipment equipment = plane.AllEquipment.Single(e => e.Id == equipmentMutable.Id);
+                PlaneEquipment equipment = ((IHaveEquipment<PlaneEquipment>)plane).AllEquipment.Single(e => e.Id == equipmentMutable.Id);
 
                 equipmentMutable.Apply(equipment);
             }

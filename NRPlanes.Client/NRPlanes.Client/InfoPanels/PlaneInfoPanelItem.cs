@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using NRPlanes.Core.Common;
 using Plane = NRPlanes.Core.Common.Plane;
 using System.Linq;
+using NRPlanes.Core.Equipments;
 
 namespace NRPlanes.Client.InfoPanels
 {
@@ -72,7 +73,7 @@ namespace NRPlanes.Client.InfoPanels
                     string.Format("{0:F0} HP", Plane.Health), 
                     Color.FromNonPremultiplied(255, 255, 255, 120));
 
-                foreach (var equipment in Plane.AllEquipment.Where(e => !string.IsNullOrEmpty(e.Info)))
+                foreach (var equipment in ((IHaveEquipment<PlaneEquipment>)Plane).AllEquipment.Where(e => !string.IsNullOrEmpty(e.Info)))
                 {
                     Color color;
 

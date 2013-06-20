@@ -1,6 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using System;
-namespace NRPlanes.Core.Common
+
+namespace NRPlanes.Core.Equipments
 {
     [DataContract]
     public class Shield : PlaneEquipment

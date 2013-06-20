@@ -4,6 +4,7 @@ using NRPlanes.Core.Common;
 using Plane = NRPlanes.Core.Common.Plane;
 using NRPlanes.Core.Controllers;
 using System;
+using NRPlanes.Core.Equipments;
 
 namespace NRPlanes.Client.Common
 {
@@ -26,12 +27,12 @@ namespace NRPlanes.Client.Common
 
             if (newState.IsKeyDown(Keys.Up) && _oldState.IsKeyUp(Keys.Up))
             {
-                ControlledPlane.StartMotion(MotionType.Forward);
+                ControlledPlane.StartMotion(PlaneMotionType.Forward);
             }
 
             if (newState.IsKeyUp(Keys.Up) && _oldState.IsKeyDown(Keys.Up))
             {
-                ControlledPlane.EndMotion(MotionType.Forward);
+                ControlledPlane.EndMotion(PlaneMotionType.Forward);
             }
 
             #endregion
@@ -40,12 +41,12 @@ namespace NRPlanes.Client.Common
 
             if (newState.IsKeyDown(Keys.Left) && _oldState.IsKeyUp(Keys.Left))
             {
-                ControlledPlane.StartMotion(MotionType.Left);
+                ControlledPlane.StartMotion(PlaneMotionType.Left);
             }
 
             if (newState.IsKeyUp(Keys.Left) && _oldState.IsKeyDown(Keys.Left))
             {
-                ControlledPlane.EndMotion(MotionType.Left);
+                ControlledPlane.EndMotion(PlaneMotionType.Left);
             }
 
             #endregion
@@ -54,12 +55,12 @@ namespace NRPlanes.Client.Common
 
             if (newState.IsKeyDown(Keys.Right) && _oldState.IsKeyUp(Keys.Right))
             {
-                ControlledPlane.StartMotion(MotionType.Right);
+                ControlledPlane.StartMotion(PlaneMotionType.Right);
             }
 
             if (newState.IsKeyUp(Keys.Right) && _oldState.IsKeyDown(Keys.Right))
             {
-                ControlledPlane.EndMotion(MotionType.Right);
+                ControlledPlane.EndMotion(PlaneMotionType.Right);
             }
 
             #endregion
