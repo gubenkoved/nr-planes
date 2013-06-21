@@ -24,7 +24,7 @@ namespace NRPlanes.Client.GameComponents
 
         private SymmetricParticlesEmitter m_emitter;
 
-        private const int PARTICLES_DENSITY = 10;
+        private const double PARTICLES_DENSITY = 0.5;
 
         public BonusXna(PlanesGame game, Bonus bonus, CoordinatesTransformer coordinatesTransformer, Color color, Texture2D texture)
             :base(game, bonus, coordinatesTransformer)
@@ -98,7 +98,7 @@ namespace NRPlanes.Client.GameComponents
                     AlphaVelocity = -0.3f,
                     TimeToLive = TimeSpan.FromSeconds(5),
                     Depth = LayersDepths.BonusesParticles,                    
-                }, (int)(Math.Max(1, bonus.RelativeGeometry.BoundingRectangle.Area * Math.Pow(PARTICLES_DENSITY, 0.3))));
+                }, (int)(Math.Max(1, bonus.RelativeGeometry.BoundingRectangle.Area * PARTICLES_DENSITY)));
             }
         }
     }

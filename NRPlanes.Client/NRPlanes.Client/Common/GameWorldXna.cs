@@ -55,6 +55,7 @@ namespace NRPlanes.Client.Common
         private SpriteBatch m_spriteBatch;
 
         private Texture2D m_background;
+        //private Size m_backgroundLogicalSize; // to right scaling backgrouund image
         // normal (with 1.0 scale factor) visible width of background image
         private readonly int m_backgroundVisiblePartWidth;        
 
@@ -66,9 +67,7 @@ namespace NRPlanes.Client.Common
             {
                 return m_soundManager;
             }
-        }
-
-        private RenderTarget2D m_lastFrameRenderTarget;
+        }        
 
         private readonly Dictionary<GameObject, DrawableGameObject> m_gameObjectMapping;
         private readonly Dictionary<Equipment, DrawableEquipment> m_equipmentMapping;
@@ -86,9 +85,15 @@ namespace NRPlanes.Client.Common
             get { return base.Game as PlanesGame; }
         }
 
+        private RenderTarget2D m_lastFrame;
+        private RenderTarget2D m_currentFrame;
+
         public GameWorldXna(PlanesGame game, GameWorld gameWorld, Rectangle gameFieldRectangle)
             : base(game)
         {
+            m_lastFrame = new RenderTarget2D(game.GraphicsDevice, game.Graphics.PreferredBackBufferWidth, game.Graphics.PreferredBackBufferHeight, false, SurfaceFormat.HdrBlendable, DepthFormat.None);
+            m_currentFrame = new RenderTarget2D(game.GraphicsDevice, game.Graphics.PreferredBackBufferWidth, game.Graphics.PreferredBackBufferHeight, false, SurfaceFormat.HdrBlendable, DepthFormat.None);
+
             m_safeDrawableGameComponents = new ThreadSafeCollection<MyDrawableGameComponent>();
 
             m_particles = new List<Particle>();
@@ -109,9 +114,9 @@ namespace NRPlanes.Client.Common
 
             m_soundManager = new SoundManager(game, () => m_coordinatesTransformer.VisibleLogicalRectangle);
 
-            m_lastFrameRenderTarget = new RenderTarget2D(game.Graphics.GraphicsDevice,
-                game.Graphics.PreferredBackBufferWidth, game.Graphics.PreferredBackBufferHeight,
-                false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PlatformContents);
+            //m_lastFrameRenderTarget = new RenderTarget2D(game.Graphics.GraphicsDevice,
+            //    game.Graphics.PreferredBackBufferWidth, game.Graphics.PreferredBackBufferHeight,
+            //    false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PlatformContents);
 
             FillInstanceMapper();
         }
@@ -120,7 +125,7 @@ namespace NRPlanes.Client.Common
         {
             m_spriteBatch = new SpriteBatch(Game.Graphics.GraphicsDevice);
 
-            m_background = Game.Content.Load<Texture2D>("Images/background");
+            m_background = Game.Content.Load<Texture2D>("Images/background2");
 
             GrabStaticObjects();
 
@@ -286,7 +291,8 @@ namespace NRPlanes.Client.Common
                 }
             }
         }
-        public override void Draw(GameTime gameTime)
+
+        public void Draw2(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
                         
@@ -326,6 +332,55 @@ namespace NRPlanes.Client.Common
 #endif
         }
 
+        public override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.SetRenderTarget(m_currentFrame);
+            GraphicsDevice.Clear(Color.Black);
+
+            // draw the last frame at 96% brightness
+            m_spriteBatch.Begin(0, BlendState.Opaque, SamplerState.PointClamp, null, null);
+            m_spriteBatch.Draw(m_lastFrame, Vector2.Zero, Color.White * 0.6f);
+            m_spriteBatch.End();
+
+            // draw particles
+            {
+                m_spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
+                foreach (var particle in m_particles)
+                {
+                    particle.Draw(gameTime, m_spriteBatch);
+                }
+                m_spriteBatch.End();
+            }
+
+            // draw the whole thing to the backbuffer
+            GraphicsDevice.SetRenderTarget(null);
+            {
+                m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                DrawBackground();
+                m_spriteBatch.End();
+
+                // draw main
+                m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                using (var handle = m_safeDrawableGameComponents.SafeRead())
+                {
+                    foreach (var drawableGameObject in handle.Items)
+                    {
+                        drawableGameObject.Draw(gameTime, m_spriteBatch);
+                    }
+                }
+                m_spriteBatch.End();
+
+                m_spriteBatch.Begin(0, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+                m_spriteBatch.Draw(m_currentFrame, Vector2.Zero, Color.White);
+                m_spriteBatch.End();
+            }
+
+            // swap render targets
+            RenderTarget2D tmp = m_currentFrame;
+            m_currentFrame = m_lastFrame;
+            m_lastFrame = tmp;
+        }
+
         private void UpdateView(GameTime gameTime)
         {
             const double followingSpeedCoeff = 0.02; // 0 - static, 1 - instantaneous camera following
@@ -341,8 +396,6 @@ namespace NRPlanes.Client.Common
 
                 m_coordinatesTransformer.SetCenterOfView(oldCenter + followingSpeedCoeff * offset);
                 #endregion
-
-
                 #region Scale
 
                 double newScale = Math.Exp(-0.01 * CenterOfViewGameObject.Velocity.Length);

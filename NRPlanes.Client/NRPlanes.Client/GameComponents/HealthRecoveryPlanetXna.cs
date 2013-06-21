@@ -62,7 +62,7 @@ namespace NRPlanes.Client.GameComponents
                                         LayersDepths.StaticObject);
 
             // do every 4 draw
-            if (m_drawCount++ % 4 == 0)
+            if (m_drawCount++ % 8 == 0)
             {
                 
                 foreach (var affectedObject in StaticObject.AffectedGameObjects)
@@ -74,6 +74,7 @@ namespace NRPlanes.Client.GameComponents
                         Position = affectedObject.Position,
                         Color = Color.Red,
                         Size = new Size(crossSize, crossSize),
+                        Alpha = 0.8f,
                         AlphaVelocity = -0.5f
                     }, 1);
                 }

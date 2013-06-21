@@ -76,7 +76,7 @@ namespace NRPlanes.Core.Planes
             AddEquipment(m_rightDeflectingEngine, new PlaneEquipmentRelativeInfo() { RelativeToOriginPosition = new Vector(-0.6, 2.8), RelativeRotation = 80 });
 
             AddEquipment(leftLaserGun, new PlaneWeaponRelativeInfo() { WeaponPosition = WeaponPosition.LeftFront, RelativeToOriginPosition = new Vector(-1.5, -0.4), RelativeRotation = 0 });
-            AddEquipment(rightLaserGun, new PlaneWeaponRelativeInfo() { WeaponPosition = WeaponPosition.LeftFront, RelativeToOriginPosition = new Vector(1.5, -0.4), RelativeRotation = 0 });
+            AddEquipment(rightLaserGun, new PlaneWeaponRelativeInfo() { WeaponPosition = WeaponPosition.RightFront, RelativeToOriginPosition = new Vector(1.5, -0.4), RelativeRotation = 0 });
 
             AddEquipment(shield, new PlaneEquipmentRelativeInfo());
         }

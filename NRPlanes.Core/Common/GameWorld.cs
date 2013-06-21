@@ -80,7 +80,6 @@ namespace NRPlanes.Core.Common
 
             OnGameObjectStatusChanged(null, new GameObjectStatusChangedEventArg(GameObjectStatus.Created, obj));
         }
-
         public void AddStaticObject(StaticObject obj)
         {
             m_staticObjects.Add(obj);
@@ -90,7 +89,6 @@ namespace NRPlanes.Core.Common
         {
             m_planeControllers.Add(controller);
         }
-
         public void RemovePlaneController(PlaneControllerBase controller)
         {
             m_planeControllers.Remove(controller);
@@ -164,8 +162,8 @@ namespace NRPlanes.Core.Common
         {            
             foreach (var collision in PhysicEngine.GetCollisions(m_safeGameObjects.ToArray()))
             {
-                var a = collision.FirstObject;
-                var b = collision.SecondObject;
+                GameObject a = collision.FirstObject;
+                GameObject b = collision.SecondObject;
 
                 if (collision.CheckTypesBoth(typeof(Bullet), typeof(GameObject)))
                 {

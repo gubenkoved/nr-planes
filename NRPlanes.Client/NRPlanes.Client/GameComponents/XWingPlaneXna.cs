@@ -25,11 +25,10 @@ namespace NRPlanes.Client.GameComponents
             if (m_texture == null)
                 m_texture = Game.Content.Load<Texture2D>("Images/x_wing");
 
-            var origin = new Vector2(m_texture.Width / 2.0f, m_texture.Height / 2.0f);
-
-            var scaleVector = CoordinatesTransformer.CreateScaleVector(GameObject.RelativeGeometry.BoundingRectangle.Size,
+            Vector2 origin = new Vector2(m_texture.Width / 2.0f, m_texture.Height / 2.0f);
+            Vector2 scaleVector = CoordinatesTransformer.CreateScaleVector(GameObject.RelativeGeometry.BoundingRectangle.Size,
                                                                        new Size(m_texture.Width, m_texture.Height));
-
+            
             spriteBatch.Draw(m_texture,
                              CoordinatesTransformer.Transform(GameObject.Position),
                              null,
