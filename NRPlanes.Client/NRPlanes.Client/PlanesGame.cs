@@ -1,4 +1,4 @@
-//#define FULL_SCREEN
+#define FULL_SCREEN
 
 using System;
 using NRPlanes.Core.Primitives;

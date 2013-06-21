@@ -1,4 +1,4 @@
-//#define DEBUG_MODE
+#define DEBUG_MODE
 
 using System;
 using System.Collections.Generic;
@@ -55,9 +55,9 @@ namespace NRPlanes.Client.Common
         private SpriteBatch m_spriteBatch;
 
         private Texture2D m_background;
-        //private Size m_backgroundLogicalSize; // to right scaling backgrouund image
-        // normal (with 1.0 scale factor) visible width of background image
-        private readonly int m_backgroundVisiblePartWidth;        
+        private Vector2 m_backgroundScale; // how much of background will be behind frame (and therefore how fast background is moving)
+        //// normal (with 1.0 scale factor) visible width of background image
+        //private readonly int m_backgroundVisiblePartWidth;        
 
         private readonly InstanceMapper m_instanceMapper;        
         private readonly SoundManager m_soundManager;
@@ -102,7 +102,8 @@ namespace NRPlanes.Client.Common
             m_gameWorld.GameObjectStatusChanged += GameObjectStatusChanged;
             m_gameWorld.CollisionDetected += CollisionDetected;
 
-            m_backgroundVisiblePartWidth = gameFieldRectangle.Width;
+            //m_backgroundVisiblePartWidth = gameFieldRectangle.Width;
+            m_backgroundScale = new Vector2(1.5f, 1.5f); // 50% of width and height will be behind screen bound in every frame
 
             m_coordinatesTransformer = new CoordinatesTransformer(m_gameWorld.Size, gameFieldRectangle, 180);
             m_coordinatesTransformer.ScaleToFit();
@@ -125,7 +126,7 @@ namespace NRPlanes.Client.Common
         {
             m_spriteBatch = new SpriteBatch(Game.Graphics.GraphicsDevice);
 
-            m_background = Game.Content.Load<Texture2D>("Images/background2");
+            m_background = Game.Content.Load<Texture2D>("Images/space");
 
             GrabStaticObjects();
 
@@ -292,45 +293,45 @@ namespace NRPlanes.Client.Common
             }
         }
 
-        public void Draw2(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.Black);
+//        public override void Draw(GameTime gameTime)
+//        {
+//            GraphicsDevice.Clear(Color.Black);
                         
-            m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);            
-            DrawBackground();            
-            m_spriteBatch.End();
+//            m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);            
+//            DrawBackground();            
+//            m_spriteBatch.End();
 
-            m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            using (var handle = m_safeDrawableGameComponents.SafeRead())
-            {
-                foreach (var drawableGameObject in handle.Items)
-                {
-                    drawableGameObject.Draw(gameTime, m_spriteBatch);
-                }
-            }
-            m_spriteBatch.End();
+//            m_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+//            using (var handle = m_safeDrawableGameComponents.SafeRead())
+//            {
+//                foreach (var drawableGameObject in handle.Items)
+//                {
+//                    drawableGameObject.Draw(gameTime, m_spriteBatch);
+//                }
+//            }
+//            m_spriteBatch.End();
 
-            m_spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
-            foreach (var particle in m_particles)
-            {
-                particle.Draw(gameTime, m_spriteBatch);
-            }
-            m_spriteBatch.End();
+//            m_spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
+//            foreach (var particle in m_particles)
+//            {
+//                particle.Draw(gameTime, m_spriteBatch);
+//            }
+//            m_spriteBatch.End();
 
-            // sprite sorting not available through SpriteBatch.Begin calls            
+//            // sprite sorting not available through SpriteBatch.Begin calls            
 
-            m_spriteBatch.Begin();
-            DrawAdditionalInfo(gameTime);
-            m_spriteBatch.End();
+//            m_spriteBatch.Begin();
+//            DrawAdditionalInfo(gameTime);
+//            m_spriteBatch.End();
 
-#if DEBUG_MODE
-            m_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+//#if DEBUG_MODE
+//            m_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
-            DrawDebugInfo();
+//            DrawDebugInfo();
 
-            m_spriteBatch.End();
-#endif
-        }
+//            m_spriteBatch.End();
+//#endif
+//        }
 
         public override void Draw(GameTime gameTime)
         {
@@ -373,6 +374,18 @@ namespace NRPlanes.Client.Common
                 m_spriteBatch.Begin(0, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
                 m_spriteBatch.Draw(m_currentFrame, Vector2.Zero, Color.White);
                 m_spriteBatch.End();
+
+                m_spriteBatch.Begin();
+                DrawAdditionalInfo(gameTime);
+                m_spriteBatch.End();
+
+#if DEBUG_MODE
+            m_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+
+            DrawDebugInfo();
+
+            m_spriteBatch.End();
+#endif
             }
 
             // swap render targets
@@ -405,17 +418,54 @@ namespace NRPlanes.Client.Common
                 #endregion
             }
         }
+        //private void DrawBackground()
+        //{
+        //    Rectangle destination = m_coordinatesTransformer.PhysicalRectangle;
+
+        //    double backgroundVisiblePartHeight = m_backgroundVisiblePartWidth / m_coordinatesTransformer.Aspect;
+
+        //    Rect vis = m_coordinatesTransformer.VisibleLogicalRectangle;
+
+        //    // moving factors belongs range [0; 1]
+        //    double xMovingFactor = (vis.Center.X - vis.Width / 2) / (m_coordinatesTransformer.FullLogicalSize.Width - vis.Width);
+        //    double yMovingFactor = (vis.Center.Y - vis.Height / 2) / (m_coordinatesTransformer.FullLogicalSize.Height - vis.Height);
+
+        //    //Rectangle source = new Rectangle(
+        //    //    (int)(xMovingFactor * (m_background.Width - m_backgroundVisiblePartWidth)),
+        //    //    (int)((m_background.Height - height) * (1 - yMovingFactor)),
+        //    //    m_backgroundVisiblePartWidth, (int)height); 
+
+        //    //m_spriteBatch.Draw(m_background, destination, source, Color.White); //, 0.0f, new Vector2(), SpriteEffects.None, 1.0f);
+
+        //    Vector2 pos = new Vector2((float)(-xMovingFactor * (m_background.Width - m_backgroundVisiblePartWidth)),
+        //        (float)(-1 * (m_background.Height - backgroundVisiblePartHeight) * (1 - yMovingFactor)));
+
+        //    //float screensCount = (float) (m_coordinatesTransformer.FullLogicalSize.Width / m_coordinatesTransformer.NormalSize.Width);            
+        //    float scale = m_coordinatesTransformer.PhysicalRectangle.Width / m_backgroundVisiblePartWidth;
+
+        //    m_spriteBatch.Draw(m_background, pos, null, Color.White, 0.0f, new Vector2(), scale, SpriteEffects.None, 0.0f);
+        //}
+
         private void DrawBackground()
         {
             Rectangle destination = m_coordinatesTransformer.PhysicalRectangle;
-
-            double backgroundVisiblePartHeight = m_backgroundVisiblePartWidth / m_coordinatesTransformer.Aspect;
-
             Rect vis = m_coordinatesTransformer.VisibleLogicalRectangle;
+
+            //double backgroundVisiblePartHeight = m_backgroundVisiblePartWidth / m_coordinatesTransformer.Aspect;
+
+            Size needPhysicalSize = new Size(
+                m_coordinatesTransformer.PhysicalRectangle.Width * m_backgroundScale.X,
+                m_coordinatesTransformer.PhysicalRectangle.Height * m_backgroundScale.Y);
+                //m_coordinatesTransformer.PhysicalRectangle.Width * 1,
+                //m_coordinatesTransformer.PhysicalRectangle.Height * 1);
+
+            Vector2 textureScale = new Vector2(
+                (float)(needPhysicalSize.Width / m_background.Width),
+                (float)(needPhysicalSize.Height / m_background.Height));
 
             // moving factors belongs range [0; 1]
             double xMovingFactor = (vis.Center.X - vis.Width / 2) / (m_coordinatesTransformer.FullLogicalSize.Width - vis.Width);
-            double yMovingFactor = (vis.Center.Y - vis.Height / 2) / (m_coordinatesTransformer.FullLogicalSize.Height - vis.Height);
+            double yMovingFactor = 1 - (vis.Center.Y - vis.Height / 2) / (m_coordinatesTransformer.FullLogicalSize.Height - vis.Height);
 
             //Rectangle source = new Rectangle(
             //    (int)(xMovingFactor * (m_background.Width - m_backgroundVisiblePartWidth)),
@@ -424,14 +474,37 @@ namespace NRPlanes.Client.Common
 
             //m_spriteBatch.Draw(m_background, destination, source, Color.White); //, 0.0f, new Vector2(), SpriteEffects.None, 1.0f);
 
-            Vector2 pos = new Vector2((float)(-xMovingFactor * (m_background.Width - m_backgroundVisiblePartWidth)),
-                (float)(-1 * (m_background.Height - backgroundVisiblePartHeight) * (1 - yMovingFactor)));
+            Size delta = needPhysicalSize - m_coordinatesTransformer.PhysicalRectangle.GetSize();
 
-            //float screensCount = (float) (m_coordinatesTransformer.FullLogicalSize.Width / m_coordinatesTransformer.NormalSize.Width);            
-            float scale = m_coordinatesTransformer.PhysicalRectangle.Width / m_backgroundVisiblePartWidth;
+            //Vector2 deltaPos = new Vector2(
+            //    (float)(m_coordinatesTransformer.PhysicalRectangle.Width * (m_backgroundScale.X - 1)),
+            //    (float)(m_coordinatesTransformer.PhysicalRectangle.Height * (m_backgroundScale.Y - 1)));
 
-            m_spriteBatch.Draw(m_background, pos, null, Color.White, 0.0f, new Vector2(), scale, SpriteEffects.None, 0.0f);
+
+            //Vector2 pos = new Vector2((float)(-xMovingFactor * deltaPos.X),
+                //(float)(-1 * deltaPos.Y * yMovingFactor));
+
+            //pos += new Vector2(m_coordinatesTransformer.PhysicalRectangle.Width, m_coordinatesTransformer.PhysicalRectangle.Height);
+
+            Vector2 pos = new Vector2((float)(-delta.Width * xMovingFactor), (float)(-delta.Height * yMovingFactor));
+            //Vector2 pos = new Vector2(-200, -150);
+
+            Vector2 origin = new Vector2(m_background.Width / 2f, m_background.Height / 2f);
+            //pos -= new Vector2(m_background.Width * pos.X, (scale.Y - 1) * pos.Y);
+
+            //pos -= new Vector2(m_background.Width / 2f, m_background.Height / 2f);
+
+            ////float screensCount = (float) (m_coordinatesTransformer.FullLogicalSize.Width / m_coordinatesTransformer.NormalSize.Width);            
+            //float scale = m_coordinatesTransformer.PhysicalRectangle.Width / m_backgroundVisiblePartWidth;
+            
+
+            //m_spriteBatch.Draw(m_background, pos, null, Color.White, 0.0f, 
+            //    new Vector2(), scale, SpriteEffects.None, 0.0f);
+
+            m_spriteBatch.Draw(m_background, pos, null, Color.White, 0.0f,
+                new Vector2(), textureScale, SpriteEffects.None, 0.0f);
         }
+
         private void DrawDebugInfo()
         {
             GeometryDrawer debugGeomertyDrawer = 

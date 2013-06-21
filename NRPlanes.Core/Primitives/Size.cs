@@ -31,6 +31,10 @@ namespace NRPlanes.Core.Primitives
         {
             return s * d;
         }
+        public static Size operator -(Size s1, Size s2)
+        {
+            return new Size(s1.Width - s2.Width, s1.Height - s2.Height);
+        }
 
         public override string ToString()
         {

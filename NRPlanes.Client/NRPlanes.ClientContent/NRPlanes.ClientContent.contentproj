@@ -380,8 +380,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Images\background2.jpg">
-      <Name>background2</Name>
+    <Compile Include="Images\back_test.png">
+      <Name>back_test</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
