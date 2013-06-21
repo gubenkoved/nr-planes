@@ -40,9 +40,7 @@ namespace NRPlanes.Core.Common
             {
                 return m_planeControllers;
             }
-        }
-
-        protected readonly Random m_random = new Random(Environment.TickCount);
+        }        
 
         public AliensAppearingStrategy AliensAppearingStrategy { get; set; }
         public Size Size { get; protected set; }
@@ -238,14 +236,13 @@ namespace NRPlanes.Core.Common
 
         protected static IEnumerable<StaticObject> GenerateRandomPlanets(int amount, Rect rect)
         {
-            Random random = new Random(Environment.TickCount);
-
             for (int i = 0; i < amount; i++)
             {
                 Vector position = new Vector(
-                    rect.X + random.NextDouble() * rect.Width,
-                    rect.Y + random.NextDouble() * rect.Height);
-                double planetValueSeed = 0.5 + 0.5 * random.NextDouble(); // in [0.5, 1.0]
+                    rect.X + RandomProvider.NextDouble() * rect.Width,
+                    rect.Y + RandomProvider.NextDouble() * rect.Height);
+
+                double planetValueSeed = 0.5 + 0.5 * RandomProvider.NextDouble(); // in [0.5, 1.0]
 
                 yield return new HealthRecoveryPlanet(position, planetValueSeed * 30.0, planetValueSeed * 6.0);
             }

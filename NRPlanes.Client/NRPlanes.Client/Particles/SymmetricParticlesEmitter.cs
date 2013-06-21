@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using NRPlanes.Client.Common;
 using NRPlanes.Core.Primitives;
+using NRPlanes.Core.Common;
 
 namespace NRPlanes.Client.Particles
 {
     public class SymmetricParticlesEmitter : ParticlesEmitterBase
-    {
-        private Random m_random = new Random(Environment.TickCount);
-
+    {        
         public double PositionDeviationRadius;
         public double VelocityDeviationRadius;
 
@@ -41,17 +40,17 @@ namespace NRPlanes.Client.Particles
         {
             particle.Position += GenerateRandomVectorWithRadius(PositionDeviationRadius);
             particle.Velocity += GenerateRandomVectorWithRadius(VelocityDeviationRadius);
-            particle.Rotation += (m_random.NextDouble() - 0.5) * 2 * RotationDeviation;
-            particle.RotationVelocity += (m_random.NextDouble() - 0.5) * 2 * RotationVelocityDeviation;
+            particle.Rotation += (RandomProvider.NextDouble() - 0.5) * 2 * RotationDeviation;
+            particle.RotationVelocity += (RandomProvider.NextDouble() - 0.5) * 2 * RotationVelocityDeviation;
 
-            particle.AlphaVelocity *= 1 + 2 * (m_random.NextDouble() - 0.5) * AlphaVelocityDeviationFactor;
+            particle.AlphaVelocity *= 1 + 2 * (RandomProvider.NextDouble() - 0.5) * AlphaVelocityDeviationFactor;
         }
 
         private Vector GenerateRandomVectorWithRadius(double radius)
         {
-            double angle = m_random.NextDouble() * 360;
+            double angle = RandomProvider.NextDouble() * 360;
 
-            return new Vector(0, (m_random.NextDouble() - 0.5) * 2 * radius).Rotate(angle);
+            return new Vector(0, (RandomProvider.NextDouble() - 0.5) * 2 * radius).Rotate(angle);
         }
     }
 }

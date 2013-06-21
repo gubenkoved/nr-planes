@@ -48,6 +48,7 @@
     <Compile Include="Bonuses\Bonus.cs" />
     <Compile Include="Bonuses\HealthBonus.cs" />
     <Compile Include="Bonuses\RandomBonus.cs" />
+    <Compile Include="Bonuses\RechargeBonus.cs" />
     <Compile Include="Bullets\LaserBullet.cs" />
     <Compile Include="Bullets\Rocket.cs" />
     <Compile Include="Bullets\Bullet.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Common\Collision.cs" />
     <Compile Include="Common\CollisionEventArgs.cs" />
     <Compile Include="Common\PlaneMotionType.cs" />
+    <Compile Include="Common\RandomProvider.cs" />
     <Compile Include="Equipments\Equipment.cs" />
     <Compile Include="Equipments\GameObjectEquipmentStatusChangedArgs.cs" />
     <Compile Include="Common\GameObjectStatusChangedEventArg.cs" />

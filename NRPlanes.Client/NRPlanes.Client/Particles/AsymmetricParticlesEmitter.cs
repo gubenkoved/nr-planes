@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using NRPlanes.Client.Common;
 using NRPlanes.Core.Primitives;
+using NRPlanes.Core.Common;
 
 namespace NRPlanes.Client.Particles
 {
     public class AsymmetricParticlesEmitter : ParticlesEmitterBase
     {
-        private Random m_random = new Random(Environment.TickCount);
-
         public double LongitualPositionDeviationRadius;
         public double TransversePositionDeviationRadius;
 
@@ -45,16 +44,16 @@ namespace NRPlanes.Client.Particles
             particle.Position += GenerateAsymmetricRandomVectorWithRadius(LongitualDirection, LongitualPositionDeviationRadius, TransversePositionDeviationRadius);
             particle.Velocity += GenerateAsymmetricRandomVectorWithRadius(LongitualDirection, LongitualVelocityDeviationRadius, TransverseVelocityDeviationRadius);
 
-            particle.Rotation += 2 * (m_random.NextDouble() - 0.5) * RotationDeviation;
-            particle.RotationVelocity += 2 * (m_random.NextDouble() - 0.5) * RotationVelocityDeviation;
+            particle.Rotation += 2 * (RandomProvider.NextDouble() - 0.5) * RotationDeviation;
+            particle.RotationVelocity += 2 * (RandomProvider.NextDouble() - 0.5) * RotationVelocityDeviation;
 
-            particle.AlphaVelocity *= 1 + 2 * (m_random.NextDouble() - 0.5) * AlphaVelocityDeviationFactor;
+            particle.AlphaVelocity *= 1 + 2 * (RandomProvider.NextDouble() - 0.5) * AlphaVelocityDeviationFactor;
         }
 
         private Vector GenerateAsymmetricRandomVectorWithRadius(Vector ort, double longitualRadius, double transverseRadius)
         {
-            Vector v = new Vector((m_random.NextDouble() - 0.5) * 2 * transverseRadius,
-                (m_random.NextDouble() - 0.5) * 2 * longitualRadius);
+            Vector v = new Vector((RandomProvider.NextDouble() - 0.5) * 2 * transverseRadius,
+                (RandomProvider.NextDouble() - 0.5) * 2 * longitualRadius);
 
             return v.Rotate(ort.Angle());
         }
@@ -62,8 +61,8 @@ namespace NRPlanes.Client.Particles
         private Vector GenerateRandomVectorWithRadius(double radius)
         {
             return new Vector(
-                (m_random.NextDouble() - 0.5) * 2 * radius,
-                (m_random.NextDouble() - 0.5) * 2 * radius);
+                (RandomProvider.NextDouble() - 0.5) * 2 * radius,
+                (RandomProvider.NextDouble() - 0.5) * 2 * radius);
 
         }
     }

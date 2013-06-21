@@ -2,13 +2,12 @@ using System;
 using NRPlanes.Core.Primitives;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using NRPlanes.Core.Common;
 
 namespace NRPlanes.Client.Common
 {
     public class AnimationSpriteDrawer
     {
-        private static Random m_random = new Random();
-
         private Texture2D m_texture;
         private TimeSpan m_currentFrameElapsed;
         private bool m_movingBackward;
@@ -32,7 +31,7 @@ namespace NRPlanes.Client.Common
 
             if (randomFirstFrame)
             {
-                CurrentFrame = m_random.Next(TotalFrames);
+                CurrentFrame = RandomProvider.Next() % TotalFrames;
             }
         }
 

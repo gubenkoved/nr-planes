@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using NRPlanes.Client.Common;
 using NRPlanes.Core.Primitives;
 using Microsoft.Xna.Framework.Graphics;
+using NRPlanes.Core.Common;
 
 namespace NRPlanes.Client.Particles
 {
@@ -20,9 +21,7 @@ namespace NRPlanes.Client.Particles
     }
 
     public class Particle : MyDrawableGameComponent, ICloneable
-    {
-        private static Random m_random = new Random(Environment.TickCount);
-
+    {        
         private Texture2D m_texture;
 
         public TimeSpan TimeToLive = TimeSpan.FromSeconds(10);
@@ -102,7 +101,7 @@ namespace NRPlanes.Client.Particles
                         m_texture = Game.Content.Load<Texture2D>("Particles/cross");
                         break;
                     case ParticleType.Debris:
-                        int num = m_random.Next() % 3 + 1;
+                        int num = RandomProvider.Next() % 3 + 1;
                         m_texture = Game.Content.Load<Texture2D>(string.Format("Particles/debris_{0}", num));
                         break;
                     default:

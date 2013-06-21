@@ -13,9 +13,7 @@ using NRPlanes.Core.Bullets;
 namespace NRPlanes.Client.GameComponents
 {
     public class ExplosionXna : MyDrawableGameComponent
-    {
-        //private static Random m_random = new Random(Environment.TickCount);
-
+    {        
         private ParticlesEmitterBase m_particlesEmitter;
         private const int PARTICLES_DENSITY = 20;
 

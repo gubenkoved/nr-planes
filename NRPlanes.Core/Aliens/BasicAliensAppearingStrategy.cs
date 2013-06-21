@@ -11,9 +11,7 @@ using NRPlanes.Core.Logging;
 namespace NRPlanes.Core.Aliens
 {
     public class BasicAliensAppearingStrategy : AliensAppearingStrategy
-    {
-        private static Random m_random = new Random(Environment.TickCount);
-
+    {        
         private TimeSpan m_timeToAppearing;
         private TimeSpan m_appearingPeriod;
 
@@ -40,8 +38,8 @@ namespace NRPlanes.Core.Aliens
         {
             Logger.Log("Add alien's plane...");
 
-            double x = m_random.NextDouble() * m_world.Size.Width;
-            double y = m_random.NextDouble() * m_world.Size.Height;
+            double x = RandomProvider.NextDouble() * m_world.Size.Width;
+            double y = RandomProvider.NextDouble() * m_world.Size.Height;
 
             Plane alien = XWingPlane.BasicConfiguration(new Vector(x, y));
 

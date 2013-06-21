@@ -12,8 +12,7 @@ namespace NRPlanes.Core.Aliens
 {
     public class SingleAliensAppearingStrategy : AliensAppearingStrategy
     {
-        private bool m_added = false;
-        private static Random m_random = new Random(Environment.TickCount);
+        private bool m_added = false;        
 
         public SingleAliensAppearingStrategy(GameWorld world)
             :base(world)
@@ -27,8 +26,8 @@ namespace NRPlanes.Core.Aliens
             {
                 Logger.Log("Add alien's plane...");
 
-                double x = m_random.NextDouble() * m_world.Size.Width;
-                double y = m_random.NextDouble() * m_world.Size.Height;
+                double x = RandomProvider.NextDouble() * m_world.Size.Width;
+                double y = RandomProvider.NextDouble() * m_world.Size.Height;
 
                 Plane alien = XWingPlane.BasicConfiguration(new Vector(x, y));
 
