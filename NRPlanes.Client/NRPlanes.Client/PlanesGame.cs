@@ -27,8 +27,10 @@ namespace NRPlanes.Client
             Content.RootDirectory = "Content";
 
 #if FULL_SCREEN
-            Graphics.PreferredBackBufferWidth = 1280;
-            Graphics.PreferredBackBufferHeight = 1024;
+            //Graphics.PreferredBackBufferWidth = 1280;
+            Graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            //Graphics.PreferredBackBufferHeight = 1024;
+            Graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             Graphics.IsFullScreen = true;
 #else
             Graphics.PreferredBackBufferWidth = 800;
