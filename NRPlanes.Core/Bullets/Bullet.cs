@@ -12,6 +12,9 @@ namespace NRPlanes.Core.Bullets
     public abstract class Bullet : GameObject
     {
         [DataMember]
+        public Guid PlayerGuid { get; set; }
+
+        [DataMember]
         public double Power { get; private set; }
 
         [DataMember]

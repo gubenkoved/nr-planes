@@ -36,15 +36,12 @@ namespace NRPlanes.Core.Aliens
 
         private void AddAlienToGameField()
         {
-            Logger.Log("Add alien's plane...");
-
             double x = RandomProvider.NextDouble() * m_world.Size.Width;
             double y = RandomProvider.NextDouble() * m_world.Size.Height;
 
             Plane alien = XWingPlane.BasicConfiguration(new Vector(x, y));
 
-            m_world.AddGameObject(alien);
-            m_world.AddPlaneController(new AlienPlaneController(m_world, alien));
+            base.AddAlienPlaneToField( alien, new AlienPlaneController(m_world, alien));
         }
     }
 }

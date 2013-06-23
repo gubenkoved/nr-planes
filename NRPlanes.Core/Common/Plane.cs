@@ -11,7 +11,9 @@ namespace NRPlanes.Core.Common
     [KnownType(typeof(Planes.XWingPlane))]
     public abstract class Plane : GameObject, IHaveEquipment<PlaneEquipment>
     {
-        //public Guid PlayerGuid { get; private set; }
+        [DataMember]
+        public Guid PlayerGuid { get; set; }
+
         [DataMember]
         public double MaximalHealth { get; protected set; }
 

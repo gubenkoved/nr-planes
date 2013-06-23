@@ -68,18 +68,15 @@ namespace NRPlanes.Core.Equipments
             if (Charge >= 1.0 && ElapsedTimeForShot == TimeSpan.Zero)
             {                
                 Charge -= 1.0;
-
                 ElapsedTimeForShot = ReloadingTime;
-
                 LastShotDateTime = DateTime.Now;
 
                 double absoluteRotation = RelatedGameObject.GetEquipmentAbsoluteRotation(this);
                 Vector absolutePosition = RelatedGameObject.GetEquipmentAbsolutePosition(this);
-
                 Vector initialVelocity = RelatedGameObject.Velocity + InitialBulletVelocity.Rotate(absoluteRotation);
 
                 Bullet bullet = (Bullet)BulletPrototype.Clone();
-
+                bullet.PlayerGuid = RelatedGameObject.PlayerGuid;
                 bullet.Fire(absolutePosition + BulletOffset.Rotate(absoluteRotation), initialVelocity, absoluteRotation);
 
                 AffectByMomentumConservationLaw(bullet);

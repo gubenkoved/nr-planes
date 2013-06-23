@@ -31,8 +31,7 @@ namespace NRPlanes.Core.Aliens
 
                 Plane alien = XWingPlane.BasicConfiguration(new Vector(x, y));
 
-                m_world.AddGameObject(alien);
-                m_world.AddPlaneController(new AlienPlaneController(m_world, alien));
+                base.AddAlienPlaneToField(alien, new AlienPlaneController(m_world, alien));
 
                 m_added = true;
             }

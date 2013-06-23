@@ -69,6 +69,7 @@ namespace NRPlanes.Client.Common
             
             #region Create plane, controller and set camera
             m_ownPlane = XWingPlane.BasicConfiguration(new Vector(m_gameWorld.Size.Width / 2.0, m_gameWorld.Size.Height / 2.0));
+            m_ownPlane.PlayerGuid = m_ownGuid;
 
             m_gameWorld.AddPlaneController(new LocalPlaneController(m_ownPlane));
 
