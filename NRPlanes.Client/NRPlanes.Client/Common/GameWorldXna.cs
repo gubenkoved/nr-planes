@@ -101,6 +101,7 @@ namespace NRPlanes.Client.Common
             m_gameWorld = gameWorld;
             m_gameWorld.GameObjectStatusChanged += GameObjectStatusChanged;
             m_gameWorld.CollisionDetected += CollisionDetected;
+            m_gameWorld.BonusApplied += BonusApplied;
 
             //m_backgroundVisiblePartWidth = gameFieldRectangle.Width;
             m_backgroundScale = new Vector2(1.5f, 1.5f); // 50% of width and height will be behind screen bound in every frame
@@ -171,6 +172,11 @@ namespace NRPlanes.Client.Common
                     throw new ArgumentOutOfRangeException();
             }
 
+        }
+        private void BonusApplied(object sender, BonusAppliedEventArgs args)
+        {
+            BonusXna bonusXna = (BonusXna)m_gameObjectMapping[args.Bonus];
+            bonusXna.WhenApplied(args.Plane);
         }
         private void CollisionDetected(object sender, CollisionEventArgs args)
         {

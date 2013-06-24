@@ -82,16 +82,44 @@ namespace NRPlanes.Server
             World.AddGravityBoundsWithPlanets(50, 13);
             //World.AliensAppearingStrategy = new BasicAliensAppearingStrategy(World, TimeSpan.FromSeconds(60));
             World.AliensAppearingStrategy = new SingleAliensAppearingStrategy(World);
-            World.GameObjectStatusChanged += GameObjectStatusChanged;
+            
+            World.GameObjectStatusChanged += GameObjectStatusChangedHandler;
+            World.BonusApplied += BonusAppliedHandler;
 
             Task.Factory.StartNew(GameWorldUpdate);                
         }
 
         private void UpdateEventLog()
         {
+            // when event log contains add and remove event for same game object then this two entries is depriciated
+
+            // copy log to avoid collection changing while enumeration (e.g. when user commiting object while enumerating log)
+            var logCopy = m_worldEventsLog.GetAll(true).ToList();
+
+            var gameobjectAddLogItems = logCopy.Where(entry => entry is GameObjectAddedLogItem).Cast<GameObjectAddedLogItem>();
+
+            foreach (var deleteLogItem in logCopy.Where(entry => entry is GameObjectDeletedLogItem).Cast<GameObjectDeletedLogItem>().ToList())
+            {
+                var conjugatedAddLogItem = gameobjectAddLogItems.SingleOrDefault(addLogItem => addLogItem.GameObject.Id == deleteLogItem.GameObjectId);
+
+                if (conjugatedAddLogItem != null)
+                {
+                    deleteLogItem.IsDepriciated = true;
+                    conjugatedAddLogItem.IsDepriciated = true;
+                }
+            }
         }
 
-        private void GameObjectStatusChanged(object sender, GameObjectStatusChangedEventArg arg)
+        private void BonusAppliedHandler(object sender, BonusAppliedEventArgs args)
+        {
+            var entry = new BonusAppliedLogItem(Timestamp.Create(), args.Bonus.Id.Value, args.Plane.Id.Value);
+
+            // marks as depritiated right now - this event has not to be transferred to new players
+            entry.IsDepriciated = true;
+
+            m_worldEventsLog.AddEntry(entry);
+        }
+        private void GameObjectStatusChangedHandler(object sender, GameObjectStatusChangedEventArg arg)
         {
             if (arg.Status == GameObjectStatus.Created)
             {
@@ -144,10 +172,11 @@ namespace NRPlanes.Server
         {
             IEnumerable<GameEventsLogItem> logItems;
 
-            if (timestamp != null)
-                logItems = m_worldEventsLog.GetLogSince(timestamp);
+            // equals null when first time request
+            if (timestamp != null) 
+                logItems = m_worldEventsLog.GetLogSince(timestamp, false);
             else
-                logItems = m_worldEventsLog.GetAll();
+                logItems = m_worldEventsLog.GetAll(true); // when first time request exclude depritiated
 
             Timestamp lastTimestamp = null;
 

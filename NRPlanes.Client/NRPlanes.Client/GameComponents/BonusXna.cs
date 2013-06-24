@@ -29,8 +29,6 @@ namespace NRPlanes.Client.GameComponents
         public BonusXna(PlanesGame game, Bonus bonus, CoordinatesTransformer coordinatesTransformer, Color color, Texture2D texture)
             :base(game, bonus, coordinatesTransformer)
         {
-            bonus.Applied += WhenBonusApplied;
-
             Bonus = bonus;
             Color = color;
 
@@ -82,9 +80,9 @@ namespace NRPlanes.Client.GameComponents
                                     1.0f);
         }
 
-        private void WhenBonusApplied(Bonus bonus, NRPlanes.Core.Common.Plane plane)
+        public void WhenApplied(NRPlanes.Core.Common.Plane plane)
         {
-            if (bonus is HealthBonus)
+            if (Bonus is HealthBonus)
             {
                 BasicSoundEffect effect = Game.GameManager.GameWorldXna.SoundManager.CreateBasicSoundEffect("health_bonus", true);
                 effect.Position = plane.Position;
@@ -93,12 +91,12 @@ namespace NRPlanes.Client.GameComponents
                 m_emitter.Emit(new Particle(Game, CoordinatesTransformer, ParticleType.Cross)
                 {
                     Color = Color.Red,
-                    Position = bonus.Position,
+                    Position = Bonus.Position,
                     Size = new Size(2, 2),
                     AlphaVelocity = -0.3f,
                     TimeToLive = TimeSpan.FromSeconds(5),
-                    Depth = LayersDepths.BonusesParticles,                    
-                }, (int)(Math.Max(1, bonus.RelativeGeometry.BoundingRectangle.Area * PARTICLES_DENSITY)));
+                    Depth = LayersDepths.BonusesParticles,
+                }, (int)(Math.Max(1, Bonus.RelativeGeometry.BoundingRectangle.Area * PARTICLES_DENSITY)));
             }
         }
     }

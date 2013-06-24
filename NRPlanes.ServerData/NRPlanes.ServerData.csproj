@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventsLog\BonusAppliedLogItem.cs" />
     <Compile Include="EventsLog\GameEventsLog.cs" />
     <Compile Include="EventsLog\GameEventsLogItem.cs" />
     <Compile Include="EventsLog\GameObjectAddedLogItem.cs" />

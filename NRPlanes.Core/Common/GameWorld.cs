@@ -85,18 +85,7 @@ namespace NRPlanes.Core.Common
 
         public bool ContainsGameObjectWithId(int id)
         {
-            using (var handle = m_safeGameObjects.SafeRead())
-            {
-                foreach (var item in handle.Items)
-                {
-                    if (item.Id.HasValue && item.Id.Value == id)
-                    {                        
-                        return true;
-                    }
-                }
-            }
-
-            return false;
+            return GetObjectById(id) != null;            
         }
         /// <summary>
         /// Tries delete game object with specified id
@@ -104,21 +93,36 @@ namespace NRPlanes.Core.Common
         /// <returns>Returns true, if game object with specified is was finded</returns>
         public bool TryDeleteGameObjectWithId(int id)
         {
+            GameObject obj = GetObjectById(id);
+
+            if (obj != null)
+            {
+                DeleteGameObject(obj);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Tries get object by id, returns null when it does not exists
+        /// </summary>
+        public GameObject GetObjectById(int id)
+        {
             using (var handle = m_safeGameObjects.SafeRead())
             {
                 foreach (var item in handle.Items)
                 {
-                    if (item.Id.HasValue &&  !item.IsGarbage && item.Id.Value == id)
+                    if (item.Id.HasValue && !item.IsGarbage && item.Id.Value == id)
                     {
-                        // delete finded item                 
-                        DeleteGameObject(item);                        
-
-                        return true;
+                        return item;
                     }
                 }
             }
 
-            return false;
+            return null;
         }
 
         public void AddPlaneController(PlaneControllerBase controller)
@@ -229,6 +233,8 @@ namespace NRPlanes.Core.Common
             Logger.Log(string.Format("Apply bonus {0}", bonus));
 
             bonus.Apply(plane);
+
+            OnBonusApplied(this, new BonusAppliedEventArgs(bonus, plane));
         }
 
         protected void DeleteGameObject(GameObject obj)
@@ -255,7 +261,7 @@ namespace NRPlanes.Core.Common
 
             Logger.Log(string.Format("Add bonus {0} in position {1}", bonus, position));
 
-            m_safeGameObjects.Add(bonus);
+            AddGameObject(bonus);            
         }
 
         protected static IEnumerable<StaticObject> GenerateGravityBounds(Size worldSize, double gravityBoundsLenght)
@@ -293,7 +299,6 @@ namespace NRPlanes.Core.Common
             if (GameObjectStatusChanged != null)
                 GameObjectStatusChanged.Invoke(sender, arg);
         }
-
         public event EventHandler<GameObjectStatusChangedEventArg> GameObjectStatusChanged;
 
         protected void OnCollisionDetected(object sender, CollisionEventArgs args)
@@ -301,8 +306,14 @@ namespace NRPlanes.Core.Common
             if (CollisionDetected != null)
                 CollisionDetected.Invoke(sender, args);
         }
+        public event EventHandler<CollisionEventArgs> CollisionDetected;
 
-        public event EventHandler<CollisionEventArgs> CollisionDetected; 
+        protected void OnBonusApplied(object sender, BonusAppliedEventArgs args)
+        {
+            if (BonusApplied != null)
+                BonusApplied.Invoke(sender, args);
+        }
+        public event EventHandler<BonusAppliedEventArgs> BonusApplied;
         #endregion
     }
 }

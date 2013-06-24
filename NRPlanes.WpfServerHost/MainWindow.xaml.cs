@@ -119,7 +119,7 @@ namespace NRPlanes.WpfServerHost
 
         private void EventsLogButton_Click(object sender, RoutedEventArgs e)
         {
-            List<GameEventsLogItem> log = m_service.WorldEventsLog.GetAll().ToList();
+            List<GameEventsLogItem> log = m_service.WorldEventsLog.GetAll(false).ToList();
 
             EventsLogViewerWindow eventsLogViewer = new EventsLogViewerWindow(log);
             eventsLogViewer.Show();

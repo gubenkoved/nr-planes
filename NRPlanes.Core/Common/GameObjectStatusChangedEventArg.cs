@@ -10,9 +10,9 @@ namespace NRPlanes.Core.Common
 
     public class GameObjectStatusChangedEventArg : EventArgs
     {
-        public GameObject GameObject { get; private set; }
+        public readonly GameObject GameObject;
 
-        public GameObjectStatus Status { get; private set; }
+        public readonly GameObjectStatus Status;
 
         public GameObjectStatusChangedEventArg(GameObjectStatus newStatus, GameObject obj)
         {

@@ -52,6 +52,7 @@
     <Compile Include="Bullets\LaserBullet.cs" />
     <Compile Include="Bullets\Rocket.cs" />
     <Compile Include="Bullets\Bullet.cs" />
+    <Compile Include="Common\BonusAppliedEventArgs.cs" />
     <Compile Include="Common\Client\ClientGameWorld.cs" />
     <Compile Include="Common\Collision.cs" />
     <Compile Include="Common\CollisionEventArgs.cs" />

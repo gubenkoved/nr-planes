@@ -47,15 +47,15 @@ namespace NRPlanes.Core.Bonuses
         {
             ApplyImpl(plane);
 
-            if (Applied != null)
-                Applied.Invoke(this, plane);
+            //if (Applied != null)
+            //    Applied.Invoke(this, plane);
 
             IsGarbage = true;
         }
 
         protected abstract void ApplyImpl(Plane plane);
 
-        public delegate void BonusAppliedHandler(Bonus bonus, Plane plane);
-        public event BonusAppliedHandler Applied;
+        //public delegate void BonusAppliedHandler(Bonus bonus, Plane plane);
+        //public event BonusAppliedHandler Applied;
     }
 }

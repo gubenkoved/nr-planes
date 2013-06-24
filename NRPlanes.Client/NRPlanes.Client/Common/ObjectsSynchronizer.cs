@@ -10,6 +10,7 @@ using System.Threading;
 using NRPlanes.Core.Common.Client;
 using NRPlanes.Client.ServiceReference;
 using NRPlanes.ServerData.EventsLog;
+using NRPlanes.Core.Bonuses;
 
 namespace NRPlanes.Client.Common
 {
@@ -125,9 +126,24 @@ namespace NRPlanes.Client.Common
             {
                 var item = logItem as GameObjectDeletedLogItem;
 
+                if (m_clientWorld.GetObjectById(item.GameObjectId) is Bonus)
+                {
+                    int k = 0;
+                }
+
                 m_deleteIdsQueue.Add(new Tuple<DateTime, int>(DateTime.Now, item.GameObjectId));
 
                 //m_clientWorld.TryDeleteGameObjectWithId(item.GameObjectId);
+            }
+            else if (logItem is BonusAppliedLogItem)
+            {
+                var item = logItem as BonusAppliedLogItem;
+
+                Bonus bonus = (Bonus)m_clientWorld.GetObjectById(item.BonusId);
+                Plane plane = (Plane)m_clientWorld.GetObjectById(item.PlaneId);
+
+                if (bonus != null && plane != null)
+                    m_clientWorld.RaiseBonusAppliedEvent(bonus, plane);
             }
         }
         private void ProcessDefferedRemoving()

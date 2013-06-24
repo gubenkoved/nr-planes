@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NRPlanes.Core.Primitives;
+using NRPlanes.Core.Bonuses;
 
 namespace NRPlanes.Core.Common.Client
 {
@@ -57,6 +58,14 @@ namespace NRPlanes.Core.Common.Client
         public void ExplicitlyRemoveGameObject(GameObject obj)
         {
             base.DeleteGameObject(obj);
+        }
+
+        /// <summary>
+        /// When bonus applied event recieved from server call it function to let xna game world know what bonus is applied
+        /// </summary>
+        public void RaiseBonusAppliedEvent(Bonus bonus, Plane plane)
+        {
+            OnBonusApplied(this, new BonusAppliedEventArgs(bonus, plane));
         }
 
         protected override void BeforeDeleteGameObject(GameObject obj)

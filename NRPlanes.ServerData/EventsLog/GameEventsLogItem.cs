@@ -9,6 +9,7 @@ namespace NRPlanes.ServerData.EventsLog
     [DataContract]
     [KnownType(typeof(GameObjectAddedLogItem))]
     [KnownType(typeof(GameObjectDeletedLogItem))]
+    [KnownType(typeof(BonusAppliedLogItem))]
     public abstract class GameEventsLogItem
     {
         [DataMember]
@@ -18,6 +19,23 @@ namespace NRPlanes.ServerData.EventsLog
             get
             {
                 return m_timestamp;
+            }
+        }
+
+        [DataMember]
+        private bool m_isDepreciated;
+        /// <summary>
+        /// Depritiated items doen not needed to new players
+        /// </summary>
+        public bool IsDepriciated
+        {
+            get
+            {
+                return m_isDepreciated;
+            }
+            set
+            {
+                m_isDepreciated = value;
             }
         }
 
