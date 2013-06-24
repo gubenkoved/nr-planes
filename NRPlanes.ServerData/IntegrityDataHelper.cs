@@ -14,7 +14,7 @@ namespace NRPlanes.ServerData
     /// </summary>
     public static class IntegrityDataHelper
     {
-        public static GameObject PreprocessRecieved(GameObject gameObject)
+        public static GameObject ProcessRecieved(GameObject gameObject)
         {
             // RelatedGameObject was excluded from Equipment serialization to avoid cycle object graph
             if (gameObject is IHaveEquipment)

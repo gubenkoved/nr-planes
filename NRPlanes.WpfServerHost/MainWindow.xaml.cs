@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Configuration;
+using NRPlanes.ServerData.EventsLog;
 
 namespace NRPlanes.WpfServerHost
 {
@@ -114,6 +115,14 @@ namespace NRPlanes.WpfServerHost
             SnapshotViewerWindow snapshotViewer = new SnapshotViewerWindow(dump);
             snapshotViewer.Title = string.Format("Snapshot by {0:H:mm:ss}", DateTime.Now);
             snapshotViewer.Show();
+        }
+
+        private void EventsLogButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<GameEventsLogItem> log = m_service.WorldEventsLog.GetAll().ToList();
+
+            EventsLogViewerWindow eventsLogViewer = new EventsLogViewerWindow(log);
+            eventsLogViewer.Show();
         }
     }
 }

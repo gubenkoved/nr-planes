@@ -27,10 +27,10 @@ namespace NRPlanes.ServerData.MutableInformations
         [DataMember]
         public Vector Velocity;
 
-        private static PrivateValueAccessor _rotationPrivateFieldAccessor = new PrivateValueAccessor(typeof(GameObject), "Rotation");
-        private static PrivateValueAccessor _rotationVelocityPrivateFieldAccessor = new PrivateValueAccessor(typeof(GameObject), "RotationVelocity");
-        private static PrivateValueAccessor _positionPrivateFieldAccessor = new PrivateValueAccessor(typeof(GameObject), "Position");
-        private static PrivateValueAccessor _velocityPrivateFieldAccessor = new PrivateValueAccessor(typeof(GameObject), "Velocity");
+        private static PrivateValueAccessor m_rotationPrivateFieldAccessor = new PrivateValueAccessor(typeof(GameObject), "Rotation");
+        private static PrivateValueAccessor m_rotationVelocityPrivateFieldAccessor = new PrivateValueAccessor(typeof(GameObject), "RotationVelocity");
+        private static PrivateValueAccessor m_positionPrivateFieldAccessor = new PrivateValueAccessor(typeof(GameObject), "Position");
+        private static PrivateValueAccessor m_velocityPrivateFieldAccessor = new PrivateValueAccessor(typeof(GameObject), "Velocity");
 
         public GameObjectMutableInformation(GameObject obj)
         {
@@ -44,10 +44,10 @@ namespace NRPlanes.ServerData.MutableInformations
 
         public override void Apply(object obj)
         {
-            _rotationPrivateFieldAccessor.SetValue(obj, Rotation);
-            _rotationVelocityPrivateFieldAccessor.SetValue(obj, RotationVelocity);
-            _positionPrivateFieldAccessor.SetValue(obj, Position);
-            _velocityPrivateFieldAccessor.SetValue(obj, Velocity);
+            m_rotationPrivateFieldAccessor.SetValue(obj, Rotation);
+            m_rotationVelocityPrivateFieldAccessor.SetValue(obj, RotationVelocity);
+            m_positionPrivateFieldAccessor.SetValue(obj, Position);
+            m_velocityPrivateFieldAccessor.SetValue(obj, Velocity);
         }
 
         public override string ToString()

@@ -4,6 +4,7 @@
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.EventsLog" />
   <xs:complexType name="JoinResult">
     <xs:sequence>
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" minOccurs="0" name="LogicalSize" type="q1:Size" />
@@ -18,10 +19,11 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CommitResult" nillable="true" type="tns:CommitResult" />
-  <xs:complexType name="GetNewObjectsResult">
+  <xs:complexType name="GetEventsLogSinceResult">
     <xs:sequence>
-      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" minOccurs="0" name="Objects" nillable="true" type="q4:ArrayOfGameObject" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.EventsLog" minOccurs="0" name="LastTimestamp" nillable="true" type="q4:Timestamp" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.EventsLog" minOccurs="0" name="LogItems" nillable="true" type="q5:ArrayOfGameEventsLogItem" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="GetNewObjectsResult" nillable="true" type="tns:GetNewObjectsResult" />
+  <xs:element name="GetEventsLogSinceResult" nillable="true" type="tns:GetEventsLogSinceResult" />
 </xs:schema>

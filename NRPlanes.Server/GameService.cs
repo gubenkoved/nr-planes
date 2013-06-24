@@ -15,6 +15,7 @@ using NRPlanes.ServerData.OperationResults;
 using NRPlanes.ServerData;
 using NRPlanes.Core.Logging;
 using NRPlanes.Core.Aliens;
+using NRPlanes.ServerData.EventsLog;
 
 namespace NRPlanes.Server
 {
@@ -30,6 +31,15 @@ namespace NRPlanes.Server
         private Dictionary<Guid, Plane> m_playerToPlaneMapping;
         private Action<string> m_log;
 
+        private GameEventsLog m_worldEventsLog;
+        public GameEventsLog WorldEventsLog
+        {
+            get
+            {
+                return m_worldEventsLog;
+            }
+        }
+
         private void GameWorldUpdate()
         {
             Stopwatch watch = new Stopwatch();
@@ -40,6 +50,8 @@ namespace NRPlanes.Server
                 watch.Start();
 
                 World.Update(elapsed);
+
+                UpdateEventLog();
 
                 if (watch.Elapsed.TotalMilliseconds < 1.0) // limit fps (max = 1000 fps)
                     Thread.Sleep(1);
@@ -54,12 +66,13 @@ namespace NRPlanes.Server
 
         public GameService()
             :this(null)
-        {
-        }
+        { }
 
         public GameService(Action<string> logAction)
         {
             m_log = logAction;
+
+            m_worldEventsLog = new GameEventsLog();
 
             Logger.LogItemReceived += logItem => LogMessage(logItem.ToString());
 
@@ -69,8 +82,27 @@ namespace NRPlanes.Server
             World.AddGravityBoundsWithPlanets(50, 13);
             //World.AliensAppearingStrategy = new BasicAliensAppearingStrategy(World, TimeSpan.FromSeconds(60));
             World.AliensAppearingStrategy = new SingleAliensAppearingStrategy(World);
+            World.GameObjectStatusChanged += GameObjectStatusChanged;
 
             Task.Factory.StartNew(GameWorldUpdate);                
+        }
+
+        private void UpdateEventLog()
+        {
+        }
+
+        private void GameObjectStatusChanged(object sender, GameObjectStatusChangedEventArg arg)
+        {
+            if (arg.Status == GameObjectStatus.Created)
+            {
+                AssignGameObjectID(arg.GameObject);
+
+                m_worldEventsLog.AddEntry(new GameObjectAddedLogItem(Timestamp.Create(), arg.GameObject));
+            }
+            else if (arg.Status == GameObjectStatus.Deleted)
+            {
+                m_worldEventsLog.AddEntry(new GameObjectDeletedLogItem(Timestamp.Create(), arg.GameObject));
+            }
         }
 
         public JoinResult Join()
@@ -96,11 +128,9 @@ namespace NRPlanes.Server
             foreach (var obj in objects)
             {
                 if (obj is Plane)
-                    m_playerToPlaneMapping[playerGuid] = obj as Plane; // If player commit plane when it his own plane
+                    m_playerToPlaneMapping[playerGuid] = obj as Plane; // If player commit plane when it his own plane                
 
-                AssignGameObjectID(obj);                
-
-                World.AddGameObject(IntegrityDataHelper.PreprocessRecieved(obj));
+                World.AddGameObject(IntegrityDataHelper.ProcessRecieved(obj));
 
                 result.ObjectsIds.Add(obj.Id.Value);
             }
@@ -110,32 +140,52 @@ namespace NRPlanes.Server
             return result;
         }
 
-        public GetNewObjectsResult GetNewObjects(Guid playerGuid, int minId)
+        public GetEventsLogSinceResult GetEventsLogSince(Guid playerGuid, Timestamp timestamp)
         {
-            GetNewObjectsResult newObjectsResult = new GetNewObjectsResult();
+            IEnumerable<GameEventsLogItem> logItems;
 
-            using (var handle = World.GameObjectsSafeReadHandle)
+            if (timestamp != null)
+                logItems = m_worldEventsLog.GetLogSince(timestamp);
+            else
+                logItems = m_worldEventsLog.GetAll();
+
+            Timestamp lastTimestamp = null;
+
+            if (logItems.Any())
+                lastTimestamp = logItems.Last().Timestamp;
+
+            GetEventsLogSinceResult result = new GetEventsLogSinceResult()
             {
-                // fill GameObject's ID field (For objects that have been created on the server)
-                foreach (var createdObject in handle.Items.Where(o => !o.Id.HasValue))
-                {
-                    AssignGameObjectID(createdObject);
-                }
+                LogItems = logItems,
+                LastTimestamp = lastTimestamp
+            };
 
-                newObjectsResult.Objects = handle.Items.Where(o => o.Id.Value >= minId && !o.IsGarbage).ToList();
-            }
+            if (result.LogItems.Count() > 0)
+                LogMessage(string.Format("Sending {0} log items since {1} ({2})", result.LogItems.Count(), timestamp, playerGuid));
 
-            if (newObjectsResult.Objects.Count > 0)
-                LogMessage(string.Format("{0} objects has been sent to player with id={1} (last ID={2})", newObjectsResult.Objects.Count, playerGuid, minId));
-
-            return newObjectsResult;            
+            return result;
         }
+
+        //public GetNewObjectsResult GetNewObjects(Guid playerGuid, int minId)
+        //{
+        //    GetNewObjectsResult newObjectsResult = new GetNewObjectsResult();
+
+        //    using (var handle = World.GameObjectsSafeReadHandle)
+        //    {
+        //        newObjectsResult.Objects = handle.Items.Where(o => o.Id.Value >= minId && !o.IsGarbage).ToList();
+        //    }
+
+        //    if (newObjectsResult.Objects.Count > 0)
+        //        LogMessage(string.Format("{0} objects has been sent to player with id={1} (last ID={2})", newObjectsResult.Objects.Count, playerGuid, minId));
+
+        //    return newObjectsResult;            
+        //}
 
         public void UpdatePlane(Guid playerGuid, PlaneMutableInformation info)
         {
             Plane playerPlane = m_playerToPlaneMapping[playerGuid];
 
-            info.Apply(playerPlane);
+            info.ApplyToPlayerPlaneOnServer(playerPlane);
         }
 
 
@@ -176,5 +226,8 @@ namespace NRPlanes.Server
             if (m_log != null)
                 m_log.BeginInvoke(message, null, null);
         }
+
+
+       
     }
 }

@@ -38,16 +38,50 @@ namespace NRPlanes.ServerData.MutableInformations
         }
 
         public override void Apply(object obj)
-        {
+        {            
             base.Apply(obj);
-
-            Plane plane = (Plane)obj;
 
             m_healthPrivateFieldAccessor.SetValue(obj, Health);
 
             foreach (var equipmentMutable in EquipmentMutableInformation)
             {
-                PlaneEquipment equipment = ((IHaveEquipment<PlaneEquipment>)plane).AllEquipment.Single(e => e.Id == equipmentMutable.Id);
+                PlaneEquipment equipment = ((IHaveEquipment<PlaneEquipment>)obj).AllEquipment.Single(e => e.Id == equipmentMutable.Id);
+
+                equipmentMutable.Apply(equipment);
+            }
+        }
+
+        /// <summary>
+        /// Applies mutable information but excludes equipment info for local plane - equipments state controlled only by local user.
+        /// <para>This function should be invoked on client-side.</para>        
+        /// </summary>
+        public void ApplyToOwnPlaneOnClient(Plane ownPlane)
+        {
+            //base.Apply(obj);
+
+            m_healthPrivateFieldAccessor.SetValue(ownPlane, Health);
+
+            //foreach (var equipmentMutable in EquipmentMutableInformation)
+            //{
+            //    PlaneEquipment equipment = ((IHaveEquipment<PlaneEquipment>)obj).AllEquipment.Single(e => e.Id == equipmentMutable.Id);
+
+            //    equipmentMutable.Apply(equipment);
+            //}
+        }
+
+        /// <summary>
+        /// Applies mutable information recieved from client (e.g. exepts plane health).
+        /// <para>This function should be invoked on server-side.</para>        
+        /// </summary>
+        public void ApplyToPlayerPlaneOnServer(Plane ownPlane)
+        {
+            base.Apply(ownPlane);
+
+            //m_healthPrivateFieldAccessor.SetValue(obj, Health);
+
+            foreach (var equipmentMutable in EquipmentMutableInformation)
+            {
+                PlaneEquipment equipment = ((IHaveEquipment<PlaneEquipment>)ownPlane).AllEquipment.Single(e => e.Id == equipmentMutable.Id);
 
                 equipmentMutable.Apply(equipment);
             }

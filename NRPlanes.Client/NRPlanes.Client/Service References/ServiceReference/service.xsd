@@ -3,6 +3,7 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.OperationResults" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.EventsLog" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.MutableInformations" />
   <xs:element name="Join">
     <xs:complexType>
@@ -31,40 +32,40 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetNewObjects">
+  <xs:element name="GetEventsLogSince">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="playerGuid" type="q5:guid" />
-        <xs:element minOccurs="0" name="minId" type="xs:int" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.EventsLog" minOccurs="0" name="timestamp" nillable="true" type="q6:Timestamp" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetNewObjectsResponse">
+  <xs:element name="GetEventsLogSinceResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.OperationResults" minOccurs="0" name="GetNewObjectsResult" nillable="true" type="q6:GetNewObjectsResult" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.OperationResults" minOccurs="0" name="GetEventsLogSinceResult" nillable="true" type="q7:GetEventsLogSinceResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="UpdatePlane">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="playerGuid" type="q7:guid" />
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.MutableInformations" minOccurs="0" name="info" nillable="true" type="q8:PlaneMutableInformation" />
+        <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="playerGuid" type="q8:guid" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.MutableInformations" minOccurs="0" name="info" nillable="true" type="q9:PlaneMutableInformation" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPlanesInfo">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="playerGuid" type="q9:guid" />
+        <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="playerGuid" type="q10:guid" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPlanesInfoResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.MutableInformations" minOccurs="0" name="GetPlanesInfoResult" nillable="true" type="q10:ArrayOfPlaneMutableInformation" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.MutableInformations" minOccurs="0" name="GetPlanesInfoResult" nillable="true" type="q11:ArrayOfPlaneMutableInformation" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Equipments" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Equipments" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Bullets" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="PlaneEquipmentRelativeInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="RelativeRotation" type="xs:double" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" minOccurs="0" name="RelativeToOriginPosition" type="q1:Vector" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlaneEquipmentRelativeInfo" nillable="true" type="tns:PlaneEquipmentRelativeInfo" />
+  <xs:complexType name="PlaneWeaponRelativeInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:PlaneEquipmentRelativeInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="WeaponPosition" type="tns:WeaponPositionEnum" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PlaneWeaponRelativeInfo" nillable="true" type="tns:PlaneWeaponRelativeInfo" />
+  <xs:simpleType name="WeaponPositionEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="LeftFront" />
+      <xs:enumeration value="CenterFront" />
+      <xs:enumeration value="RightFront" />
+      <xs:enumeration value="Unknown" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="WeaponPositionEnum" nillable="true" type="tns:WeaponPositionEnum" />
+  <xs:complexType name="PlaneEquipment">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:EquipmentOfPlanevLP_SO9OV">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Charge" type="xs:double" />
+          <xs:element minOccurs="0" name="MaximumCharge" type="xs:double" />
+          <xs:element minOccurs="0" name="MinimalChargeToActivate" type="xs:double" />
+          <xs:element minOccurs="0" name="Regeneration" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PlaneEquipment" nillable="true" type="tns:PlaneEquipment" />
+  <xs:complexType name="EquipmentOfPlanevLP_SO9OV">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="EquipmentOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Equipments" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="Plane" Namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Equipment">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="EquipmentOfPlanevLP_SO9OV" nillable="true" type="tns:EquipmentOfPlanevLP_SO9OV" />
+  <xs:complexType name="Equipment">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Info" nillable="true" type="xs:string" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" minOccurs="0" name="Size" type="q2:Size" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Equipment" nillable="true" type="tns:Equipment" />
+  <xs:complexType name="Shield">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:PlaneEquipment">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DamageToChargeFactor" type="xs:double" />
+          <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Shield" nillable="true" type="tns:Shield" />
+  <xs:complexType name="Engine">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:PlaneEquipment">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+          <xs:element minOccurs="0" name="TractionForce" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Engine" nillable="true" type="tns:Engine" />
+  <xs:complexType name="Weapon">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:PlaneEquipment">
+        <xs:sequence>
+          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" minOccurs="0" name="BulletOffset" type="q3:Vector" />
+          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Bullets" minOccurs="0" name="BulletPrototype" nillable="true" type="q4:Bullet" />
+          <xs:element minOccurs="0" name="ElapsedTimeForShot" type="ser:duration" />
+          <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" minOccurs="0" name="InitialBulletVelocity" type="q5:Vector" />
+          <xs:element minOccurs="0" name="LastShotDateTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="ReloadingTime" type="ser:duration" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Weapon" nillable="true" type="tns:Weapon" />
+</xs:schema>

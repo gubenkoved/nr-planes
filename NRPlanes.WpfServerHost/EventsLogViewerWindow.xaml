@@ -1,8 +1,8 @@
-﻿<Window x:Class="NRPlanes.WpfServerHost.SnapshotViewerWindow"
+﻿<Window x:Class="NRPlanes.WpfServerHost.EventsLogViewerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:toolkit="clr-namespace:Xceed.Wpf.Toolkit.PropertyGrid;assembly=Xceed.Wpf.Toolkit"
-        Title="Snapshot Viewer" Height="642" Width="878">
+        Title="Events Viewer" Height="642" Width="878">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -10,7 +10,7 @@
         </Grid.ColumnDefinitions>
         <ListBox Name="ObjectsList" />
         <toolkit:PropertyGrid Grid.Column="1" AutoGenerateProperties="True" IsReadOnly="True" SelectedObject="{Binding ElementName=ObjectsList, Path=SelectedItem}">
-            
+
         </toolkit:PropertyGrid>
     </Grid>
 </Window>

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NRPlanes.Core.Common;
-using NRPlanes.Client.NRPlanesServerReference;
 using NRPlanes.ServerData.MutableInformations;
 using NRPlanes.ServerData.OperationResults;
 using NRPlanes.ServerData;
 using System.Threading;
 using NRPlanes.Core.Common.Client;
+using NRPlanes.Client.ServiceReference;
+using NRPlanes.ServerData.EventsLog;
 
 namespace NRPlanes.Client.Common
 {
@@ -26,6 +27,7 @@ namespace NRPlanes.Client.Common
         private readonly Plane m_ownPlane;
 
         private int m_maxId;
+        private Timestamp m_lastTimestamp;
         private List<GameObject> m_commitQueue;
 
         private Thread m_workerThread;
@@ -33,6 +35,12 @@ namespace NRPlanes.Client.Common
         private bool m_isFirstUpdate;
 
         private const float MAX_UPDATE_RATE = 50.0f;
+
+        // minimal time since getting from server DELETE event and before it will be removed from client GameWorld
+        // this time is need to give client game world instance possibility to handle collsions by it's own
+        private readonly TimeSpan DELETE_DELAY = TimeSpan.FromMilliseconds(100);
+
+        private List<Tuple<DateTime, int>> m_deleteIdsQueue;
 
         public ObjectsSynchronizer(GameServiceClient client, ClientGameWorld world, Guid ownGuid, Plane ownPlane)
         {
@@ -49,6 +57,8 @@ namespace NRPlanes.Client.Common
             m_workerThread = new Thread(DoUpdateWork);
             m_workerThread.Name = "ObjectsSynchronizer worker";            
             m_workerThread.Start();
+
+            m_deleteIdsQueue = new List<Tuple<DateTime, int>>();
 
             world.GameObjectStatusChanged += GameObjectStatusChanged;            
         }
@@ -85,16 +95,61 @@ namespace NRPlanes.Client.Common
 
             m_commitQueue.Clear();
         }
-        private void GetAndProcessNewObjects()
+        private void ProcessServerGameWorldEvents()
         {
-            GetNewObjectsResult getNewObjectsResult = m_client.GetNewObjects(m_ownGuid, m_maxId + 1);
+            GetEventsLogSinceResult getNewObjectsResult = m_client.GetEventsLogSince(m_ownGuid, m_lastTimestamp);
 
-            foreach (var obj in getNewObjectsResult.Objects)
+            m_lastTimestamp = getNewObjectsResult.LastTimestamp != null ? getNewObjectsResult.LastTimestamp : m_lastTimestamp;
+
+            foreach (var logItem in getNewObjectsResult.LogItems)
             {
-                UpdateMaxId(obj.Id.Value);
-
-                m_clientWorld.AddGameObject(IntegrityDataHelper.PreprocessRecieved(obj));
+                ProcessServerEvent(logItem);
             }
+        }
+
+        private void ProcessServerEvent(GameEventsLogItem logItem)
+        {
+            if (logItem is GameObjectAddedLogItem)
+            {
+                var item = logItem as GameObjectAddedLogItem;
+
+                // preventing repeated game objects adding (e.g. own plane or any another commited objects such as bullets)
+                if (!m_clientWorld.ContainsGameObjectWithId(item.GameObject.Id.Value))
+                {
+                    UpdateMaxId(item.GameObject.Id.Value);
+
+                    m_clientWorld.AddGameObject(IntegrityDataHelper.ProcessRecieved(item.GameObject));
+                }
+            }
+            else if (logItem is GameObjectDeletedLogItem)
+            {
+                var item = logItem as GameObjectDeletedLogItem;
+
+                m_deleteIdsQueue.Add(new Tuple<DateTime, int>(DateTime.Now, item.GameObjectId));
+
+                //m_clientWorld.TryDeleteGameObjectWithId(item.GameObjectId);
+            }
+        }
+        private void ProcessDefferedRemoving()
+        {
+            var deleted = new List<Tuple<DateTime, int>>();
+
+            foreach (var item in m_deleteIdsQueue)
+            {
+                // when DELETE DELAY passed
+                if ((DateTime.Now - item.Item1 /*delete event receiving time*/) > DELETE_DELAY)
+                {
+                    m_clientWorld.TryDeleteGameObjectWithId(item.Item2 /*GO id*/);
+                    deleted.Add(item);
+                }
+                else
+                {
+                    // see further is needless - time have not passed yet
+                    return;
+                }
+            }
+
+            deleted.ForEach(item => m_deleteIdsQueue.Remove(item));
         }
         private void SendOwnPlaneParameters()
         {
@@ -124,6 +179,8 @@ namespace NRPlanes.Client.Common
                 {
                     if (localPlane != m_ownPlane)
                         planeInfo.Apply(localPlane);
+                    else
+                        planeInfo.ApplyToOwnPlaneOnClient(localPlane);
 
                     detectedPlanes.Add(localPlane);
                 }
@@ -149,14 +206,15 @@ namespace NRPlanes.Client.Common
 
                 if (m_isFirstUpdate)
                 {
-                    GetAndProcessNewObjects();
+                    ProcessServerGameWorldEvents();
                     m_isFirstUpdate = false;
                     continue;
                 }
 
                 CommitNewObjects();
                 SendOwnPlaneParameters();
-                GetAndProcessNewObjects();
+                ProcessServerGameWorldEvents();
+                ProcessDefferedRemoving();
                 UpdateEnemyPlanes(); // only after getting new objects from server
             }
         }

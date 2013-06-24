@@ -15,6 +15,7 @@
       <xs:extension base="tns:Planet">
         <xs:sequence>
           <xs:element minOccurs="0" name="RecoverySpeed" type="xs:double" />
+          <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" minOccurs="0" name="m_lastTickAffections" nillable="true" type="q2:ArrayOfGameObject" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -22,10 +23,10 @@
   <xs:element name="HealthRecoveryPlanet" nillable="true" type="tns:HealthRecoveryPlanet" />
   <xs:complexType name="RectangleGravityField">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" base="q2:StaticObject">
+      <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" base="q3:StaticObject">
         <xs:sequence>
           <xs:element minOccurs="0" name="Acceleration" type="xs:double" />
-          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" minOccurs="0" name="ForceDirection" type="q3:Vector" />
+          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" minOccurs="0" name="ForceDirection" type="q4:Vector" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

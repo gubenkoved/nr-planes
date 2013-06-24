@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="ArrayOfStaticObject">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="StaticObject" nillable="true" type="tns:StaticObject" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfStaticObject" nillable="true" type="tns:ArrayOfStaticObject" />
+  <xs:complexType name="StaticObject">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" minOccurs="0" name="AbsoluteGeometry" nillable="true" type="q1:Geometry" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="StaticObject" nillable="true" type="tns:StaticObject" />
+  <xs:complexType name="ArrayOfGameObject">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="GameObject" nillable="true" type="tns:GameObject" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfGameObject" nillable="true" type="tns:ArrayOfGameObject" />
+  <xs:complexType name="GameObject">
+    <xs:sequence>
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" minOccurs="0" name="Acceleration" type="q2:Vector" />
+      <xs:element minOccurs="0" name="AngularMass" type="xs:double" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Mass" type="xs:double" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" minOccurs="0" name="Position" type="q3:Vector" />
+      <xs:element minOccurs="0" name="ReferenceArea" nillable="true" type="tns:ReferenceArea" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" minOccurs="0" name="RelativeGeometry" nillable="true" type="q4:Geometry" />
+      <xs:element minOccurs="0" name="Rotation" type="xs:double" />
+      <xs:element minOccurs="0" name="RotationAcceleration" type="xs:double" />
+      <xs:element minOccurs="0" name="RotationVelocity" type="xs:double" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" minOccurs="0" name="Velocity" type="q5:Vector" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GameObject" nillable="true" type="tns:GameObject" />
+  <xs:complexType name="ReferenceArea">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="m_points" nillable="true" type="tns:ArrayOfReferenceAreaPoint" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ReferenceArea" nillable="true" type="tns:ReferenceArea" />
+  <xs:complexType name="ArrayOfReferenceAreaPoint">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ReferenceAreaPoint" type="tns:ReferenceAreaPoint" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfReferenceAreaPoint" nillable="true" type="tns:ArrayOfReferenceAreaPoint" />
+  <xs:complexType name="ReferenceAreaPoint">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsValueType xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsValueType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Angle" type="xs:double" />
+      <xs:element minOccurs="0" name="ReferenceArea" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ReferenceAreaPoint" nillable="true" type="tns:ReferenceAreaPoint" />
+  <xs:complexType name="Plane">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:GameObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="MaximalHealth" type="xs:double" />
+          <xs:element minOccurs="0" name="PlayerGuid" type="ser:guid" />
+          <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="m_allEquipment" nillable="true" type="q6:ArrayOfKeyValueOfPlaneEquipmentRelativeInfoPlaneEquipmentpjR_SvStE" />
+          <xs:element minOccurs="0" name="m_health" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Plane" nillable="true" type="tns:Plane" />
+</xs:schema>

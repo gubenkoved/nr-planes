@@ -41,9 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventsLog\GameEventsLog.cs" />
+    <Compile Include="EventsLog\GameEventsLogItem.cs" />
+    <Compile Include="EventsLog\GameObjectAddedLogItem.cs" />
+    <Compile Include="EventsLog\GameObjectDeletedLogItem.cs" />
+    <Compile Include="EventsLog\Timestamp.cs" />
     <Compile Include="OperationResults\CommitResult.cs" />
     <Compile Include="MutableInformations\EngineMutableInformation.cs" />
     <Compile Include="MutableInformations\GameObjectMutableInformation.cs" />
+    <Compile Include="OperationResults\GetEventsLogSinceResult.cs" />
     <Compile Include="OperationResults\GetNewObjectsResult.cs" />
     <Compile Include="IntegrityDataHelper.cs" />
     <Compile Include="OperationResults\JoinResult.cs" />

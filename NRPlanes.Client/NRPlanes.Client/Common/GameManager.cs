@@ -4,10 +4,10 @@ using NRPlanes.Core.Common;
 using NRPlanes.Core.Planes;
 using NRPlanes.Core.Primitives;
 using NRPlanes.Client.InfoPanels;
-using NRPlanes.Client.NRPlanesServerReference;
 using NRPlanes.ServerData.OperationResults;
 using NRPlanes.Core.Controllers;
 using NRPlanes.Core.Common.Client;
+using NRPlanes.Client.ServiceReference;
 
 namespace NRPlanes.Client.Common
 {

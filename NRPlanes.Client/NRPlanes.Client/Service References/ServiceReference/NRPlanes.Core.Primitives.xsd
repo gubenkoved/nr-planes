@@ -17,19 +17,16 @@
     <xs:sequence />
   </xs:complexType>
   <xs:element name="Geometry" nillable="true" type="tns:Geometry" />
-  <xs:complexType name="PolygonGeometry">
+  <xs:complexType name="RectGeometry">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:Geometry">
         <xs:sequence>
-          <xs:element minOccurs="0" name="_boundingRectangle" type="tns:Rect" />
-          <xs:element minOccurs="0" name="_center" type="tns:Vector" />
-          <xs:element minOccurs="0" name="_segments" nillable="true" type="tns:ArrayOfSegment" />
-          <xs:element minOccurs="0" name="_vertexes" nillable="true" type="tns:ArrayOfVector" />
+          <xs:element minOccurs="0" name="m_rect" type="tns:Rect" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="PolygonGeometry" nillable="true" type="tns:PolygonGeometry" />
+  <xs:element name="RectGeometry" nillable="true" type="tns:RectGeometry" />
   <xs:complexType name="Rect">
     <xs:annotation>
       <xs:appinfo>
@@ -44,6 +41,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Rect" nillable="true" type="tns:Rect" />
+  <xs:complexType name="PolygonGeometry">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Geometry">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="m_boundingRectangle" type="tns:Rect" />
+          <xs:element minOccurs="0" name="m_center" type="tns:Vector" />
+          <xs:element minOccurs="0" name="m_segments" nillable="true" type="tns:ArrayOfSegment" />
+          <xs:element minOccurs="0" name="m_vertexes" nillable="true" type="tns:ArrayOfVector" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PolygonGeometry" nillable="true" type="tns:PolygonGeometry" />
   <xs:complexType name="Vector">
     <xs:annotation>
       <xs:appinfo>
@@ -84,8 +94,8 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:Geometry">
         <xs:sequence>
-          <xs:element minOccurs="0" name="_center" type="tns:Vector" />
-          <xs:element minOccurs="0" name="_radius" type="xs:double" />
+          <xs:element minOccurs="0" name="m_center" type="tns:Vector" />
+          <xs:element minOccurs="0" name="m_radius" type="xs:double" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

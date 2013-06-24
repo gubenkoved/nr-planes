@@ -60,9 +60,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EventsLogViewerWindow.xaml.cs">
+      <DependentUpon>EventsLogViewerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SnapshotViewerWindow.xaml.cs">
       <DependentUpon>SnapshotViewerWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="EventsLogViewerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -112,6 +119,10 @@
     <ProjectReference Include="..\NRPlanes.Core\NRPlanes.Core.csproj">
       <Project>{21D70C5F-2503-4B69-A755-D33E25F7E831}</Project>
       <Name>NRPlanes.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NRPlanes.ServerData\NRPlanes.ServerData.csproj">
+      <Project>{8038A9F1-27BA-4370-894C-506B51C9BA2B}</Project>
+      <Name>NRPlanes.ServerData</Name>
     </ProjectReference>
     <ProjectReference Include="..\NRPlanes.Server\NRPlanes.Server.csproj">
       <Project>{E26E2DAB-452F-436F-AD51-423F3060798B}</Project>

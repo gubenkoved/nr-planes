@@ -21,7 +21,7 @@ namespace NRPlanes.Core.Aliens
 
         protected void AddAlienPlaneToField(Plane plane, AlienPlaneController controller)
         {
-            Logger.Log("Add alien's plane...");
+            Logger.Log(string.Format("Add alien's plane in position {0}...", plane.Position));
 
             plane.PlayerGuid = new Guid();
 

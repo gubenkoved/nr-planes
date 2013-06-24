@@ -129,6 +129,11 @@
     <Compile Include="Particles\AsymmetricParticlesEmitter.cs" />
     <Compile Include="Particles\ParticlesEngine.cs" />
     <Compile Include="Particles\SymmetricParticlesEmitter.cs" />
+    <Compile Include="Service References\ServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Sound\BasicSoundEffect.cs" />
     <Compile Include="Sound\FadeInOutSoundEffect.cs" />
     <Compile Include="Common\ObjectsSynchronizer.cs" />
@@ -151,17 +156,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="PlanesGame.cs" />
-    <Compile Include="Service References\NRPlanesServerReference\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Sound\INeedToUpdate.cs" />
     <Compile Include="Sound\SoundManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
+    <None Include="Service References\ServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\ServiceReference\configuration.svcinfo" />
+    <None Include="Service References\ServiceReference\configuration91.svcinfo" />
+    <None Include="Properties\DataSources\NRPlanes.ServerData.OperationResults.GetEventsLogSinceResult.datasource" />
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -174,33 +181,52 @@
     <None Include="Properties\DataSources\NRPlanes.ServerData.OperationResults.GetNewObjectsResult.datasource" />
     <None Include="Properties\DataSources\NRPlanes.ServerData.OperationResults.JoinResult.datasource" />
     <None Include="Properties\DataSources\NRPlanes.ServerData.PlaneMutableInformation.datasource" />
-    <None Include="Service References\NRPlanesServerReference\Arrays.xsd">
+    <None Include="Service References\ServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\NRPlanesServerReference\NRPlanes.Core.Bullets.xsd">
+    <None Include="Service References\ServiceReference\NRPlanes.Core.Bonuses.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\NRPlanesServerReference\NRPlanes.Core.Engines.xsd">
+    <None Include="Service References\ServiceReference\NRPlanes.Core.Bullets.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\NRPlanesServerReference\NRPlanes.Core.Planes.xsd">
+    <None Include="Service References\ServiceReference\NRPlanes.Core.Common.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\NRPlanesServerReference\NRPlanes.Core.Weapons.xsd">
+    <None Include="Service References\ServiceReference\NRPlanes.Core.Equipments.Engines.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\NRPlanesServerReference\NRPlanes.ServerData.MutableInformations.xsd">
+    <None Include="Service References\ServiceReference\NRPlanes.Core.Equipments.Weapons.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\NRPlanesServerReference\NRPlanes.ServerData.OperationResults.xsd">
+    <None Include="Service References\ServiceReference\NRPlanes.Core.Equipments.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\NRPlanesServerReference\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
+    <None Include="Service References\ServiceReference\NRPlanes.Core.Planes.xsd">
+      <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\NRPlanesServerReference\configuration.svcinfo" />
-    <None Include="Service References\NRPlanesServerReference\configuration91.svcinfo" />
+    <None Include="Service References\ServiceReference\NRPlanes.Core.Primitives.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference\NRPlanes.Core.StaticObjects.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference\NRPlanes.ServerData.EventsLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference\NRPlanes.ServerData.MutableInformations.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference\NRPlanes.ServerData.OperationResults.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference\service.wsdl" />
+    <None Include="Service References\ServiceReference\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\NRPlanes.Core\NRPlanes.Core.csproj">
@@ -247,30 +273,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
-    <None Include="Service References\NRPlanesServerReference\NRPlanes.Core.Common.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\NRPlanesServerReference\NRPlanes.Core.Primitives.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\NRPlanesServerReference\NRPlanes.Core.StaticObjects.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\NRPlanesServerReference\service.wsdl" />
-    <None Include="Service References\NRPlanesServerReference\service.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\NRPlanesServerReference\service1.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\NRPlanesServerReference\" />
+    <WCFMetadataStorage Include="Service References\ServiceReference\" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

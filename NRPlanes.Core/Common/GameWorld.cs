@@ -83,6 +83,44 @@ namespace NRPlanes.Core.Common
             m_staticObjects.Add(obj);
         }
 
+        public bool ContainsGameObjectWithId(int id)
+        {
+            using (var handle = m_safeGameObjects.SafeRead())
+            {
+                foreach (var item in handle.Items)
+                {
+                    if (item.Id.HasValue && item.Id.Value == id)
+                    {                        
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+        /// <summary>
+        /// Tries delete game object with specified id
+        /// </summary>        
+        /// <returns>Returns true, if game object with specified is was finded</returns>
+        public bool TryDeleteGameObjectWithId(int id)
+        {
+            using (var handle = m_safeGameObjects.SafeRead())
+            {
+                foreach (var item in handle.Items)
+                {
+                    if (item.Id.HasValue &&  !item.IsGarbage && item.Id.Value == id)
+                    {
+                        // delete finded item                 
+                        DeleteGameObject(item);                        
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public void AddPlaneController(PlaneControllerBase controller)
         {
             m_planeControllers.Add(controller);

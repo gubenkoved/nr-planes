@@ -21,6 +21,7 @@
         <Grid>
             <StackPanel Orientation="Horizontal">
                 <Button Content="Objects snapshot" Click="SnapshotButton_Click" />
+                <Button Content="Events log" Click="EventsLogButton_Click" />
             </StackPanel>
         </Grid>
         <ScrollViewer Name="LogScrollView" Grid.Row="2" VerticalScrollBarVisibility="Auto">

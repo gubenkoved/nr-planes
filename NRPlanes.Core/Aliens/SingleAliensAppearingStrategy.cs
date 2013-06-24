@@ -24,8 +24,6 @@ namespace NRPlanes.Core.Aliens
         {
             if (!m_added)
             {
-                Logger.Log("Add alien's plane...");
-
                 double x = RandomProvider.NextDouble() * m_world.Size.Width;
                 double y = RandomProvider.NextDouble() * m_world.Size.Height;
 

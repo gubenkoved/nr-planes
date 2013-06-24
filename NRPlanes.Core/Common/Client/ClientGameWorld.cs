@@ -64,5 +64,9 @@ namespace NRPlanes.Core.Common.Client
             // do nothing - bonuses generates only by server
         }
 
+        protected override void ApplyBonus(Bonuses.Bonus bonus, Plane plane)
+        {
+            // do nothing - bonuses are apllied on server-side only
+        }
     }
 }

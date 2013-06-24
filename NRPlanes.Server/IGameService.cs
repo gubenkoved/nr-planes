@@ -6,6 +6,7 @@ using System.ServiceModel;
 using NRPlanes.Core.Common;
 using NRPlanes.ServerData.MutableInformations;
 using NRPlanes.ServerData.OperationResults;
+using NRPlanes.ServerData.EventsLog;
 
 namespace NRPlanes.Server
 {
@@ -18,8 +19,11 @@ namespace NRPlanes.Server
         [OperationContract]
         CommitResult CommitObjects(Guid playerGuid, List<GameObject> objects);
 
+        //[OperationContract]
+        //GetNewObjectsResult GetNewObjects(Guid playerGuid, int minId);
+
         [OperationContract]
-        GetNewObjectsResult GetNewObjects(Guid playerGuid, int minId);
+        GetEventsLogSinceResult GetEventsLogSince(Guid playerGuid, Timestamp timestamp);
 
         [OperationContract(IsOneWay = true)]
         void UpdatePlane(Guid playerGuid, PlaneMutableInformation info);
