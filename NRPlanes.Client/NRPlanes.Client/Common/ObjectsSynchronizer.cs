@@ -100,7 +100,8 @@ namespace NRPlanes.Client.Common
         {
             GetEventsLogSinceResult getNewObjectsResult = m_client.GetEventsLogSince(m_ownGuid, m_lastTimestamp);
 
-            m_lastTimestamp = getNewObjectsResult.LastTimestamp != null ? getNewObjectsResult.LastTimestamp : m_lastTimestamp;
+            if (getNewObjectsResult.LogItems.Any())
+                m_lastTimestamp = getNewObjectsResult.LogItems.Last().Timestamp;            
 
             foreach (var logItem in getNewObjectsResult.LogItems)
             {
@@ -126,14 +127,7 @@ namespace NRPlanes.Client.Common
             {
                 var item = logItem as GameObjectDeletedLogItem;
 
-                if (m_clientWorld.GetObjectById(item.GameObjectId) is Bonus)
-                {
-                    int k = 0;
-                }
-
                 m_deleteIdsQueue.Add(new Tuple<DateTime, int>(DateTime.Now, item.GameObjectId));
-
-                //m_clientWorld.TryDeleteGameObjectWithId(item.GameObjectId);
             }
             else if (logItem is BonusAppliedLogItem)
             {
@@ -145,6 +139,17 @@ namespace NRPlanes.Client.Common
                 if (bonus != null && plane != null)
                     m_clientWorld.RaiseBonusAppliedEvent(bonus, plane);
             }
+            else if (logItem is GameObjectExplodedLogItem)
+            {
+                var item = logItem as GameObjectExplodedLogItem;
+
+                GameObject exploded = m_clientWorld.GetObjectById(item.GameObjectId);
+
+                if (exploded != null)
+                {
+                    m_clientWorld.RaiseExplosionEvent(exploded);
+                }
+            }
         }
         private void ProcessDefferedRemoving()
         {
@@ -153,10 +158,15 @@ namespace NRPlanes.Client.Common
             foreach (var item in m_deleteIdsQueue)
             {
                 // when DELETE DELAY passed
-                if ((DateTime.Now - item.Item1 /*delete event receiving time*/) > DELETE_DELAY)
+                if ((DateTime.Now - item.Item1 /*server's delete event receiving time*/) > DELETE_DELAY)
                 {
-                    m_clientWorld.TryDeleteGameObjectWithId(item.Item2 /*GO id*/);
-                    deleted.Add(item);
+                    GameObject deleting = m_clientWorld.GetObjectById(item.Item2);
+
+                    if (deleting != null) // if game world have object with specified ID
+                    {
+                        m_clientWorld.ExplicitlyRemoveGameObject(deleting);
+                        deleted.Add(item);
+                    }
                 }
                 else
                 {

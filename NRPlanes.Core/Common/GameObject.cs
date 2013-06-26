@@ -34,7 +34,7 @@ namespace NRPlanes.Core.Common
         /// Geometry should be specified so that the center of mass point is (0, 0)
         /// </summary>
         [DataMember]
-        public Geometry RelativeGeometry { get; protected set; }
+        public Geometry RelativeGeometry { get; private set; }
 
         /// <summary>
         /// Returns absolute geomerty. (WARNING: This is VERY expensive operation)
@@ -79,13 +79,12 @@ namespace NRPlanes.Core.Common
         [DataMember]
         public ReferenceArea ReferenceArea { get; private set; }
 
-        protected GameObject(double mass, double angularMass, ReferenceArea referenceArea)
+        protected GameObject(double mass, double angularMass, Geometry relativeGeometry, ReferenceArea referenceArea)
         {
             Mass = mass;
-
             AngularMass = angularMass;
-
             ReferenceArea = referenceArea;
+            RelativeGeometry = relativeGeometry;
         }
 
         public virtual void Update(TimeSpan elapsed)

@@ -85,6 +85,7 @@ namespace NRPlanes.Server
             
             World.GameObjectStatusChanged += GameObjectStatusChangedHandler;
             World.BonusApplied += BonusAppliedHandler;
+            World.Explosion += ExplosionHandler;
 
             Task.Factory.StartNew(GameWorldUpdate);                
         }
@@ -109,7 +110,15 @@ namespace NRPlanes.Server
                 }
             }
         }
+        private void ExplosionHandler(object sender, ExplosionEventArgs args)
+        {
+            var entry = new GameObjectExplodedLogItem(Timestamp.Create(), args.Exploded.Id.Value);
 
+            // marks as depritiated right now - this event has not to be transferred to new players
+            entry.IsDepriciated = true;
+
+            m_worldEventsLog.AddEntry(entry);
+        }
         private void BonusAppliedHandler(object sender, BonusAppliedEventArgs args)
         {
             var entry = new BonusAppliedLogItem(Timestamp.Create(), args.Bonus.Id.Value, args.Plane.Id.Value);
@@ -173,21 +182,12 @@ namespace NRPlanes.Server
             IEnumerable<GameEventsLogItem> logItems;
 
             // equals null when first time request
-            if (timestamp != null) 
-                logItems = m_worldEventsLog.GetLogSince(timestamp, false);
+            if (timestamp != null)
+                logItems = m_worldEventsLog.GetLogSince(timestamp, excludeDepriciated: false);
             else
-                logItems = m_worldEventsLog.GetAll(true); // when first time request exclude depritiated
+                logItems = m_worldEventsLog.GetAll(excludeDepriciated: true); // when first time request exclude depritiated items
 
-            Timestamp lastTimestamp = null;
-
-            if (logItems.Any())
-                lastTimestamp = logItems.Last().Timestamp;
-
-            GetEventsLogSinceResult result = new GetEventsLogSinceResult()
-            {
-                LogItems = logItems,
-                LastTimestamp = lastTimestamp
-            };
+            GetEventsLogSinceResult result = new GetEventsLogSinceResult() { LogItems = logItems };
 
             if (result.LogItems.Count() > 0)
                 LogMessage(string.Format("Sending {0} log items since {1} ({2})", result.LogItems.Count(), timestamp, playerGuid));

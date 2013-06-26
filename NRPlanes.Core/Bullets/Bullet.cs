@@ -40,8 +40,8 @@ namespace NRPlanes.Core.Bullets
             }
         }
 
-        protected Bullet(double mass, double angularMass, ReferenceArea referenceArea, double power, TimeSpan timeToLive)
-            : base(mass, angularMass, referenceArea)
+        protected Bullet(double mass, double angularMass, Geometry relativeGeometry, ReferenceArea referenceArea, double power, TimeSpan timeToLive)
+            : base(mass, angularMass, relativeGeometry, referenceArea)
         {
             Power = power;
 

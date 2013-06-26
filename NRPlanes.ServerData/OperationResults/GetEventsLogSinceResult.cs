@@ -12,8 +12,5 @@ namespace NRPlanes.ServerData.OperationResults
     {
         [DataMember]
         public IEnumerable<GameEventsLogItem> LogItems;
-
-        [DataMember]
-        public Timestamp LastTimestamp;
     }
 }

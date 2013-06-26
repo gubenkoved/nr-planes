@@ -11,16 +11,6 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="Bonus" nillable="true" type="tns:Bonus" />
-  <xs:complexType name="HealthBonus">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:Bonus">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="m_value" type="xs:double" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="HealthBonus" nillable="true" type="tns:HealthBonus" />
   <xs:complexType name="RandomBonus">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:Bonus">
@@ -31,4 +21,14 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="RandomBonus" nillable="true" type="tns:RandomBonus" />
+  <xs:complexType name="HealthBonus">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Bonus">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="m_value" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="HealthBonus" nillable="true" type="tns:HealthBonus" />
 </xs:schema>

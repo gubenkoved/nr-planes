@@ -3,7 +3,8 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" />
   <xs:complexType name="Timestamp">
     <xs:sequence>
-      <xs:element minOccurs="0" name="m_timestamp" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="m_dateTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="m_triesCount" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Timestamp" nillable="true" type="tns:Timestamp" />
@@ -15,20 +16,11 @@
   <xs:element name="ArrayOfGameEventsLogItem" nillable="true" type="tns:ArrayOfGameEventsLogItem" />
   <xs:complexType name="GameEventsLogItem">
     <xs:sequence>
+      <xs:element minOccurs="0" name="m_isDepreciated" type="xs:boolean" />
       <xs:element minOccurs="0" name="m_timestamp" nillable="true" type="tns:Timestamp" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="GameEventsLogItem" nillable="true" type="tns:GameEventsLogItem" />
-  <xs:complexType name="GameObjectAddedLogItem">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:GameEventsLogItem">
-        <xs:sequence>
-          <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" minOccurs="0" name="m_gameObject" nillable="true" type="q1:GameObject" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GameObjectAddedLogItem" nillable="true" type="tns:GameObjectAddedLogItem" />
   <xs:complexType name="GameObjectDeletedLogItem">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:GameEventsLogItem">
@@ -39,4 +31,25 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="GameObjectDeletedLogItem" nillable="true" type="tns:GameObjectDeletedLogItem" />
+  <xs:complexType name="BonusAppliedLogItem">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:GameEventsLogItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="m_bonusId" type="xs:int" />
+          <xs:element minOccurs="0" name="m_planeId" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BonusAppliedLogItem" nillable="true" type="tns:BonusAppliedLogItem" />
+  <xs:complexType name="GameObjectAddedLogItem">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:GameEventsLogItem">
+        <xs:sequence>
+          <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" minOccurs="0" name="m_gameObject" nillable="true" type="q1:GameObject" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GameObjectAddedLogItem" nillable="true" type="tns:GameObjectAddedLogItem" />
 </xs:schema>

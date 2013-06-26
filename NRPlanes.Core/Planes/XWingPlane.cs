@@ -41,26 +41,29 @@ namespace NRPlanes.Core.Planes
         }
 
         public XWingPlane(double mass, double angularMass, ReferenceArea referenceArea, Vector initialPosition)
-            :base(mass, angularMass, referenceArea, 1000)
+            : base(
+                mass,
+                angularMass,
+                new PolygonGeometry(new[]
+                    {
+                        new Vector(0, 6),
+                        new Vector(0.5, -0.6),
+                        new Vector(7, -1),
+                        new Vector(7, -5),
+                        new Vector(-7, -5),
+                        new Vector(-7, -1),
+                        new Vector(-0.5, -0.6)
+                    }),
+                referenceArea,
+                1000)
         {
             Position = initialPosition;
 
-            RelativeGeometry = new PolygonGeometry(new[]
-                                                       {
-                                                           new Vector(0, 6),
-                                                           new Vector(0.5, -0.6),
-                                                           new Vector(7, -1),
-                                                           new Vector(7, -5),
-                                                           new Vector(-7, -5),
-                                                           new Vector(-7, -1),
-                                                           new Vector(-0.5, -0.6)
-                                                       });
-
             m_leftForwardEngine = new RocketEngine(200000.0) { Info = "Left primary engine" };
-            m_rightForwardEngine = new RocketEngine(200000.0) { Info = "Right primary engine"};
+            m_rightForwardEngine = new RocketEngine(200000.0) { Info = "Right primary engine" };
 
-            m_leftDeflectingEngine = new IonEngine(50000.0) { Info = "Left deflector"};
-            m_rightDeflectingEngine = new IonEngine(50000.0) { Info = "Right deflector"};
+            m_leftDeflectingEngine = new IonEngine(50000.0) { Info = "Left deflector" };
+            m_rightDeflectingEngine = new IonEngine(50000.0) { Info = "Right deflector" };
 
             Weapon leftLaserGun = LaserGun.CreateDefault();
             leftLaserGun.Info = "Left laser gun";

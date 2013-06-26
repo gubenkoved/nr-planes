@@ -87,24 +87,6 @@ namespace NRPlanes.Core.Common
         {
             return GetObjectById(id) != null;            
         }
-        /// <summary>
-        /// Tries delete game object with specified id
-        /// </summary>        
-        /// <returns>Returns true, if game object with specified is was finded</returns>
-        public bool TryDeleteGameObjectWithId(int id)
-        {
-            GameObject obj = GetObjectById(id);
-
-            if (obj != null)
-            {
-                DeleteGameObject(obj);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         /// <summary>
         /// Tries get object by id, returns null when it does not exists
@@ -224,7 +206,30 @@ namespace NRPlanes.Core.Common
                     }
                 }
 
+                GenerateExplosionsOnCollision(collision);
+
                 OnCollisionDetected(this, new CollisionEventArgs(collision));
+            }
+        }
+
+        private void GenerateExplosionsOnCollision(Collision collision)
+        {
+            if (collision.CheckTypesBoth(typeof(Bullet))
+                || collision.CheckTypesBoth(typeof(Bullet), typeof(Bonus)))
+            {
+                if (collision.FirstObject.IsGarbage)
+                    OnExplosion(this, new ExplosionEventArgs(collision.FirstObject));
+
+                if (collision.SecondObject.IsGarbage)
+                    OnExplosion(this, new ExplosionEventArgs(collision.SecondObject));
+            }
+
+            if (collision.CheckTypesBoth(typeof(Bullet), typeof(Plane)))
+            {
+                if (collision.FirstObject is Bullet)
+                    OnExplosion(this, new ExplosionEventArgs(collision.FirstObject));
+                else
+                    OnExplosion(this, new ExplosionEventArgs(collision.SecondObject));
             }
         }
 
@@ -314,6 +319,13 @@ namespace NRPlanes.Core.Common
                 BonusApplied.Invoke(sender, args);
         }
         public event EventHandler<BonusAppliedEventArgs> BonusApplied;
+
+        protected void OnExplosion(object sender, ExplosionEventArgs args)
+        {
+            if (Explosion != null)
+                Explosion.Invoke(sender, args);
+        }
+        public event EventHandler<ExplosionEventArgs> Explosion;
         #endregion
     }
 }

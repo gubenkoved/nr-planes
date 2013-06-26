@@ -65,17 +65,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Equipment" nillable="true" type="tns:Equipment" />
-  <xs:complexType name="Shield">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:PlaneEquipment">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="DamageToChargeFactor" type="xs:double" />
-          <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="Shield" nillable="true" type="tns:Shield" />
   <xs:complexType name="Engine">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:PlaneEquipment">
@@ -102,4 +91,15 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="Weapon" nillable="true" type="tns:Weapon" />
+  <xs:complexType name="Shield">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:PlaneEquipment">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DamageToChargeFactor" type="xs:double" />
+          <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Shield" nillable="true" type="tns:Shield" />
 </xs:schema>

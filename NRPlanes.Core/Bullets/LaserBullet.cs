@@ -21,21 +21,14 @@ namespace NRPlanes.Core.Bullets
         }        
 
         private LaserBullet(double mass, double angularMass, double power, TimeSpan timeToLive)
-            : base(mass, angularMass, new ReferenceArea(0.0), power, timeToLive)
+            : base(
+                mass, 
+                angularMass,
+                PolygonGeometry.FromRectangle(new Rect(Vector.Zero, new Size(0.35, 0.35))),
+                new ReferenceArea(0.0), 
+                power, 
+                timeToLive)
         {
-            const double radius = 0.35;
-
-            //RelativeGeometry = new CircleGeometry(new Vector(0, 0), radius);
-
-            RelativeGeometry = new PolygonGeometry(new[]
-                                               {
-                                                   new Vector(-radius, radius),
-                                                   new Vector(radius, radius),
-                                                   new Vector(radius, -radius),
-                                                   new Vector(-radius, -radius)
-                                               });
         }
-
-        
     }
 }

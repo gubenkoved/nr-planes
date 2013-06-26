@@ -21,8 +21,7 @@
   <xs:element name="CommitResult" nillable="true" type="tns:CommitResult" />
   <xs:complexType name="GetEventsLogSinceResult">
     <xs:sequence>
-      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.EventsLog" minOccurs="0" name="LastTimestamp" nillable="true" type="q4:Timestamp" />
-      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.EventsLog" minOccurs="0" name="LogItems" nillable="true" type="q5:ArrayOfGameEventsLogItem" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.EventsLog" minOccurs="0" name="LogItems" nillable="true" type="q4:ArrayOfGameEventsLogItem" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="GetEventsLogSinceResult" nillable="true" type="tns:GetEventsLogSinceResult" />

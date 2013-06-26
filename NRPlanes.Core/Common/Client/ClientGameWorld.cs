@@ -68,6 +68,11 @@ namespace NRPlanes.Core.Common.Client
             OnBonusApplied(this, new BonusAppliedEventArgs(bonus, plane));
         }
 
+        public void RaiseExplosionEvent(GameObject exploded)
+        {
+            OnExplosion(this, new ExplosionEventArgs(exploded));
+        }
+
         protected override void BeforeDeleteGameObject(GameObject obj)
         {
             // do nothing - bonuses generates only by server

@@ -50,12 +50,13 @@
     <Compile Include="Bonuses\RandomBonus.cs" />
     <Compile Include="Bonuses\RechargeBonus.cs" />
     <Compile Include="Bullets\LaserBullet.cs" />
-    <Compile Include="Bullets\Rocket.cs" />
+    <Compile Include="Bullets\HomingRocket.cs" />
     <Compile Include="Bullets\Bullet.cs" />
     <Compile Include="Common\BonusAppliedEventArgs.cs" />
     <Compile Include="Common\Client\ClientGameWorld.cs" />
     <Compile Include="Common\Collision.cs" />
     <Compile Include="Common\CollisionEventArgs.cs" />
+    <Compile Include="Common\ExplosionEventArgs.cs" />
     <Compile Include="Common\PlaneMotionType.cs" />
     <Compile Include="Common\RandomProvider.cs" />
     <Compile Include="Equipments\Equipment.cs" />

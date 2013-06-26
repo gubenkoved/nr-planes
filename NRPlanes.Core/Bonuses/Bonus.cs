@@ -24,12 +24,11 @@ namespace NRPlanes.Core.Bonuses
         }
 
         public Bonus(Vector position, double health = 1000)
-            :base(1, 1, null)
+            :base(1, 1, new CircleGeometry(Vector.Zero, 5), null)
         {
             m_health = health;
 
-            Position = position;
-            RelativeGeometry = new CircleGeometry(Vector.Zero, 5);
+            Position = position;            
         }
 
         public void Damage(double power)

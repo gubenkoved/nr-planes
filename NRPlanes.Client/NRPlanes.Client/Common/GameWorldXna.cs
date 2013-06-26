@@ -99,9 +99,9 @@ namespace NRPlanes.Client.Common
             m_particles = new List<Particle>();
 
             m_gameWorld = gameWorld;
-            m_gameWorld.GameObjectStatusChanged += GameObjectStatusChanged;
-            m_gameWorld.CollisionDetected += CollisionDetected;
+            m_gameWorld.GameObjectStatusChanged += GameObjectStatusChanged;            
             m_gameWorld.BonusApplied += BonusApplied;
+            m_gameWorld.Explosion += ExplosionDetected;
 
             //m_backgroundVisiblePartWidth = gameFieldRectangle.Width;
             m_backgroundScale = new Vector2(1.5f, 1.5f); // 50% of width and height will be behind screen bound in every frame
@@ -178,27 +178,9 @@ namespace NRPlanes.Client.Common
             BonusXna bonusXna = (BonusXna)m_gameObjectMapping[args.Bonus];
             bonusXna.WhenApplied(args.Plane);
         }
-        private void CollisionDetected(object sender, CollisionEventArgs args)
+        private void ExplosionDetected(object sedner, ExplosionEventArgs args)
         {
-            Collision collision = args.Collision;
-
-            if (collision.CheckTypesBoth(typeof(Bullet)) 
-                || collision.CheckTypesBoth(typeof(Bullet), typeof(Bonus)))
-            {
-                if (collision.FirstObject.IsGarbage)
-                    AddExplosion(collision.FirstObject);
-
-                if (collision.SecondObject.IsGarbage)
-                    AddExplosion(collision.SecondObject);
-            }
-
-            if (collision.CheckTypesBoth(typeof(Bullet), typeof(Plane)))
-            {
-                if (collision.FirstObject is Bullet)
-                    AddExplosion(collision.FirstObject);
-                else
-                    AddExplosion(collision.SecondObject);
-            }           
+            AddExplosion(args.Exploded);
         }
         private void AddExplosion(GameObject exploded)
         {
@@ -344,9 +326,9 @@ namespace NRPlanes.Client.Common
             GraphicsDevice.SetRenderTarget(m_currentFrame);
             GraphicsDevice.Clear(Color.Black);
 
-            // draw the last frame at 96% brightness
+            // draw the last frame at some brightness
             m_spriteBatch.Begin(0, BlendState.Opaque, SamplerState.PointClamp, null, null);
-            m_spriteBatch.Draw(m_lastFrame, Vector2.Zero, Color.White * 0.6f);
+            m_spriteBatch.Draw(m_lastFrame, Vector2.Zero, Color.White * 0.3f);
             m_spriteBatch.End();
 
             // draw particles

@@ -52,8 +52,8 @@ namespace NRPlanes.Core.Common
             get { return m_allEquipment.Values; }
         }
 
-        protected Plane(double mass, double angularMass, ReferenceArea referenceArea, double maxHealth)
-            : base(mass, angularMass, referenceArea)
+        protected Plane(double mass, double angularMass, Geometry relativeGeometry, ReferenceArea referenceArea, double maxHealth)
+            : base(mass, angularMass, relativeGeometry, referenceArea)
         {
             m_allEquipment = new Dictionary<PlaneEquipmentRelativeInfo, PlaneEquipment>();
 
