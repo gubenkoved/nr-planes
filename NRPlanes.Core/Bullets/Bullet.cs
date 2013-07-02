@@ -9,6 +9,7 @@ namespace NRPlanes.Core.Bullets
 {
     [DataContract]
     [KnownType(typeof(Bullets.LaserBullet))]
+    [KnownType(typeof(Bullets.HomingRocket))]
     public abstract class Bullet : GameObject
     {
         [DataMember]

@@ -11,7 +11,7 @@ namespace NRPlanes.Core.Equipments
         public GameObject RelatedGameObject { get; set; }
 
         /// <summary>
-        /// To unambiguous identificate equipment in related game object bounds
+        /// Identificates equipment in related game object's bounds
         /// </summary>
         [DataMember]
         public int Id { get; set; }

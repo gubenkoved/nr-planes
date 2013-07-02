@@ -49,9 +49,6 @@ namespace NRPlanes.Core.Common
             return tmp;
         }
 
-        /// <summary>
-        /// Rotation angle. From 0 to 360 degres
-        /// </summary>
         [DataMember]
         public double Rotation { get; internal set; }
 

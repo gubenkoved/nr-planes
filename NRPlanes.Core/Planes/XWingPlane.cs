@@ -73,15 +73,15 @@ namespace NRPlanes.Core.Planes
 
             Shield shield = new Shield(10.0, 0.5, 1.0, 0.03) { Info = "Shield" };
 
-            AddEquipment(m_leftForwardEngine, new PlaneEquipmentRelativeInfo() { RelativeToOriginPosition = new Vector(-1.55, -6.6), RelativeRotation = 5 });
-            AddEquipment(m_rightForwardEngine, new PlaneEquipmentRelativeInfo() { RelativeToOriginPosition = new Vector(+1.55, -6.6), RelativeRotation = -5 });
-            AddEquipment(m_leftDeflectingEngine, new PlaneEquipmentRelativeInfo() { RelativeToOriginPosition = new Vector(+0.6, 2.8), RelativeRotation = -80 });
-            AddEquipment(m_rightDeflectingEngine, new PlaneEquipmentRelativeInfo() { RelativeToOriginPosition = new Vector(-0.6, 2.8), RelativeRotation = 80 });
+            AddEquipmentSuppressEvents(m_leftForwardEngine, new PlaneEquipmentRelativeInfo() { RelativeToOriginPosition = new Vector(-1.55, -6.6), RelativeRotation = 5 });
+            AddEquipmentSuppressEvents(m_rightForwardEngine, new PlaneEquipmentRelativeInfo() { RelativeToOriginPosition = new Vector(+1.55, -6.6), RelativeRotation = -5 });
+            AddEquipmentSuppressEvents(m_leftDeflectingEngine, new PlaneEquipmentRelativeInfo() { RelativeToOriginPosition = new Vector(+0.6, 2.8), RelativeRotation = -80 });
+            AddEquipmentSuppressEvents(m_rightDeflectingEngine, new PlaneEquipmentRelativeInfo() { RelativeToOriginPosition = new Vector(-0.6, 2.8), RelativeRotation = 80 });
 
-            AddEquipment(leftLaserGun, new PlaneWeaponRelativeInfo() { WeaponPosition = WeaponPosition.LeftFront, RelativeToOriginPosition = new Vector(-1.5, -0.4), RelativeRotation = 0 });
-            AddEquipment(rightLaserGun, new PlaneWeaponRelativeInfo() { WeaponPosition = WeaponPosition.RightFront, RelativeToOriginPosition = new Vector(1.5, -0.4), RelativeRotation = 0 });
+            AddEquipmentSuppressEvents(leftLaserGun, new PlaneWeaponRelativeInfo() { WeaponPosition = WeaponPosition.LeftFront, RelativeToOriginPosition = new Vector(-1.5, -0.4), RelativeRotation = 0 });
+            AddEquipmentSuppressEvents(rightLaserGun, new PlaneWeaponRelativeInfo() { WeaponPosition = WeaponPosition.RightFront, RelativeToOriginPosition = new Vector(1.5, -0.4), RelativeRotation = 0 });
 
-            AddEquipment(shield, new PlaneEquipmentRelativeInfo());
+            AddEquipmentSuppressEvents(shield, new PlaneEquipmentRelativeInfo());
         }
 
         public override void StartMotion(PlaneMotionType motion)

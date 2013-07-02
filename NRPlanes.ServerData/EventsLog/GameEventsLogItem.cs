@@ -11,6 +11,8 @@ namespace NRPlanes.ServerData.EventsLog
     [KnownType(typeof(GameObjectDeletedLogItem))]
     [KnownType(typeof(BonusAppliedLogItem))]
     [KnownType(typeof(GameObjectExplodedLogItem))]
+    [KnownType(typeof(PlaneEquipmentAddedLogItem))]
+    [KnownType(typeof(PlaneEquipmentRemovedLogItem))]
     public abstract class GameEventsLogItem
     {
         [DataMember]

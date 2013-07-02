@@ -2,24 +2,21 @@
 
 namespace NRPlanes.Core.Equipments
 {
-    //public enum GameObjectEquipmentStatus
-    //{
-    //    Created,
-    //    Deleted
-    //}
+    public enum GameObjectEquipmentStatus
+    {
+        Added,
+        Removed
+    }
 
-    //public class GameObjectEquipmentStatusChangedArgs<T> : EventArgs
-    //// where T : Equipment
-    //{
-    //    public T Equipment;
+    public class GameObjectEquipmentStatusChangedArgs : EventArgs    
+    {
+        public readonly Equipment Equipment;
+        public readonly GameObjectEquipmentStatus Status;
 
-    //    public GameObjectEquipmentStatus Status;
-
-    //    public GameObjectEquipmentStatusChangedArgs(GameObjectEquipmentStatus newStatus, T equipment)
-    //    {
-    //        Status = newStatus;
-
-    //        Equipment = equipment;
-    //    }
-    //}
+        public GameObjectEquipmentStatusChangedArgs(GameObjectEquipmentStatus newStatus, Equipment equipment)
+        {
+            Status = newStatus;
+            Equipment = equipment;
+        }
+    }
 }

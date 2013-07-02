@@ -61,24 +61,61 @@ namespace NRPlanes.Core.Common
             Health = MaximalHealth / 2.0;
         }
 
-        protected void AddEquipment(PlaneEquipment equipment, PlaneEquipmentRelativeInfo relInfo)
+        private void AddEquipment(PlaneEquipment equipment, PlaneEquipmentRelativeInfo relInfo, bool supressRaisingEquipmentAddedEvent)
         {
             equipment.RelatedGameObject = this;
             equipment.Id = m_allEquipment.Count;
 
             m_allEquipment.Add(relInfo, equipment);
+
+            if (!supressRaisingEquipmentAddedEvent)
+            {
+                OnEquipmentStatusChanged(this,
+                    new GameObjectEquipmentStatusChangedArgs(
+                        GameObjectEquipmentStatus.Added,
+                        equipment));
+            }
+        }
+        protected void AddEquipmentSuppressEvents(PlaneEquipment equipment, PlaneEquipmentRelativeInfo relInfo)
+        {
+            AddEquipment(equipment, relInfo, true);
+        }
+        public void AddEquipment(PlaneEquipment equipment, PlaneEquipmentRelativeInfo relInfo)
+        {
+            AddEquipment(equipment, relInfo, false);
+        }
+        protected void RemoveEquipment(PlaneEquipment equipment)
+        {
+            if (m_allEquipment.ContainsValue(equipment))
+            {
+                var key = GetEquipmentRelativeInfo(equipment);
+                
+                m_allEquipment.Remove(key);
+
+                OnEquipmentStatusChanged(this,
+                    new GameObjectEquipmentStatusChangedArgs(
+                        GameObjectEquipmentStatus.Removed,
+                        equipment));
+            }
+            else
+            {
+                throw new Exception("There is no this equipment");
+            }
         }
 
+        public PlaneEquipmentRelativeInfo GetEquipmentRelativeInfo(PlaneEquipment planeEquipment)
+        {
+            return m_allEquipment.Single(kvp => kvp.Value == planeEquipment).Key;
+        }
         public Vector GetEquipmentAbsolutePosition(PlaneEquipment planeEquipment)
         {
-            PlaneEquipmentRelativeInfo equipmentInfo = m_allEquipment.Single(kvp => kvp.Value == planeEquipment).Key;
+            PlaneEquipmentRelativeInfo equipmentInfo = GetEquipmentRelativeInfo(planeEquipment);
 
             return Position + equipmentInfo.RelativeToOriginPosition.Rotate(Rotation);
         }
-
         public double GetEquipmentAbsoluteRotation(PlaneEquipment planeEquipment)
         {
-            PlaneEquipmentRelativeInfo equipmentInfo = m_allEquipment.Single(kvp => kvp.Value == planeEquipment).Key;
+            PlaneEquipmentRelativeInfo equipmentInfo = GetEquipmentRelativeInfo(planeEquipment);
 
             return Rotation + equipmentInfo.RelativeRotation;
         }
@@ -161,5 +198,14 @@ namespace NRPlanes.Core.Common
                 planeEquipment.Update(elapsed);
             }
         }
+
+        private void OnEquipmentStatusChanged(object sender, GameObjectEquipmentStatusChangedArgs args)
+        {
+            if (EquipmentStatusChanged != null)
+            {
+                EquipmentStatusChanged.Invoke(sender, args);
+            }
+        }
+        public event EventHandler<GameObjectEquipmentStatusChangedArgs> EquipmentStatusChanged;
     }
 }

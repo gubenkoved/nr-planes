@@ -120,7 +120,9 @@ namespace NRPlanes.Client.Common
                 {
                     UpdateMaxId(item.GameObject.Id.Value);
 
-                    m_clientWorld.AddGameObject(IntegrityDataHelper.ProcessRecieved(item.GameObject));
+                    IntegrityDataHelper.ProcessRecieved(item.GameObject, m_clientWorld);
+
+                    m_clientWorld.AddGameObject(item.GameObject);
                 }
             }
             else if (logItem is GameObjectDeletedLogItem)

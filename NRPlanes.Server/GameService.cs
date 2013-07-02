@@ -16,6 +16,7 @@ using NRPlanes.ServerData;
 using NRPlanes.Core.Logging;
 using NRPlanes.Core.Aliens;
 using NRPlanes.ServerData.EventsLog;
+using NRPlanes.Core.Equipments;
 
 namespace NRPlanes.Server
 {
@@ -130,15 +131,43 @@ namespace NRPlanes.Server
         }
         private void GameObjectStatusChangedHandler(object sender, GameObjectStatusChangedEventArg arg)
         {
-            if (arg.Status == GameObjectStatus.Created)
+            switch (arg.Status)
             {
-                AssignGameObjectID(arg.GameObject);
+                case GameObjectStatus.Created:
+                    AssignGameObjectID(arg.GameObject);
 
-                m_worldEventsLog.AddEntry(new GameObjectAddedLogItem(Timestamp.Create(), arg.GameObject));
+                    // add PlaneEquipmentStatusChanged handler when game object is Plane
+                    if (arg.GameObject is Plane)
+                        ((Plane)arg.GameObject).EquipmentStatusChanged += PlaneEquipmentStatusChanged;
+
+                    m_worldEventsLog.AddEntry(new GameObjectAddedLogItem(Timestamp.Create(), arg.GameObject));
+                    break;
+                case GameObjectStatus.Deleted:
+                    m_worldEventsLog.AddEntry(new GameObjectDeletedLogItem(Timestamp.Create(), arg.GameObject));
+                    break;
+                default:
+                    throw new Exception("Unknown state");
             }
-            else if (arg.Status == GameObjectStatus.Deleted)
+        }
+
+        private void PlaneEquipmentStatusChanged(object sender, GameObjectEquipmentStatusChangedArgs args)
+        {
+            switch (args.Status)
             {
-                m_worldEventsLog.AddEntry(new GameObjectDeletedLogItem(Timestamp.Create(), arg.GameObject));
+                case GameObjectEquipmentStatus.Added:
+                    m_worldEventsLog.AddEntry(new PlaneEquipmentAddedLogItem(
+                        Timestamp.Create(),
+                        (Plane)args.Equipment.RelatedGameObject,
+                        (PlaneEquipment)args.Equipment));
+                    break;
+                case GameObjectEquipmentStatus.Removed:
+                    m_worldEventsLog.AddEntry(new PlaneEquipmentRemovedLogItem(
+                       Timestamp.Create(),
+                       (Plane)args.Equipment.RelatedGameObject,
+                       (PlaneEquipment)args.Equipment));
+                    break;
+                default:
+                    throw new Exception("Unknown state");
             }
         }
 
@@ -167,7 +196,9 @@ namespace NRPlanes.Server
                 if (obj is Plane)
                     m_playerToPlaneMapping[playerGuid] = obj as Plane; // If player commit plane when it his own plane                
 
-                World.AddGameObject(IntegrityDataHelper.ProcessRecieved(obj));
+                IntegrityDataHelper.ProcessRecieved(obj, World);
+
+                World.AddGameObject(obj);
 
                 result.ObjectsIds.Add(obj.Id.Value);
             }
