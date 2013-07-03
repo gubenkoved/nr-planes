@@ -48,7 +48,7 @@ namespace NRPlanes.Client.InfoPanels
                     m_lowChargeTexture,
                     new Vector2(lowChargeMarkIndention + position.X + center.X * scale, lowChargeMarkIndention + position.Y + +center.Y * scale),
                     null,
-                    Color.FromNonPremultiplied(255, 255, 255, 200),
+                    Color.White * 0.8f,
                     0,
                     center,
                     scale * (float)(1f + Math.Sin(m_drawCount / 50.0) / 10f),

@@ -84,7 +84,7 @@ namespace NRPlanes.Core.Common
         {
             AddEquipment(equipment, relInfo, false);
         }
-        protected void RemoveEquipment(PlaneEquipment equipment)
+        public void RemoveEquipment(PlaneEquipment equipment)
         {
             if (m_allEquipment.ContainsValue(equipment))
             {
@@ -101,6 +101,10 @@ namespace NRPlanes.Core.Common
             {
                 throw new Exception("There is no this equipment");
             }
+        }
+        public PlaneEquipment GetEquipmentById(int id)
+        {
+            return m_allEquipment.Single(kvp => kvp.Value.Id == id).Value;
         }
 
         public PlaneEquipmentRelativeInfo GetEquipmentRelativeInfo(PlaneEquipment planeEquipment)

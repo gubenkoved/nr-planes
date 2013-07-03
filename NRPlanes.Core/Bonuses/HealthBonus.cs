@@ -12,24 +12,17 @@ namespace NRPlanes.Core.Bonuses
     public class HealthBonus : Bonus
     {
         [DataMember]
-        private double m_value;
-        public double Value
-        {
-            get
-            {
-                return m_value;
-            }
-        }
+        public readonly double Value;
 
         public HealthBonus(Vector position, double value)
             : base(position)
         {
-            m_value = value;
+            Value = value;
         }
 
         protected override void ApplyImpl(Plane plane)
         {
-            plane.Recover(m_value);
+            plane.Recover(Value);
         }
     }
 }

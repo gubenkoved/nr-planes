@@ -263,6 +263,7 @@ namespace NRPlanes.Core.Common
         private void GenerateBonus(Vector position)
         {
             Bonus bonus = new HealthBonus(position, 333);
+            //Bonus bonus = new RocketsBonus(position, 2);
 
             Logger.Log(string.Format("Add bonus {0} in position {1}", bonus, position));
 

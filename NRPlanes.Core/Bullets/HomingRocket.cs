@@ -24,13 +24,17 @@ namespace NRPlanes.Core.Bullets
             set
             {
                 m_target = value;
-                m_targetPlaneId = m_target.Id.Value;
+
+                if (m_target != null)
+                    m_targetPlaneId = m_target.Id.Value;
+                else
+                    m_targetPlaneId = null;
             }
         }
         
         [DataMember]
-        private int m_targetPlaneId;
-        public int TargetPlaneId
+        private int? m_targetPlaneId;
+        public int? TargetPlaneId
         {
             get
             {
@@ -38,11 +42,19 @@ namespace NRPlanes.Core.Bullets
             }
         }
 
+        public static HomingRocket Default
+        {
+            get
+            {
+                return new HomingRocket(null);
+            }
+        }
+
         public HomingRocket(Plane target)
             :base(
                 20, 
                 50,
-                PolygonGeometry.FromRectangle( new Rect(Vector.Zero, new Size(1, 3))),
+                PolygonGeometry.FromRectangle( new Rect(Vector.Zero, new Size(2, 6.4))),
                 null,
                 200,
                 TimeSpan.FromSeconds(30))
@@ -56,19 +68,22 @@ namespace NRPlanes.Core.Bullets
         {
             base.Update(elapsed);            
 
-            double angleToTarget = Helper.RelativeAngleBetweenPositions(Position, Target.Position);
-            double rotationDelta = Helper.NormalizeAngle(angleToTarget - Rotation);
-
-            // NOTE: it's desirable to change this code from direct manipulation with Rotation prop. (with internal setter)
-            // to calculate appretiate force impacting
-
-            if (rotationDelta > 180) // rotate through left side
+            if (Target != null)
             {
-                Rotation += -1 * m_maxRotationVelocity * elapsed.TotalSeconds;
-            }
-            else
-            {
-                Rotation += m_maxRotationVelocity * elapsed.TotalSeconds;
+                double angleToTarget = Helper.RelativeAngleBetweenPositions(Position, Target.Position);
+                double rotationDelta = Helper.NormalizeAngle(angleToTarget - Rotation);
+
+                // NOTE: it's desirable to change this code from direct manipulation with Rotation prop. (with internal setter)
+                // to calculate appretiate force impacting
+
+                if (rotationDelta > 180) // rotate through left side
+                {
+                    Rotation += -1 * m_maxRotationVelocity * elapsed.TotalSeconds;
+                }
+                else
+                {
+                    Rotation += m_maxRotationVelocity * elapsed.TotalSeconds;
+                }
             }
         }
     }

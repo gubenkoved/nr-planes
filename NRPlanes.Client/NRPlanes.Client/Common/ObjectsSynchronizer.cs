@@ -11,6 +11,7 @@ using NRPlanes.Core.Common.Client;
 using NRPlanes.Client.ServiceReference;
 using NRPlanes.ServerData.EventsLog;
 using NRPlanes.Core.Bonuses;
+using NRPlanes.Core.Equipments;
 
 namespace NRPlanes.Client.Common
 {
@@ -151,6 +152,23 @@ namespace NRPlanes.Client.Common
                 {
                     m_clientWorld.RaiseExplosionEvent(exploded);
                 }
+            }
+            else if (logItem is PlaneEquipmentAddedLogItem)
+            {
+                var item = logItem as PlaneEquipmentAddedLogItem;
+
+                Plane plane = (Plane)m_clientWorld.GetObjectById(item.PlaneId);
+
+                plane.AddEquipment(item.Equipment, item.EquipmentRelativeInfo);
+            }
+            else if (logItem is PlaneEquipmentRemovedLogItem)
+            {
+                var item = logItem as PlaneEquipmentRemovedLogItem;
+
+                Plane plane = (Plane)m_clientWorld.GetObjectById(item.PlaneId);
+                PlaneEquipment equip = plane.GetEquipmentById(item.EquipmentId);
+
+                plane.RemoveEquipment(equip);
             }
         }
         private void ProcessDefferedRemoving()

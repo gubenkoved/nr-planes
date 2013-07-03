@@ -51,3 +51,8 @@ Content\Sounds\health_bonus.xnb
 Content\Fonts\information_font.xnb
 Content\Fonts\infopanel_font.xnb
 Content\Fonts\debug.xnb
+Content\Bonuses\health_bonus.xnb
+Content\Bonuses\rocket_bonus.xnb
+Content\Bonuses\random_bonus.xnb
+Content\Minimap\bonus_location.xnb
+Content\Images\rocket.xnb

@@ -123,6 +123,8 @@
     <Compile Include="Common\MyDrawableGameComponent.cs" />
     <Compile Include="GameComponents\GeometryDrawer.cs" />
     <Compile Include="GameComponents\BonusXna.cs" />
+    <Compile Include="GameComponents\HomingRocketXna.cs" />
+    <Compile Include="GameComponents\RocketGunXna.cs" />
     <Compile Include="GameComponents\TrailDrawer.cs" />
     <Compile Include="Particles\ParticlesEmitterBase.cs" />
     <Compile Include="Particles\Particle.cs" />

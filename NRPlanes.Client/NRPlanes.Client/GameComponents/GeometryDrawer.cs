@@ -19,24 +19,27 @@ namespace NRPlanes.Client.GameComponents
             m_font = font;
         }
 
-        public void Draw(SpriteBatch spriteBatch, CoordinatesTransformer coordinatesTransformer, Geometry geometry)
+        public void Draw(SpriteBatch spriteBatch, CoordinatesTransformer coordinatesTransformer, Geometry geometry, bool drawCenter = true)
         {
-            spriteBatch.DrawString(
-                m_font,
-                geometry.Center.ToString(),
-                coordinatesTransformer.Transform(geometry.Center).Round(),
-                Color.Yellow);
+            if (drawCenter)
+            {
+                spriteBatch.DrawString(
+                    m_font,
+                    geometry.Center.ToString(),
+                    coordinatesTransformer.Transform(geometry.Center).Round(),
+                    Color.Yellow);
 
-            spriteBatch.Draw(
-                m_point,
-                coordinatesTransformer.Transform(geometry.Center),
-                null,
-                Color.White,
-                0,
-                new Vector2(m_point.Width / 2.0f, m_point.Height / 2.0f),
-                1.0f,
-                SpriteEffects.None,
-                0f);
+                spriteBatch.Draw(
+                    m_point,
+                    coordinatesTransformer.Transform(geometry.Center),
+                    null,
+                    Color.White,
+                    0,
+                    new Vector2(m_point.Width / 2.0f, m_point.Height / 2.0f),
+                    1.0f,
+                    SpriteEffects.None,
+                    0f);
+            }
 
             foreach (var segment in PolygonGeometry.FromRectangle(geometry.BoundingRectangle).Segments)
             {
@@ -49,7 +52,7 @@ namespace NRPlanes.Client.GameComponents
                     m_line,
                     coordinatesTransformer.Transform(centerSegment),
                     null,
-                    Color.FromNonPremultiplied(255, 255, 255, 200),
+                    Color.White * 0.8f,
                     (float)Helper.ToRadians(rotation),
                     origin,
                     new Vector2(1, scale.Y),
@@ -72,7 +75,7 @@ namespace NRPlanes.Client.GameComponents
                         m_line,
                         coordinatesTransformer.Transform(centerSegment),
                         null,
-                        Color.FromNonPremultiplied(255, 255, 255, 200),
+                        Color.White * 0.8f,
                         (float)Helper.ToRadians(rotation),
                         origin,
                         new Vector2(1, scale.Y),

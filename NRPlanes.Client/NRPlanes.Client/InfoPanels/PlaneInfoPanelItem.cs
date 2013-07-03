@@ -71,7 +71,7 @@ namespace NRPlanes.Client.InfoPanels
                     Color.Black, 
                     Color.Red, 
                     string.Format("{0:F0} HP", Plane.Health), 
-                    Color.FromNonPremultiplied(255, 255, 255, 120));
+                    Color.White * 0.5f);
 
                 foreach (var equipment in ((IHaveEquipment<PlaneEquipment>)Plane).AllEquipment.Where(e => !string.IsNullOrEmpty(e.Info)))
                 {
@@ -93,7 +93,7 @@ namespace NRPlanes.Client.InfoPanels
                         indicatorPosition,
                         Color.Black,
                         color,                                           
-                        Color.FromNonPremultiplied(255, 255, 255, 120),
+                        Color.White * 0.5f,
                         equipment);
                 }
             }

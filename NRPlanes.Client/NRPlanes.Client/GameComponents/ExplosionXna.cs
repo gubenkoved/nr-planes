@@ -78,13 +78,13 @@ namespace NRPlanes.Client.GameComponents
                         Color = Color.OrangeRed,
                         Position = m_explosionPosition.Center,
                         Size = new Size(3, 3),
-                        AlphaVelocity = -0.5f,
+                        AlphaVelocity = -0.35f,
                         TimeToLive = TimeSpan.FromSeconds(5),
                         Velocity = Vector.Zero,
                         Rotation = 0,
                         Depth = LayersDepths.Explosion,
                         SizeFactorVelocity = new Vector(0.3, 0.3)
-                    }, (int)(m_explosionPosition.Area * Math.Pow(PARTICLES_DENSITY, 0.7)));
+                    }, (int)(Math.Max(3, m_explosionPosition.Area * Math.Pow(PARTICLES_DENSITY, 0.7))));
 
                     m_particlesEmitter.Emit(new Particle(Game, CoordinatesTransformer)
                     {
@@ -96,7 +96,7 @@ namespace NRPlanes.Client.GameComponents
                         Velocity = Vector.Zero,
                         Rotation = 0,
                         Depth = LayersDepths.Explosion,
-                        SizeFactorVelocity = new Vector(25, 25)
+                        SizeFactorVelocity = new Vector(40, 40)
                     }, (int)(Math.Max(1, m_explosionPosition.Area * Math.Pow(PARTICLES_DENSITY, 0.3))));
                 }
                 else if (m_exploded is Bonus)

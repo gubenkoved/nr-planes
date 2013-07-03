@@ -84,7 +84,7 @@ namespace NRPlanes.Client.GameComponents
                     m_pixelTexture,
                     CoordinatesTransformer.Transform(centerSegment),
                     null,
-                    Color.FromNonPremultiplied(255, 255, 255, (int)(curAlpha * 255)),
+                    Color.White * curAlpha,
                     (float) Helper.ToRadians(rotation),
                     origin,
                     scale,

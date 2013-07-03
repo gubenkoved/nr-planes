@@ -65,24 +65,27 @@ namespace NRPlanes.Client.GameComponents
         public void DrawOnMinimap(GameTime gameTime, SpriteBatch minimapSpriteBatch, CoordinatesTransformer coordinatesTransformer)
         {
             if (m_minimapTexture == null)
-                m_minimapTexture = Game.Content.Load<Texture2D>("Minimap/point");
+                m_minimapTexture = Game.Content.Load<Texture2D>("Minimap/bonus_location");
 
             var origin = new Vector2(m_minimapTexture.Width / 2.0f, m_minimapTexture.Height / 2.0f);
+            var targetSize = new Vector2(10, 10);
+            var scale = new Vector2(targetSize.X / m_minimapTexture.Width, targetSize.Y / m_minimapTexture.Height);
 
             minimapSpriteBatch.Draw(m_minimapTexture,
                                     coordinatesTransformer.Transform(GameObject.Position),
                                     null,
-                                    Color,
+                                    Color * 0.8f,                                    
                                     (float)Helper.ToRadians(GameObject.Rotation),
                                     origin,
-                                    1.0f,
+                                    scale,
                                     SpriteEffects.None,
                                     1.0f);
         }
 
         public void WhenApplied(NRPlanes.Core.Common.Plane plane)
         {
-            if (Bonus is HealthBonus)
+            // temporary single reaction
+            //if (Bonus is HealthBonus)
             {
                 BasicSoundEffect effect = Game.GameManager.GameWorldXna.SoundManager.CreateBasicSoundEffect("health_bonus", true);
                 effect.Position = plane.Position;

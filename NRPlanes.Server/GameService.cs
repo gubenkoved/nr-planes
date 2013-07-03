@@ -158,13 +158,19 @@ namespace NRPlanes.Server
                     m_worldEventsLog.AddEntry(new PlaneEquipmentAddedLogItem(
                         Timestamp.Create(),
                         (Plane)args.Equipment.RelatedGameObject,
-                        (PlaneEquipment)args.Equipment));
+                        (PlaneEquipment)args.Equipment)
+                        {
+                            IsDepriciated = true
+                        });
                     break;
                 case GameObjectEquipmentStatus.Removed:
                     m_worldEventsLog.AddEntry(new PlaneEquipmentRemovedLogItem(
                        Timestamp.Create(),
                        (Plane)args.Equipment.RelatedGameObject,
-                       (PlaneEquipment)args.Equipment));
+                       (PlaneEquipment)args.Equipment)
+                        {
+                            IsDepriciated = true
+                        });
                     break;
                 default:
                     throw new Exception("Unknown state");

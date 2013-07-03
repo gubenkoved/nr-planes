@@ -49,6 +49,7 @@
     <Compile Include="Bonuses\HealthBonus.cs" />
     <Compile Include="Bonuses\RandomBonus.cs" />
     <Compile Include="Bonuses\RechargeBonus.cs" />
+    <Compile Include="Bonuses\RocketsBonus.cs" />
     <Compile Include="Bullets\LaserBullet.cs" />
     <Compile Include="Bullets\HomingRocket.cs" />
     <Compile Include="Bullets\Bullet.cs" />

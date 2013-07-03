@@ -37,14 +37,7 @@ namespace NRPlanes.Client.Common
             }
         }
 
-        private List<Particle> m_particles;
-        public IEnumerable<Particle> Particles
-        {
-            get
-            {
-                return m_particles;
-            }
-        }
+        private ThreadSafeCollection<Particle> m_safeParticlesCollection;
 
         private readonly GameWorld m_gameWorld;
         public GameWorld GameWorld
@@ -96,7 +89,7 @@ namespace NRPlanes.Client.Common
 
             m_safeDrawableGameComponents = new ThreadSafeCollection<MyDrawableGameComponent>();
 
-            m_particles = new List<Particle>();
+            m_safeParticlesCollection = new ThreadSafeCollection<Particle>();
 
             m_gameWorld = gameWorld;
             m_gameWorld.GameObjectStatusChanged += GameObjectStatusChanged;            
@@ -139,6 +132,7 @@ namespace NRPlanes.Client.Common
             #region Game objects
             m_instanceMapper.AddMapping(typeof(XWingPlane), typeof(XWingPlaneXna));
             m_instanceMapper.AddMapping(typeof(LaserBullet), typeof(LaserBulletXna));
+            m_instanceMapper.AddMapping(typeof(HomingRocket), typeof(HomingRocketXna));
             #endregion
 
             #region Equipments
@@ -146,6 +140,7 @@ namespace NRPlanes.Client.Common
             m_instanceMapper.AddMapping(typeof(IonEngine), typeof(IonEngineXna));
             m_instanceMapper.AddMapping(typeof(LaserGun), typeof(LaserGunXna));
             m_instanceMapper.AddMapping(typeof(Shield), typeof(ShieldXna));
+            m_instanceMapper.AddMapping(typeof(RocketGun), typeof(RocketGunXna));
             #endregion
 
             #region Static objects
@@ -154,7 +149,9 @@ namespace NRPlanes.Client.Common
             #endregion
 
             #region Bonuses
-            m_instanceMapper.AddMapping(typeof(HealthBonus), typeof(BonusXna), new object[] { Color.Red, Game.Content.Load<Texture2D>("Bonuses/bonus") });
+            m_instanceMapper.AddMapping(typeof(HealthBonus), typeof(BonusXna), new object[] { Color.YellowGreen, Game.Content.Load<Texture2D>("Bonuses/health_bonus") });
+            m_instanceMapper.AddMapping(typeof(RocketsBonus), typeof(BonusXna), new object[] { Color.OrangeRed, Game.Content.Load<Texture2D>("Bonuses/rocket_bonus") });
+            m_instanceMapper.AddMapping(typeof(RandomBonus), typeof(BonusXna), new object[] { Color.AntiqueWhite, Game.Content.Load<Texture2D>("Bonuses/random_bonus") });
             #endregion
 
         }
@@ -173,6 +170,20 @@ namespace NRPlanes.Client.Common
             }
 
         }
+        private void GameObjectEquipmentStatusChanged(object sedner, GameObjectEquipmentStatusChangedArgs args)
+        {
+            switch (args.Status)
+            {
+                case GameObjectEquipmentStatus.Added:
+                    AddEquipment(args.Equipment);
+                    break;
+                case GameObjectEquipmentStatus.Removed:
+                    DeleteEquipment(args.Equipment);
+                    break;
+                default:
+                    break;
+            }
+        }
         private void BonusApplied(object sender, BonusAppliedEventArgs args)
         {
             BonusXna bonusXna = (BonusXna)m_gameObjectMapping[args.Bonus];
@@ -189,7 +200,7 @@ namespace NRPlanes.Client.Common
             m_safeDrawableGameComponents.Add(explosion);
         }
         private void WhenGameObjectAdded(GameObject gameObject)
-        {            
+        {
             var xnaRelatedGameObject = (DrawableGameObject)m_instanceMapper.CreateInstance(gameObject);
 
             m_gameObjectMapping[gameObject] = xnaRelatedGameObject;
@@ -198,6 +209,8 @@ namespace NRPlanes.Client.Common
 
             if (gameObject is IHaveEquipment)
             {
+                ((IHaveEquipment)gameObject).EquipmentStatusChanged += GameObjectEquipmentStatusChanged;
+
                 foreach (var equipment in (gameObject as IHaveEquipment).AllEquipment)
                 {
                     AddEquipment(equipment);
@@ -247,7 +260,7 @@ namespace NRPlanes.Client.Common
 
         public void AddParticle(Particle particle)
         {
-            m_particles.Add(particle);
+            m_safeParticlesCollection.Add(particle);
         }
         public void ForceSetCameraOnCenterOfView()
         {
@@ -259,12 +272,15 @@ namespace NRPlanes.Client.Common
 
             UpdateView(gameTime);
 
-            for (int i = 0; i < m_particles.Count; i++)
+            using (var handle = m_safeParticlesCollection.SafeRead())
             {
-                if (m_particles[i].IsGarbage)
-                    m_particles.RemoveAt(i);
-                else
-                    m_particles[i].Update(gameTime);
+                for (int i = 0; i < handle.Items.Count; i++)
+                {
+                    if (handle.Items[i].IsGarbage)
+                        m_safeParticlesCollection.RemoveAt(i);
+                    else
+                        handle.Items[i].Update(gameTime);
+                }
             }
 
             using (var handle = m_safeDrawableGameComponents.SafeRead())
@@ -276,7 +292,7 @@ namespace NRPlanes.Client.Common
                     if (!copy[i].IsGarbage)
                         copy[i].Update(gameTime);
                     else
-                        m_safeDrawableGameComponents.Remove(copy[i]);
+                        m_safeDrawableGameComponents.RemoveAt(i);
                 }
             }
         }
@@ -334,10 +350,15 @@ namespace NRPlanes.Client.Common
             // draw particles
             {
                 m_spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
-                foreach (var particle in m_particles)
+
+                using (var handle = m_safeParticlesCollection.SafeRead())
                 {
-                    particle.Draw(gameTime, m_spriteBatch);
+                    foreach (var particle in handle.Items)
+                    {
+                        particle.Draw(gameTime, m_spriteBatch);
+                    }
                 }
+                
                 m_spriteBatch.End();
             }
 
@@ -512,6 +533,17 @@ namespace NRPlanes.Client.Common
 
                         debugGeomertyDrawer.Draw(m_spriteBatch, m_coordinatesTransformer, gameObject.CalculateAbsoluteGeometry());
 
+                        if (gameObject is Plane && gameObject is IHaveEquipment<PlaneEquipment>)
+                        {
+                            foreach (var equipment in ((IHaveEquipment<PlaneEquipment>)gameObject).AllEquipment)
+                            {
+                                var equipmentGeometry = PolygonGeometry.FromRectangle(new Rect(Vector.Zero, equipment.Size));
+                                equipmentGeometry.Rotate(equipment.GetAbsoluteRotation());
+                                equipmentGeometry.Translate(equipment.GetAbsolutePosition());
+
+                                debugGeomertyDrawer.Draw(m_spriteBatch, m_coordinatesTransformer, equipmentGeometry, drawCenter: false);
+                            }
+                        }
                     }
                     else if (drawableObj is DrawableStaticObject)
                     {
@@ -531,7 +563,7 @@ namespace NRPlanes.Client.Common
                 {
                     string.Format("{0:F1} fps", gameTime.ElapsedGameTime.TotalSeconds != 0 ? (1.0 / gameTime.ElapsedGameTime.TotalSeconds) : 0),
                     string.Format(@"{0:hh\:mm\:ss}", gameTime.TotalGameTime),
-                    string.Format(@"Particles: {0}", m_particles.Count),
+                    string.Format(@"Particles: {0}", m_safeParticlesCollection.Count),
                     string.Format(@"Game objects: {0}", Game.GameManager.GameWorld.GameObjectsCount),
                     string.Format(@"Drawable components: {0}", m_safeDrawableGameComponents.Count),
                 };

@@ -33,7 +33,8 @@ namespace NRPlanes.ServerData
                 var rocket = (HomingRocket)gameObject;
 
                 // reassign Target property by its id
-                rocket.Target = (Plane)localWorld.GetObjectById(rocket.TargetPlaneId);
+                if (rocket.TargetPlaneId.HasValue)
+                    rocket.Target = (Plane)localWorld.GetObjectById(rocket.TargetPlaneId.Value);
             }
         }
     }

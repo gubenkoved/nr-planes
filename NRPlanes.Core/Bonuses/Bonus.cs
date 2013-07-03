@@ -11,6 +11,8 @@ namespace NRPlanes.Core.Bonuses
     [DataContract]
     [KnownType(typeof(HealthBonus))]
     [KnownType(typeof(RandomBonus))]
+    [KnownType(typeof(RechargeBonus))]
+    [KnownType(typeof(RocketsBonus))]
     public abstract class Bonus : GameObject
     {
         [DataMember]
