@@ -1,5 +1,3 @@
-//#define FULL_SCREEN
-
 using System;
 using NRPlanes.Core.Primitives;
 using Microsoft.Xna.Framework;
@@ -12,13 +10,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace NRPlanes.Client
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
     public class PlanesGame : Game
     {
         public readonly GameManager GameManager;
-        public GraphicsDeviceManager Graphics { get; private set; }        
+        public GraphicsDeviceManager Graphics { get; private set; }
 
         public PlanesGame()
         {
@@ -26,18 +21,19 @@ namespace NRPlanes.Client
 
             Content.RootDirectory = "Content";
 
-#if FULL_SCREEN
-            //Graphics.PreferredBackBufferWidth = 1280;
-            Graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            //Graphics.PreferredBackBufferHeight = 1024;
-            Graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            Graphics.IsFullScreen = true;
-#else
-            Graphics.PreferredBackBufferWidth = 800;
-            Graphics.PreferredBackBufferHeight = 600;
-            Graphics.IsFullScreen = false;
-#endif
-            
+            if (Config.Default.IsFullScreen)
+            {
+                Graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+                Graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+                Graphics.IsFullScreen = true;
+            }
+            else
+            {
+                Graphics.PreferredBackBufferWidth = Config.Default.BufferWidth;
+                Graphics.PreferredBackBufferHeight = Config.Default.BufferHeight;
+                Graphics.IsFullScreen = false;
+            }
+
             GameManager = new GameManager(this);
 
             IsFixedTimeStep = true;
