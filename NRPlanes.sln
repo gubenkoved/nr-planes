@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRPlanes.Core", "NRPlanes.Core\NRPlanes.Core.csproj", "{21D70C5F-2503-4B69-A755-D33E25F7E831}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRPlanes.Server", "NRPlanes.Server\NRPlanes.Server.csproj", "{E26E2DAB-452F-436F-AD51-423F3060798B}"
@@ -27,10 +29,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRPlanes.WpfServerHost", "N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRPlanes.Tests", "NRPlanes.Tests\NRPlanes.Tests.csproj", "{E1A58918-B49A-4304-9394-3E41C4F906DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRPlanes.Client.MonoGame", "NRPlanes.Client.MonoGame\NRPlanes.Client.MonoGame.csproj", "{B9AEAF32-6D8B-4E3C-A462-BE86246D3689}"
+EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = NRPlanes.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -116,8 +117,21 @@ Global
 		{E1A58918-B49A-4304-9394-3E41C4F906DD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E1A58918-B49A-4304-9394-3E41C4F906DD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E1A58918-B49A-4304-9394-3E41C4F906DD}.Release|x86.ActiveCfg = Release|Any CPU
+		{B9AEAF32-6D8B-4E3C-A462-BE86246D3689}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{B9AEAF32-6D8B-4E3C-A462-BE86246D3689}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{B9AEAF32-6D8B-4E3C-A462-BE86246D3689}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{B9AEAF32-6D8B-4E3C-A462-BE86246D3689}.Debug|x86.ActiveCfg = Debug|x86
+		{B9AEAF32-6D8B-4E3C-A462-BE86246D3689}.Debug|x86.Build.0 = Debug|x86
+		{B9AEAF32-6D8B-4E3C-A462-BE86246D3689}.Release|Any CPU.ActiveCfg = Release|x86
+		{B9AEAF32-6D8B-4E3C-A462-BE86246D3689}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{B9AEAF32-6D8B-4E3C-A462-BE86246D3689}.Release|Mixed Platforms.Build.0 = Release|x86
+		{B9AEAF32-6D8B-4E3C-A462-BE86246D3689}.Release|x86.ActiveCfg = Release|x86
+		{B9AEAF32-6D8B-4E3C-A462-BE86246D3689}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = NRPlanes.vsmdi
 	EndGlobalSection
 EndGlobal
