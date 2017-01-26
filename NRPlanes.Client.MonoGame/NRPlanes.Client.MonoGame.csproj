@@ -92,6 +92,10 @@
     <Compile Include="Sound\SoundManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
@@ -103,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <None Include="packages.config" />
     <None Include="Properties\DataSources\NRPlanes.ServerData.MutableInformations.PlaneMutableInformation.datasource" />
     <None Include="Properties\DataSources\NRPlanes.ServerData.OperationResults.CommitResult.datasource" />
     <None Include="Properties\DataSources\NRPlanes.ServerData.OperationResults.GetEventsLogSinceResult.datasource" />
