@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<ArrayOfArrayOfArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ArrayOfArrayOfString>
+    <ArrayOfString>
+      <string>c:\src\nr-planes\nrplanes.client.monogame\planesgame.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>c:\src\nr-planes\nrplanes.client.monogame\common\animationspritedrawer.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>c:\src\nr-planes\nrplanes.client.monogame\sound\basicsoundeffect.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\src\nr-planes\NRPlanes.Client.MonoGame\Common\ObjectsSynchronizer.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\src\nr-planes\NRPlanes.Client.MonoGame\Common\GameWorldXna.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\src\nr-planes\NRPlanes.Client.MonoGame\app.config</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\src\nr-planes\NRPlanes.Client.MonoGame\Config.cs</string>
+    </ArrayOfString>
+  </ArrayOfArrayOfString>
+</ArrayOfArrayOfArrayOfString>
