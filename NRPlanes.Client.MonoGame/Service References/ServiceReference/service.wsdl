@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="GameService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="NetTcpBinding_IGameService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import namespace="http://tempuri.org/" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.OperationResults" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Primitives" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Common" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.StaticObjects" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Bullets" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Equipments" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Equipments.Weapons" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Equipments.Engines" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Planes" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.Core.Bonuses" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.EventsLog" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/NRPlanes.ServerData.MutableInformations" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IGameService_Join_InputMessage">
+    <wsdl:part name="parameters" element="tns:Join" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_Join_OutputMessage">
+    <wsdl:part name="parameters" element="tns:JoinResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_CommitObjects_InputMessage">
+    <wsdl:part name="parameters" element="tns:CommitObjects" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_CommitObjects_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CommitObjectsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_GetEventsLogSince_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetEventsLogSince" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_GetEventsLogSince_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetEventsLogSinceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_UpdatePlane_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePlane" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_GetPlanesInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPlanesInfo" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_GetPlanesInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPlanesInfoResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IGameService">
+    <wsdl:operation name="Join">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameService/Join" message="tns:IGameService_Join_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameService/JoinResponse" message="tns:IGameService_Join_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CommitObjects">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameService/CommitObjects" message="tns:IGameService_CommitObjects_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameService/CommitObjectsResponse" message="tns:IGameService_CommitObjects_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEventsLogSince">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameService/GetEventsLogSince" message="tns:IGameService_GetEventsLogSince_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameService/GetEventsLogSinceResponse" message="tns:IGameService_GetEventsLogSince_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePlane">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameService/UpdatePlane" message="tns:IGameService_UpdatePlane_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPlanesInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameService/GetPlanesInfo" message="tns:IGameService_GetPlanesInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameService/GetPlanesInfoResponse" message="tns:IGameService_GetPlanesInfo_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetTcpBinding_IGameService" type="tns:IGameService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IGameService_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="Join">
+      <soap12:operation soapAction="http://tempuri.org/IGameService/Join" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CommitObjects">
+      <soap12:operation soapAction="http://tempuri.org/IGameService/CommitObjects" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEventsLogSince">
+      <soap12:operation soapAction="http://tempuri.org/IGameService/GetEventsLogSince" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePlane">
+      <soap12:operation soapAction="http://tempuri.org/IGameService/UpdatePlane" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="GetPlanesInfo">
+      <soap12:operation soapAction="http://tempuri.org/IGameService/GetPlanesInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GameService">
+    <wsdl:port name="NetTcpBinding_IGameService" binding="tns:NetTcpBinding_IGameService">
+      <soap12:address location="net.tcp://localhost:8733/NRPlanes/" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:8733/NRPlanes/</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

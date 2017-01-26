@@ -30,6 +30,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRPlanes.Tests", "NRPlanes.Tests\NRPlanes.Tests.csproj", "{E1A58918-B49A-4304-9394-3E41C4F906DD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRPlanes.Client.MonoGame", "NRPlanes.Client.MonoGame\NRPlanes.Client.MonoGame.csproj", "{B9AEAF32-6D8B-4E3C-A462-BE86246D3689}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E26E2DAB-452F-436F-AD51-423F3060798B} = {E26E2DAB-452F-436F-AD51-423F3060798B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="4e08c99a-3167-448e-92da-74d722da5c5a" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8732/NRPlanes/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="a41a0ef3-0d6f-4dcd-91f7-facde71aa478" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="389ddd30-98d8-4e4d-b0bc-5dfca18045e3" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="59ff990e-268e-41da-bf3b-7902d3f8b972" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="NRPlanes.ServerData.OperationResults.xsd" MetadataType="Schema" ID="13a5a341-da41-4d0b-ae63-382c3737aaa2" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="NRPlanes.Core.Primitives.xsd" MetadataType="Schema" ID="f24caef7-4057-423e-88c0-240f912926e4" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="NRPlanes.Core.Common.xsd" MetadataType="Schema" ID="b1fe2b5b-2ba3-456e-96d3-d585978376c4" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="NRPlanes.Core.StaticObjects.xsd" MetadataType="Schema" ID="9ad15a76-f60b-4866-b267-cf671cf66c16" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="NRPlanes.Core.Bullets.xsd" MetadataType="Schema" ID="8d152dc7-9394-4d90-9349-ef797dcffe88" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="2b668c08-e6fc-4429-b3da-d917d6e536cc" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="NRPlanes.Core.Equipments.xsd" MetadataType="Schema" ID="6634bea2-0b14-4696-b5d9-a9a2c148dd57" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="NRPlanes.Core.Equipments.Weapons.xsd" MetadataType="Schema" ID="3e813efc-5393-43a1-9e3a-29c84a6a20c4" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="NRPlanes.Core.Equipments.Engines.xsd" MetadataType="Schema" ID="d1af1f1f-2d39-42fa-a791-83167742e27e" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="NRPlanes.Core.Planes.xsd" MetadataType="Schema" ID="9116dee6-b956-40da-9f55-af54a33f80a7" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="NRPlanes.Core.Bonuses.xsd" MetadataType="Schema" ID="5c037269-eece-4cca-b667-aac3f982c9d5" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="NRPlanes.ServerData.EventsLog.xsd" MetadataType="Schema" ID="39d1a23c-f434-4fd3-a01b-9d2cb244c4ca" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+    <MetadataFile FileName="NRPlanes.ServerData.MutableInformations.xsd" MetadataType="Schema" ID="297bcfaa-350e-43ed-9919-e3894c4c9fae" SourceId="1" SourceUrl="http://localhost:8732/NRPlanes/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
