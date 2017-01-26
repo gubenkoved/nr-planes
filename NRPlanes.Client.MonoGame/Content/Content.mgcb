@@ -205,12 +205,6 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/infopanel_font.spritefont
 
-#begin Fonts/inforamtion_font.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:TextureFormat=Compressed
-/build:Fonts/inforamtion_font.spritefont
-
 #begin Images/alien.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -702,4 +696,10 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sounds/plane_explosion.wav
+
+#begin Fonts\information_font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts\information_font.spritefont
 
