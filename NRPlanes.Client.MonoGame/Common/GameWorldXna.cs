@@ -388,13 +388,16 @@ namespace NRPlanes.Client.Common
                 DrawAdditionalInfo(gameTime);
                 m_spriteBatch.End();
 
-#if DEBUG_MODE
-            m_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+                //#if DEBUG_MODE
+                if (Config.Default.IsDebugMode)
+                {
+                    m_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
-            DrawDebugInfo();
+                    DrawDebugInfo();
 
-            m_spriteBatch.End();
-#endif
+                    m_spriteBatch.End();
+                }
+//#endif
             }
 
             // swap render targets

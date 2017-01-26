@@ -12,6 +12,8 @@ namespace NRPlanes.Client
 
         public bool IsFullScreen { get; set; }
 
+        public bool IsDebugMode { get; set; }
+
         public int BufferWidth { get; set; }
         public int BufferHeight { get; set; }
 
@@ -32,8 +34,9 @@ namespace NRPlanes.Client
             Default = new Config()
             {
                 IsFullScreen = Convert.ToBoolean(ReadValue("IsFullScreen", "true")),
-                BufferWidth = Convert.ToInt32(ReadValue("BufferWidth", "800")),
-                BufferHeight = Convert.ToInt32(ReadValue("BufferHeight", "600")),
+                IsDebugMode = Convert.ToBoolean(ReadValue("IsDebugMode", "false")),
+                BufferWidth = Convert.ToInt32(ReadValue("BufferWidth", "1024")),
+                BufferHeight = Convert.ToInt32(ReadValue("BufferHeight", "768")),
             };
         }
 
