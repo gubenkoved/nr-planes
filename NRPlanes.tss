@@ -11,16 +11,25 @@
       <string>c:\src\nr-planes\nrplanes.client.monogame\sound\basicsoundeffect.cs</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>C:\src\nr-planes\NRPlanes.Client.MonoGame\Common\ObjectsSynchronizer.cs</string>
+      <string>c:\src\nr-planes\nrplanes.client.monogame\common\objectssynchronizer.cs</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>C:\src\nr-planes\NRPlanes.Client.MonoGame\Common\GameWorldXna.cs</string>
+      <string>c:\src\nr-planes\nrplanes.client.monogame\common\gameworldxna.cs</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>C:\src\nr-planes\NRPlanes.Client.MonoGame\app.config</string>
+      <string>c:\src\nr-planes\nrplanes.client.monogame\gamecomponents\geometrydrawer.cs</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>C:\src\nr-planes\NRPlanes.Client.MonoGame\Config.cs</string>
+      <string>c:\src\nr-planes\nrplanes.core\primitives\polygongeometry.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>c:\src\nr-planes\nrplanes.core\planes\xwingplane.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>c:\src\nr-planes\nrplanes.core\bullets\bullet.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>c:\src\nr-planes\nrplanes.client.monogame\program.cs</string>
     </ArrayOfString>
   </ArrayOfArrayOfString>
 </ArrayOfArrayOfArrayOfString>
